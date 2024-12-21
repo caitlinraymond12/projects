@@ -1,6 +1,5 @@
 #include <iostream>
-#include "calc.h"
-
+#include "super.h"
 
 bigint::bigint()
 { cap = 0;
