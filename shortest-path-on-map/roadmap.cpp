@@ -87,7 +87,7 @@ void readplaces()
   int code, road, population;
   string state, city1;
   double area, lat, longi, distance;
-  ifstream file("places.txt");
+  ifstream file("namedplaces.txt");
   while(true)
   {
     string text;
