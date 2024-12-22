@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <cctype>
 #include <cmath>
-#include "super.h"
+#include "Super.h"
 
 using namespace std;
 
@@ -199,7 +199,7 @@ void op2(string compare, bigint & x, bigint & y)
     y*=x;
   else if(compare == "%=")
     y%=x;
-
+    
   nums.push_back(y); }
 
 void op(string compare, bigint & x, bigint & y)
@@ -212,7 +212,7 @@ void op(string compare, bigint & x, bigint & y)
 
   if(compare == "+")
     nums.push_back(y + x);
-
+    
   else if(compare == "-")
     nums.push_back(y - x);
 
@@ -290,6 +290,7 @@ void input()
   while(true)
   { vector<string> data;
     string line;
+    cout << "> ";
     getline(cin, line);
     istringstream in(line);
     while(true)

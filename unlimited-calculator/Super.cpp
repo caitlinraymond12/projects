@@ -1,5 +1,5 @@
 #include <iostream>
-#include "super.h"
+#include "Super.h"
 
 bigint::bigint()
 { cap = 0;
@@ -53,7 +53,7 @@ bigint& bigint::operator=(const bigint & other)
   data = new uchar[cap];
   for(int i = 0; i < num; i++)
     data[i] = other.data[i];
-  remove();
+  remove(); 
   return *this; }
 
 bigint& bigint::operator=(const string & user_num)
@@ -489,3 +489,4 @@ bigint factorial(int n)
   for(int i = 1; i <= n; i++)
   { r = r * i; }
   return r; }
+
