@@ -26,7 +26,7 @@ class connection
 
 class intersection
 {
-  public: //protected:
+  protected:
     int line;
     double lat, longi, nearest_place_distance, dist;
     string state, nearest_place_name;
