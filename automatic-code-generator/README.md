@@ -10,7 +10,7 @@ The sample file must be formatted in a specific way. it must have the name of th
 
 For example and input file containing:
 
-
+```
 class person  
 string - firstname lastname address city state phone  
 int - ssn balance  
@@ -18,7 +18,7 @@ const cat * - pet
 pub  
 string - favourite_colour  
 end  
-
+```
 
 would output:
 
