@@ -56,3 +56,6 @@ Each map is read in one byte at a time, each byte being a short int that represe
 
 The user is prompted to enter a starting city. Then, a list of all states containing a city by that name are listed, and the user must then select a state. The same process is used to select the end city/state.
 
+
+.png files have been provided to show what the graphical output of this program is, and .txt files have been provided to show what the written output of this program is. 
+

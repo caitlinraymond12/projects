@@ -1,0 +1,18 @@
+Enter Starting City: Phoenix
+State Choices: OR NY IL AZ
+Select A State: AZ
+
+Enter End City: Tucson
+State Choices: AZ
+Select A State: AZ
+
+Found! Total Distance: 120.924
+Take I-17 distance of 6.158 miles to intersection #24055 3.5 miles away from Phoenix, AZ
+Take US-0 distance of 0.734 miles to intersection #24070 3.9 miles away from Phoenix, AZ
+Take ? distance of 0.434 miles to intersection #24079 4.2 miles away from Phoenix, AZ
+Take I-10 distance of 2.441 miles to intersection #24118 5.4 miles away from Phoenix, AZ
+Take I-10/US-60 distance of 7.6159 miles to intersection #24240 0.9 miles away from Guadalupe, AZ
+Take I-10 distance of 40.939 miles to intersection #24921 4.4 miles away from Casa Grande, AZ
+Take AZ-84 distance of 13.1049 miles to intersection #25030 5.5 miles away from Eloy, AZ
+Take I-10 distance of 49.4969 miles to intersection #25679 0.5 miles away from South Tucson, AZ
+

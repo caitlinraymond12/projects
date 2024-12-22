@@ -1,0 +1,27 @@
+Enter Starting City: Atlanta
+State Choices: GA IL IN KS LA MI MO NE TX
+Select A State: GA
+
+Enter End City: Charleston
+State Choices: AR IL MO MS SC TN UT WV
+Select A State: SC
+
+Found! Total Distance: 274.24
+Take US-29/US-78/GA-8 distance of 0.985 miles to intersection #23097 1.2 miles away from Atlanta, GA
+Take US-29/US-78/US-278/GA-8 distance of 2.399 miles to intersection #23074 1.4 miles away from Druid Hills, GA
+Take US-23/US-29/US-78/US-278/GA-8 distance of 1.651 miles to intersection #23075 1.1 miles away from Decatur, GA
+Take US-278/GA-10 distance of 3.906 miles to intersection #23060 0.8 miles away from Avondale Estates, GA
+Take US-278/GA-12 distance of 9.825 miles to intersection #23137 0.6 miles away from Lithonia, GA
+Take I-20/US-278/GA-402 distance of 14.687 miles to intersection #23237 1.2 miles away from Oxford, GA
+Take I-20/GA-402 distance of 107.298 miles to intersection #22857 3.2 miles away from Martinez, GA
+Take GA-28 distance of 4.6609 miles to intersection #22901 2.5 miles away from North Augusta, SC
+Take GA-28/bus-US-25/GA-121 distance of 1.131 miles to intersection #22905 2.8 miles away from North Augusta, SC
+Take GA-28 distance of 3.402 miles to intersection #22945 4.5 miles away from Clearwater, SC
+Take SC-28 distance of 1.6279 miles to intersection #22964 5.5 miles away from Clearwater, SC
+Take US-278 distance of 23.721 miles to intersection #22957 4.7 miles away from Williston, SC
+Take SC-39 distance of 4.625 miles to intersection #22860 0.1 miles away from Williston, SC
+Take US-78 distance of 33.21 miles to intersection #22986 4.3 miles away from Branchville, SC
+Take SC-61 distance of 40.183 miles to intersection #23236 6.6 miles away from Summerville, SC
+Take alt-US-17/SC-61 distance of 0.484 miles to intersection #23233 6.2 miles away from Summerville, SC
+Take SC-61 distance of 20.444 miles to intersection #23389 0.8 miles away from Charleston, SC
+

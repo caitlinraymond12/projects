@@ -1,0 +1,170 @@
+Enter Starting City: Miami
+State Choices: AZ FL MO OK TX
+Select A State: FL
+
+Enter End City: Seattle
+State Choices: WA
+Select A State: WA
+
+Found! Total Distance: 3040.92
+Take I-95 distance of 1.43 miles to intersection #28869 1.9 miles away from Miami, FL
+Take FL-112 distance of 3.379 miles to intersection #28871 1.5 miles away from Brownsville, FL
+Take US-27 distance of 147.117 miles to intersection #28558 4.6 miles away from Sebring, FL
+Take US-27/US-98 distance of 23 miles to intersection #28401 2.7 miles away from Frostproof, FL
+Take US-27 distance of 79.7279 miles to intersection #27772 1.3 miles away from Leesburg, FL
+Take US-27/US-441 distance of 19.039 miles to intersection #27680 0.4 miles away from Belleview, FL
+Take US-27/US-301 distance of 11.092 miles to intersection #27621 0.9 miles away from Ocala, FL
+Take US-301/US-441 distance of 1.61 miles to intersection #27601 2.4 miles away from Ocala, FL
+Take FL-326 distance of 4.365 miles to intersection #27571 6.7 miles away from Ocala, FL
+Take I-75 distance of 112.022 miles to intersection #26517 3.9 miles away from Jennings, FL
+Take I-75/GA-401 distance of 18.115 miles to intersection #26321 1.1 miles away from Remerton, GA
+Take GA-133 distance of 34.641 miles to intersection #26025 1.3 miles away from Moultrie, GA
+Take US-319/GA-33/GA-35/GA-133 distance of 2.695 miles to intersection #25997 1.6 miles away from Riverside, GA
+Take GA-33/GA-133 distance of 1.958 miles to intersection #25975 3.3 miles away from Riverside, GA
+Take GA-133 distance of 29.167 miles to intersection #25627 3.8 miles away from Albany, GA
+Take US-19/GA-3/GA-300 distance of 2.02 miles to intersection #25563 3.1 miles away from Albany, GA
+Take US-19/US-82/GA-3/GA-520 distance of 4.462 miles to intersection #25530 2.2 miles away from Albany, GA
+Take US-82/GA-520 distance of 19.869 miles to intersection #25410 0.3 miles away from Dawson, GA
+Take GA-45/GA-520 distance of 1.492 miles to intersection #25383 1.4 miles away from Dawson, GA
+Take GA-520 distance of 40.6339 miles to intersection #24981 0 miles away from Cusseta, GA
+Take US-27/US-280/GA-1/GA-520 distance of 16.0769 miles to intersection #24852 2.4 miles away from Phenix City, AL
+Take US-280 distance of 1.447 miles to intersection #24858 1.3 miles away from Phenix City, AL
+Take US-280/US-431/AL-1 distance of 1.792 miles to intersection #24832 0.6 miles away from Phenix City, AL
+Take US-80/US-280/US-431/AL-1/AL-8/AL-38 distance of 1.5149 miles to intersection #24796 1.9 miles away from Phenix City, AL
+Take US-280/US-431/AL-1/AL-38 distance of 21.179 miles to intersection #24671 1.9 miles away from Opelika, AL
+Take US-280/AL-1/AL-38 distance of 1.746 miles to intersection #24667 0.6 miles away from Opelika, AL
+Take US-29/US-280/AL-15/AL-38 distance of 2.0019 miles to intersection #24682 1.3 miles away from Opelika, AL
+Take US-280/AL-38 distance of 5.227 miles to intersection #24654 5.8 miles away from Auburn, AL
+Take US-280/AL-38/AL-147 distance of 0.517 miles to intersection #24652 5.9 miles away from Waverly, AL
+Take US-280/AL-38 distance of 18.849 miles to intersection #24542 0.1 miles away from Dadeville, AL
+Take US-280/AL-38/AL-49 distance of 1.685 miles to intersection #24526 1.6 miles away from Dadeville, AL
+Take US-280/AL-38 distance of 34.574 miles to intersection #24251 2.2 miles away from Gantts Quarry, AL
+Take US-231/US-280/AL-38 distance of 10.817 miles to intersection #24068 0.3 miles away from Childersburg, AL
+Take US-231/US-280/AL-38/AL-76 distance of 1.97 miles to intersection #24030 2.1 miles away from Childersburg, AL
+Take US-231/US-280/AL-38 distance of 4.725 miles to intersection #23996 1.4 miles away from Harpersville, AL
+Take US-280/AL-38 distance of 22.4789 miles to intersection #23904 1.7 miles away from Homewood, AL
+Take US-31/US-280/AL-3/AL-38 distance of 2.109 miles to intersection #23876 1.3 miles away from Birmingham, AL
+Take US-78/AL-4 distance of 1.755 miles to intersection #23881 0.8 miles away from Birmingham, AL
+Take I-65 distance of 0.452 miles to intersection #23871 0.7 miles away from Birmingham, AL
+Take I-20/I-59 distance of 1.331 miles to intersection #23879 2.1 miles away from Birmingham, AL
+Take US-78/AL-4/AL-5 distance of 34.099 miles to intersection #23557 0.6 miles away from Jasper, AL
+Take AL-4/AL-5 distance of 24.822 miles to intersection #23305 0.4 miles away from Natural Bridge, AL
+Take US-278/AL-4/AL-13 distance of 0.397 miles to intersection #23312 0.1 miles away from Natural Bridge, AL
+Take US-278/AL-4 distance of 22.296 miles to intersection #23307 0.4 miles away from Hamilton, AL
+Take AL-4 distance of 5.075 miles to intersection #23269 5.3 miles away from Hamilton, AL
+Take US-78/AL-4/AL-138 distance of 7.167 miles to intersection #23222 3.7 miles away from Tremont, MS
+Take US-78 distance of 52.222 miles to intersection #22922 1.2 miles away from New Albany, MS
+Take US-78/MS-30 distance of 2.346 miles to intersection #22882 1.5 miles away from New Albany, MS
+Take US-78 distance of 59.683 miles to intersection #22254 3 miles away from Olive Branch, MS
+Take US-78/TN-4 distance of 13.903 miles to intersection #22020 4.3 miles away from Memphis, TN
+Take US-64/US-70/US-79/TN-1 distance of 0.634 miles to intersection #22023 4.9 miles away from Memphis, TN
+Take US-61/US-64/US-70/US-79/TN-1 distance of 0.701 miles to intersection #22027 5.6 miles away from Memphis, TN
+Take I-55/US-61/US-64/US-70/US-79 distance of 0.518 miles to intersection #22019 5.8 miles away from West Memphis, AR
+Take I-55/US-61/US-70 distance of 3.023 miles to intersection #21986 2.9 miles away from West Memphis, AR
+Take I-55/US-61/US-64 distance of 1.414 miles to intersection #21969 1.6 miles away from West Memphis, AR
+Take I-40/I-55/US-61 distance of 2.633 miles to intersection #21940 1.7 miles away from West Memphis, AR
+Take I-55/US-61 distance of 15.886 miles to intersection #21592 1.2 miles away from Turrell, AR
+Take US-63/AR-77 distance of 0.251 miles to intersection #21585 1 miles away from Gilmore, AR
+Take US-63 distance of 38.562 miles to intersection #21031 2 miles away from Jonesboro, AR
+Take US-49/US-63 distance of 2.861 miles to intersection #21035 1.9 miles away from Jonesboro, AR
+Take US-63 distance of 25.847 miles to intersection #20684 1.8 miles away from Portia, AR
+Take US-63/US-412 distance of 11.924 miles to intersection #20516 0.2 miles away from Imboden, AR
+Take US-62/US-63/US-412/AR-115 distance of 0.364 miles to intersection #20514 0.1 miles away from Imboden, AR
+Take US-62/US-63/US-412 distance of 18.535 miles to intersection #20392 0.2 miles away from Hardy, AR
+Take US-63 distance of 35.1 miles to intersection #19811 3.3 miles away from West Plains, MO
+Take bus-US-63 distance of 4.241 miles to intersection #19751 0.9 miles away from West Plains, MO
+Take US-63 distance of 16.3839 miles to intersection #19377 2.1 miles away from Willow Springs, MO
+Take US-60/US-63 distance of 12.984 miles to intersection #19169 1.2 miles away from Cabool, MO
+Take US-60 distance of 11.611 miles to intersection #19138 1.7 miles away from Mountain Grove, MO
+Take MO-95 distance of 23.736 miles to intersection #18689 16.4 miles away from Twin Bridges, MO
+Take MO-32 distance of 23.256 miles to intersection #18493 0.9 miles away from Lebanon, MO
+Take MO-5/MO-32 distance of 1.278 miles to intersection #18474 0.3 miles away from Lebanon, MO
+Take MO-5 distance of 0.272 miles to intersection #18469 0.6 miles away from Lebanon, MO
+Take MO-64 distance of 25.86 miles to intersection #18429 1.2 miles away from Louisburg, MO
+Take US-65 distance of 31.382 miles to intersection #17780 6 miles away from Warsaw, MO
+Take US-65/MO-7 distance of 5.883 miles to intersection #17698 0.2 miles away from Warsaw, MO
+Take MO-7 distance of 22.892 miles to intersection #17566 0.4 miles away from Clinton, MO
+Take MO-7/MO-13/MO-52 distance of 0.83 miles to intersection #17544 0.7 miles away from Clinton, MO
+Take MO-7/MO-13 distance of 0.807 miles to intersection #17537 1.2 miles away from Clinton, MO
+Take MO-7 distance of 35.046 miles to intersection #17271 2.8 miles away from Harrisonville, MO
+Take US-71 distance of 24.867 miles to intersection #16799 3.3 miles away from Grandview, MO
+Take US-50/US-71 distance of 1.377 miles to intersection #16764 4 miles away from Leawood, KS
+Take US-71 distance of 10.097 miles to intersection #16429 0.9 miles away from Kansas City, MO
+Take I-70/US-40/US-71 distance of 1.502 miles to intersection #16392 2 miles away from Kansas City, MO
+Take I-35/US-24/I-70/US-40 distance of 0.516 miles to intersection #16391 2.2 miles away from Kansas City, MO
+Take MO-9 distance of 3.7469 miles to intersection #16302 1.6 miles away from North Kansas City, MO
+Take ? distance of 1.766 miles to intersection #16257 0.3 miles away from Northmoor, MO
+Take I-29/US-71/US-169 distance of 1.5089 miles to intersection #16239 0 miles away from Houston Lake, MO
+Take I-29/US-71 distance of 8.775 miles to intersection #16049 1.5 miles away from Ferrelview, MO
+Take I-29/I-435/US-71 distance of 5.392 miles to intersection #15965 0.5 miles away from Platte City, MO
+Take I-29/US-71 distance of 37.6159 miles to intersection #15093 1.9 miles away from Amazonia, MO
+Take I-29 distance of 8.706 miles to intersection #14950 4 miles away from Fillmore, MO
+Take I-29/US-59 distance of 1.226 miles to intersection #14940 3.9 miles away from Fillmore, MO
+Take I-29 distance of 88.383 miles to intersection #13264 1.9 miles away from Pacific Junction, IA
+Take US-34 distance of 2.649 miles to intersection #13253 0.7 miles away from Plattsmouth, NE
+Take ? distance of 3.499 miles to intersection #13182 3.3 miles away from Plattsmouth, NE
+Take US-75 distance of 12.223 miles to intersection #12773 4.1 miles away from Council Bluffs, IA
+Take I-480/US-75 distance of 2.545 miles to intersection #12687 2.1 miles away from Carter Lake, IA
+Take US-75 distance of 6.32 miles to intersection #12474 4.4 miles away from Carter Lake, IA
+Take I-680/US-75 distance of 0.168 miles to intersection #12472 4.5 miles away from Carter Lake, IA
+Take US-75 distance of 16.193 miles to intersection #12089 0.1 miles away from Blair, NE
+Take US-30/US-75 distance of 0.476 miles to intersection #12090 0.3 miles away from Blair, NE
+Take US-75 distance of 16.938 miles to intersection #11664 0.2 miles away from Tekamah, NE
+Take NE-32 distance of 12.794 miles to intersection #11569 0.5 miles away from Oakland, NE
+Take US-77 distance of 0.202 miles to intersection #11564 0.3 miles away from Oakland, NE
+Take NE-32 distance of 12.728 miles to intersection #11551 0.3 miles away from West Point, NE
+Take US-275 distance of 20.605 miles to intersection #11182 1.9 miles away from Pilger, NE
+Take US-275/NE-15 distance of 2.033 miles to intersection #11187 0.7 miles away from Pilger, NE
+Take US-275 distance of 77.624 miles to intersection #10477 4.8 miles away from Page, NE
+Take US-20/US-275 distance of 13.509 miles to intersection #10142 0.5 miles away from O'Neill, NE
+Take US-20 distance of 46.263 miles to intersection #9800 0.2 miles away from Bassett, NE
+Take US-20/US-183/NE-7 distance of 11.035 miles to intersection #9897 2.7 miles away from Long Pine, NE
+Take US-20/NE-7 distance of 5.5439 miles to intersection #9900 0.2 miles away from Ainsworth, NE
+Take US-20 distance of 37.191 miles to intersection #9062 5.1 miles away from Valentine, NE
+Take US-20/US-83 distance of 4.877 miles to intersection #8881 0.5 miles away from Valentine, NE
+Take US-20 distance of 58.015 miles to intersection #8711 0 miles away from Merriman, NE
+Take NE-61 distance of 5.355 miles to intersection #8524 5.3 miles away from Merriman, NE
+Take SD-73 distance of 12.1199 miles to intersection #8102 0.3 miles away from Martin, SD
+Take US-18 distance of 9.053 miles to intersection #8092 7.5 miles away from Allen, SD
+Take ? distance of 60.108 miles to intersection #6891 20.5 miles away from Wasta, SD
+Take SD-44 distance of 39.541 miles to intersection #6135 0.4 miles away from Rapid City, SD
+Take I-190 distance of 0.389 miles to intersection #6129 0.8 miles away from Rapid City, SD
+Take I-190/US-16 distance of 1.355 miles to intersection #6088 2.1 miles away from Rapid City, SD
+Take I-90/US-14 distance of 6.493 miles to intersection #5950 1.4 miles away from Blackhawk, SD
+Take I-90/US-14/SD-79 distance of 19.425 miles to intersection #5540 0.2 miles away from Sturgis, SD
+Take I-90/US-14/SD-34 distance of 7.399 miles to intersection #5455 0.6 miles away from Whitewood, SD
+Take SD-34 distance of 16.289 miles to intersection #5160 1.2 miles away from Belle Fourche, SD
+Take US-85 distance of 1.416 miles to intersection #5122 0.1 miles away from Belle Fourche, SD
+Take US-85/US-212 distance of 1.084 miles to intersection #5104 1.2 miles away from Belle Fourche, SD
+Take US-212 distance of 89.705 miles to intersection #3559 3.1 miles away from Broadus, MT
+Take US-212/MT-59 distance of 5.533 miles to intersection #3467 2.5 miles away from Broadus, MT
+Take US-212 distance of 98.477 miles to intersection #3094 1.9 miles away from Crow Agency, MT
+Take I-90/US-87/US-212 distance of 56.429 miles to intersection #2735 1.3 miles away from Lockwood, MT
+Take bus-I-90/US-87 distance of 1.748 miles to intersection #2750 2.6 miles away from Billings, MT
+Take bus-I-90 distance of 1.097 miles to intersection #2767 1.8 miles away from Billings, MT
+Take MT-3 distance of 42.212 miles to intersection #2243 1 miles away from Lavina, MT
+Take US-12 distance of 42.56 miles to intersection #2091 1 miles away from Harlowton, MT
+Take US-12/US-191 distance of 1.476 miles to intersection #2090 0.4 miles away from Harlowton, MT
+Take US-12 distance of 48.937 miles to intersection #1891 2.6 miles away from White Sulphur Spring, MT
+Take US-12/US-89 distance of 10.285 miles to intersection #2005 8.6 miles away from White Sulphur Spring, MT
+Take US-12 distance of 30.111 miles to intersection #2055 0 miles away from Townsend, MT
+Take US-12/US-287 distance of 29.59 miles to intersection #1806 1.4 miles away from Helena, MT
+Take bus-I-15/US-12 distance of 1.069 miles to intersection #1802 0.4 miles away from Helena, MT
+Take bus-I-15 distance of 0.783 miles to intersection #1797 0.4 miles away from Helena, MT
+Take ? distance of 0.326 miles to intersection #1793 0.6 miles away from Helena, MT
+Take US-12 distance of 36.258 miles to intersection #1783 2.1 miles away from Garrison, MT
+Take I-90/US-12 distance of 62.183 miles to intersection #1405 1.5 miles away from Missoula, MT
+Take I-90 distance of 4.028 miles to intersection #1349 3.9 miles away from Missoula, MT
+Take I-90/US-93 distance of 5.225 miles to intersection #1293 0.3 miles away from Wye, MT
+Take I-90 distance of 165.051 miles to intersection #672 1.3 miles away from Spokane, WA
+Take I-90/US-2/US-395 distance of 2.642 miles to intersection #680 3.5 miles away from Spokane, WA
+Take US-2 distance of 19.292 miles to intersection #628 0.2 miles away from Reardan, WA
+Take US-2/WA-231 distance of 3.173 miles to intersection #629 2.9 miles away from Reardan, WA
+Take US-2 distance of 36.9469 miles to intersection #553 0.4 miles away from Wilbur, WA
+Take US-2/WA-21 distance of 0.623 miles to intersection #551 1 miles away from Wilbur, WA
+Take US-2 distance of 71.466 miles to intersection #509 3.6 miles away from Entiat, WA
+Take US-2/US-97 distance of 27.1559 miles to intersection #510 3.8 miles away from Leavenworth, WA
+Take US-2 distance of 73.153 miles to intersection #363 0.6 miles away from Monroe, WA
+Take WA-522 distance of 23.059 miles to intersection #384 3.8 miles away from Seattle, WA
+Take I-5 distance of 4.586 miles to intersection #399 0.8 miles away from Seattle, WA
+

@@ -1,0 +1,45 @@
+Enter Starting City: Tampa
+State Choices: KS FL
+Select A State: FL
+
+Enter End City: Houston
+State Choices: AK AR DE MN MO MS PA TX
+Select A State: TX
+
+Found! Total Distance: 923.659
+Take I-275 distance of 2.1909 miles to intersection #28338 1.8 miles away from Tampa, FL
+Take US-41 distance of 40.324 miles to intersection #28064 0.4 miles away from Brooksville, FL
+Take US-41/US-98 distance of 0.17 miles to intersection #28062 0.4 miles away from North Brooksville, FL
+Take US-98 distance of 14.895 miles to intersection #27967 1.8 miles away from Sugarmill Woods, FL
+Take US-19/US-98 distance of 58.3719 miles to intersection #27494 0.4 miles away from Chiefland, FL
+Take US-19/US-98/alt-US-27 distance of 65.089 miles to intersection #27139 0.4 miles away from Perry, FL
+Take US-98/FL-30 distance of 35.773 miles to intersection #27148 3.4 miles away from St. Marks, FL
+Take FL-267 distance of 30.499 miles to intersection #27042 12.6 miles away from Midway, FL
+Take FL-20/FL-267 distance of 2.844 miles to intersection #27047 12.9 miles away from Greensboro, FL
+Take FL-20 distance of 86.612 miles to intersection #27156 0.8 miles away from Freeport, FL
+Take US-331/FL-20 distance of 0.964 miles to intersection #27145 0.3 miles away from Freeport, FL
+Take FL-20 distance of 21.355 miles to intersection #27176 1.4 miles away from Valparaiso, FL
+Take FL-85 distance of 6.222 miles to intersection #27233 1.2 miles away from Eglin AFB, FL
+Take FL-189 distance of 4.649 miles to intersection #27253 0.8 miles away from Wright, FL
+Take FL-393 distance of 3.328 miles to intersection #27290 0.1 miles away from Mary Esther, FL
+Take US-98/FL-30 distance of 35.266 miles to intersection #27332 1.1 miles away from Pensacola, FL
+Take I-110/US-98/FL-30 distance of 0.353 miles to intersection #27328 0.8 miles away from Pensacola, FL
+Take US-90/US-98/FL-30 distance of 0.313 miles to intersection #27331 0.9 miles away from Pensacola, FL
+Take US-90 distance of 0.789 miles to intersection #27320 0.5 miles away from Pensacola, FL
+Take US-29 distance of 5.512 miles to intersection #27279 1.4 miles away from Ensley, FL
+Take I-10 distance of 156.86 miles to intersection #27607 2.9 miles away from Slidell, LA
+Take I-12 distance of 84.4689 miles to intersection #27624 2.1 miles away from Westminster, LA
+Take I-10 distance of 74.785 miles to intersection #27753 2.6 miles away from Crowley, LA
+Take I-10/US-90 distance of 1.23 miles to intersection #27754 1.8 miles away from Crowley, LA
+Take US-90 distance of 1.672 miles to intersection #27755 1.8 miles away from Crowley, LA
+Take I-10 distance of 47.3829 miles to intersection #27796 2.9 miles away from Lake Charles, LA
+Take I-10/US-90 distance of 6.487 miles to intersection #27813 1.9 miles away from Westlake, LA
+Take I-10 distance of 21.76 miles to intersection #27895 4.2 miles away from Vinton, LA
+Take I-10/US-90 distance of 29.0848 miles to intersection #27977 1.7 miles away from Beaumont, TX
+Take US-90 distance of 43.79 miles to intersection #28047 0.9 miles away from Liberty, TX
+Take US-90/TX-146 distance of 5.199 miles to intersection #28053 1.3 miles away from Dayton, TX
+Take US-90 distance of 28.161 miles to intersection #28153 3.1 miles away from Jacinto City, TX
+Take alt-US-90 distance of 1.591 miles to intersection #28164 2.8 miles away from Jacinto City, TX
+Take I-10/US-90 distance of 4.8179 miles to intersection #28170 1.2 miles away from Houston, TX
+Take I-45 distance of 0.85 miles to intersection #28176 0.5 miles away from Houston, TX
+

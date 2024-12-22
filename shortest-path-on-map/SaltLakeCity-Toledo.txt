@@ -1,0 +1,93 @@
+Enter Starting City: Salt Lake City
+State Choices: UT
+Select A State: UT
+
+Enter End City: Toledo
+State Choices: WA OR OH IL IA
+Select A State: OH
+
+Found! Total Distance: 1551.1
+Take UT-186 distance of 5.385 miles to intersection #12644 1.1 miles away from Canyon Rim, UT
+Take I-80 distance of 16.193 miles to intersection #12691 2.1 miles away from South Snyderville Ba, UT
+Take I-80/US-189 distance of 49.711 miles to intersection #11735 1.1 miles away from Evanston, WY
+Take US-189 distance of 2.301 miles to intersection #11726 1.2 miles away from Evanston, WY
+Take I-80/US-189 distance of 11.546 miles to intersection #11677 12.7 miles away from Evanston, WY
+Take I-80 distance of 46.691 miles to intersection #11315 2 miles away from Little America, WY
+Take I-80/US-30 distance of 21.739 miles to intersection #11395 2.1 miles away from James Town, WY
+Take I-80 distance of 3.074 miles to intersection #11462 1.3 miles away from Green River, WY
+Take I-80/US-30 distance of 7.48 miles to intersection #11410 1.4 miles away from Purple Sage, WY
+Take I-80/US-30/US-191 distance of 2.777 miles to intersection #11382 1 miles away from Clearview Acres, WY
+Take US-30/US-191 distance of 2.024 miles to intersection #11355 0 miles away from Rock Springs, WY
+Take US-30 distance of 1.18 miles to intersection #11333 1.1 miles away from Rock Springs, WY
+Take I-80/US-30 distance of 76.596 miles to intersection #11297 13.3 miles away from Wamsutter, WY
+Take I-80/US-30/WY-789 distance of 23.755 miles to intersection #11254 2.2 miles away from Rawlins, WY
+Take US-30/WY-789 distance of 1.599 miles to intersection #11242 0.6 miles away from Rawlins, WY
+Take US-30/US-287 distance of 3.215 miles to intersection #11251 2.6 miles away from Rawlins, WY
+Take I-80/US-30/US-287 distance of 18.466 miles to intersection #11412 14.9 miles away from Sinclair, WY
+Take I-80 distance of 76.42 miles to intersection #12446 3.6 miles away from Laramie, WY
+Take I-80/US-30 distance of 36.534 miles to intersection #12988 1.9 miles away from Warren AFB, WY
+Take US-30 distance of 11.2468 miles to intersection #12896 7.3 miles away from Ranchettes, WY
+Take I-80/US-30 distance of 30.556 miles to intersection #12914 0.1 miles away from Pine Bluffs, WY
+Take US-30 distance of 60.2369 miles to intersection #13066 1.9 miles away from Sidney, NE
+Take US-30/US-385 distance of 25.531 miles to intersection #13198 0.5 miles away from Chappell, NE
+Take US-30 distance of 88.636 miles to intersection #13151 0.5 miles away from North Platte, NE
+Take US-30/US-83 distance of 0.47 miles to intersection #13160 0.7 miles away from North Platte, NE
+Take US-30 distance of 44.678 miles to intersection #13622 0.2 miles away from Cozad, NE
+Take US-30/NE-21 distance of 13.633 miles to intersection #13778 0.2 miles away from Lexington, NE
+Take US-30 distance of 35.306 miles to intersection #13925 0.1 miles away from Kearney, NE
+Take US-30/NE-10 distance of 7.049 miles to intersection #13875 5.8 miles away from Gibbon, NE
+Take US-30 distance of 19.3 miles to intersection #13686 0.3 miles away from Wood River, NE
+Take US-30/NE-11 distance of 1.127 miles to intersection #13676 0.8 miles away from Wood River, NE
+Take US-30 distance of 45.17 miles to intersection #13018 2.4 miles away from Clarks, NE
+Take NE-92 distance of 14.211 miles to intersection #13035 2.5 miles away from Osceola, NE
+Take US-81/NE-92 distance of 12.0429 miles to intersection #12990 3.1 miles away from Shelby, NE
+Take NE-92 distance of 12.374 miles to intersection #12926 2.9 miles away from Garrison, NE
+Take NE-15/NE-92 distance of 1.368 miles to intersection #12925 3.4 miles away from David City, NE
+Take NE-92 distance of 14.163 miles to intersection #12917 4.7 miles away from Weston, NE
+Take NE-79/NE-92 distance of 0.952 miles to intersection #12911 3.7 miles away from Weston, NE
+Take NE-92 distance of 9.816 miles to intersection #12891 0.4 miles away from Wahoo, NE
+Take US-77/NE-92 distance of 6.57 miles to intersection #12813 0.9 miles away from Mead, NE
+Take NE-92 distance of 10.898 miles to intersection #12794 3.6 miles away from Waterloo, NE
+Take US-275/NE-92 distance of 19.757 miles to intersection #12828 3.5 miles away from Bellevue, NE
+Take US-275/IA-92 distance of 4.855 miles to intersection #12757 1.9 miles away from Council Bluffs, IA
+Take IA-92 distance of 44.1129 miles to intersection #12670 6 miles away from Grant, IA
+Take US-71/IA-92 distance of 1.2629 miles to intersection #12619 6.2 miles away from Lewis, IA
+Take IA-92 distance of 49.745 miles to intersection #12322 1.7 miles away from Winterset, IA
+Take US-169/IA-92 distance of 1.723 miles to intersection #12290 0 miles away from Winterset, IA
+Take IA-92 distance of 39.92 miles to intersection #12204 3.4 miles away from Pleasantville, IA
+Take IA-5/IA-92 distance of 6.912 miles to intersection #12237 1.2 miles away from Knoxville, IA
+Take ? distance of 8.22 miles to intersection #12254 2.7 miles away from Harvey, IA
+Take IA-92 distance of 16.847 miles to intersection #12206 0.4 miles away from Oskaloosa, IA
+Take US-63/IA-92 distance of 1.111 miles to intersection #12203 0.9 miles away from University Park, IA
+Take IA-92 distance of 13.941 miles to intersection #12124 1.7 miles away from Delta, IA
+Take IA-21/IA-92 distance of 1.489 miles to intersection #12121 0.6 miles away from Delta, IA
+Take IA-92 distance of 6.478 miles to intersection #12099 0.2 miles away from Sigourney, IA
+Take IA-92/IA-149 distance of 1.428 miles to intersection #12093 1.2 miles away from Sigourney, IA
+Take IA-149 distance of 7.532 miles to intersection #11924 0.8 miles away from Webster, IA
+Take IA-22/IA-149 distance of 3.296 miles to intersection #11899 0.2 miles away from South English, IA
+Take IA-22 distance of 40.829 miles to intersection #11709 0 miles away from Nichols, IA
+Take IA-22/IA-70 distance of 2.271 miles to intersection #11694 2.2 miles away from Nichols, IA
+Take IA-22 distance of 11.618 miles to intersection #11778 0.3 miles away from Muscatine, IA
+Take IA-92 distance of 0.797 miles to intersection #11790 0.8 miles away from Muscatine, IA
+Take IL-92 distance of 21.728 miles to intersection #11667 2.9 miles away from Milan, IL
+Take ? distance of 2.955 miles to intersection #11663 0.3 miles away from Milan, IL
+Take US-67 distance of 0.223 miles to intersection #11661 0 miles away from Milan, IL
+Take I-280 distance of 3.55 miles to intersection #11624 2.5 miles away from Coal Valley, IL
+Take I-74/I-280 distance of 8.737 miles to intersection #11616 2.4 miles away from Colona, IL
+Take I-80 distance of 141.074 miles to intersection #10735 0.4 miles away from Hazel Crest, IL
+Take I-294/I-80 distance of 5.016 miles to intersection #10694 1.4 miles away from Thornton, IL
+Take I-80/I-94 distance of 1.337 miles to intersection #10679 1 miles away from Lansing, IL
+Take I-80/I-94/US-6 distance of 2.65 miles to intersection #10675 1.5 miles away from Munster, IN
+Take I-80/I-94/US-6/US-41 distance of 2.034 miles to intersection #10663 1.6 miles away from Highland, IN
+Take I-80/I-94/US-6 distance of 13.34 miles to intersection #10541 1.5 miles away from Portage, IN
+Take I-94 distance of 2.204 miles to intersection #10483 1.1 miles away from Portage, IN
+Take US-20 distance of 3.719 miles to intersection #10442 1.1 miles away from Burns Harbor, IN
+Take I-94 distance of 16.323 miles to intersection #10096 2.4 miles away from Trail Creek, IN
+Take US-20/US-35 distance of 0.524 miles to intersection #10104 2.9 miles away from Trail Creek, IN
+Take US-20 distance of 24.202 miles to intersection #9904 4.5 miles away from Roseland, IN
+Take bus-US-20 distance of 23.9039 miles to intersection #9837 2.7 miles away from Dunlap, IN
+Take US-20 distance of 55.1608 miles to intersection #9511 5.7 miles away from Edon, OH
+Take I-90/I-80 distance of 53.1979 miles to intersection #9117 4.4 miles away from Holland, OH
+Take OH-2 distance of 10.686 miles to intersection #8917 2.3 miles away from Toledo, OH
+Take US-24 distance of 2.374 miles to intersection #8832 0.2 miles away from Toledo, OH
+
