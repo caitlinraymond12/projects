@@ -52,5 +52,7 @@ There are many different maps that my program can choose for any path, and it ch
 fstream map(path, ios::in | ios::binary);
 ```
 
-Each map is read in one byte at a time, each byte being a short int that represents an elevation. That byte is assigned a color based on the elevation, and a pixel is drawn. The map is read in one byte at a time, and drawn one pixel at a time. After the map is drawn, the red line representing the path is drawn ontop of it. 
+Each map is read in one byte at a time, each byte being a short int that represents an elevation. That byte is assigned a color based on the elevation, and a pixel is drawn. The map is read in one byte at a time, and drawn one pixel at a time. After the map is drawn, the red line representing the path is drawn ontop of it.
+
+The user is prompted to enter a starting city. Then, a list of all states containing a city by that name are listed, and the user must then select a state. The same process is used to select the end city/state.
 
