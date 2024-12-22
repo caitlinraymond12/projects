@@ -15,23 +15,27 @@ First Few Lines of File:
 
 In the linked-list database, the user is able to:
 * Reverse the entire linked list  
-    * > reverse
+    * reverse
 * Find a person by their name   
-        *find Lillian DeMorgan*
+    * find Lillian DeMorgan
 * Find a person by their zipcode  
-        *zip 79090*
+    * zip 79090
 * Count how many people named a certain Beatle as their favorite  
-        *count Paul*
+    * count Paul
 * Find oldest person  
-        *oldest* 
+    * oldest 
 * Remove based on SSN  
-        *remove 148432263*
+    * remove 148432263
 
 In the binary-tree database, the user is able to:
 * Print out the entire tree
-    * test
+    * print
 * Create a family tree based on a last name
+    * tree Tivo
 * Remove a person from the tree
+    * remove Orson Laurel
 * Find a person by their name 
+    * find James Stanley
 * Find oldest person
+    * oldest
 
