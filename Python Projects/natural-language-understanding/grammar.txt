@@ -1,0 +1,176 @@
+group npstart art dem num pos prn madj adj nn
+group vpstart madj adv vb
+
+start sentence-cnj
+
+graph sentence-cnj
+    node start
+        ["always", ("sub", "sentence"), ["receive", ("to", "had-sentence")]]
+    node start-reason
+        ["always", ("sub", "sentence"), [("note", "kind", "reason"), "receive", ("to", "had-sentence")]]
+    node had-sentence
+        [("cat", "reason"), (),["build", ("to", "start-reason")]]
+        ["always", (), "accept"]
+
+
+graph sentence
+  node start
+    [("group", "npstart"),   \
+        ("sub", "np-cnj"),   \
+        [("lift", "hadnn"), ("lift", "hadprn"), ("lift", "prngen"), ("lift" , "nngen"),("lift", "numnn"), ("note", "kind", "statement"), "receive", ("to", "need-vb")]]
+    [[("group", "vpstart"), ("not", ("has", "typ", "s"))], ("sub", "vp"), [("lift", "vtype"), ("note", "kind", "command"), "receive", ("to", "had-vb")]]
+    [("cat", "reason"), "consume", [("note", "kind", "reason"), "build", ("to", "had-reason")]]
+    [[("cat", "que"), ("has", "mod", "nv")], "consume", [("note", "kind", "question"), "build", ("to" , "no-verb")]]
+    [[("cat", "que"), ("has", "mod", "npa")], "consume", [("note", "kind", "question"), "build", ("to", "need-subj")]]
+    [("cat", "que"), "consume", [("note", "kind", "question"), "build", ("to", "need-vb")]]
+  node need-subj
+    [("cat", "art"), (), "fail"]
+    [("cat", "dem"), (), "fail"]
+    [("cat", "prn"), (), "fail"]
+    [("cat", "pos"), (), "fail"]
+    [("group", "npstart"), ("sub", "np-cnj"), [("note", "kind", "question"), "receive", ("to", "need-vb")]]
+  node no-verb
+    ["always", ("sub", "np-cnj"), ["receive", ("to", "need-vb")]]
+  node need-vb
+    [("group", "vpstart"), ("sub", "vp"), [("lift", "numvb"), ("lift", "vtype"), "receive", ("to", "had-vb")]]
+  node had-reason
+    [("group", "npstart"),   \
+        ("sub", "np-cnj"),   \
+        [("lift", "numnn"), "receive", ("to", "need-vb")]]
+  node had-vb
+    [[("=", ("value", "hadnn"), "true"), ("not", ("=", ("value", "numnn"), ("value", "numvb")))], (), "fail"]
+    [[("=", ("value", "vtype"), "b"), ("cat", "dem")], "consume", ("to", "had-belief")]
+    [("=", ("value", "vtype"), "b"), (), ("to", "had-belief")]
+    [("=", ("value", "vtype"), "t"), ("sub", "np-cnj"), [("lift", "numnn"), ("lift", "hadnn"), ("lift", "nngen"), "receive", ("note", "had-obj"), ("to", "had-obj")]]
+    [("=", ("value", "vtype"), "i"), (), ("to", "had-obj")]
+    [("=", ("value", "vtype"), "e"), (), ("to", "need-comp")]
+    [("cat", "prp"), ("sub" , "prpp"), ["receive" , ("to" , "had-prpp")]]
+  node need-comp
+    [("cat", "madj", "adj"), ("sub", "adj-cnj"), ["receive", "stay"]]
+    ["always", (), ("jump", "had-obj")]
+  node had-belief
+      [("group", "npstart"),   \
+        ("sub", "np-cnj"),   \
+        [("note", "kind", "belief"), "receive", ("to", "need-vb")]]
+  node had-obj
+    [[("=", ("value", "hadprn"), "true"), ("=", ("value", "hadnn"), "true"), ("not", ("=", ("value", "nngen"), ("value", "prngen")))], (), "fail"]
+    [("cat", "vb"), ("sub", "vp"), ["receive", ("to", "had-vb")]]
+    [[("cat", "prp"), ("noted", "had-obj")], ("sub", "prpp"), ["receive", ("to", "had-prpp")]]
+    [("cat", "madj", "adv"), ("sub", "advp-grp"), ["receive", ("to", "had-advp")]]
+    ["always", (), ("accept", ("value", "kind"))]
+  node had-advp
+    [("cat", "prp"), ("sub", "prpp"), ["receive", ("to", "had-advp-prpp")]]
+    ["always", (), ("accept", ("value", "kind"))]
+  node had-prpp
+    [("cat", "madj", "adv"), ("sub", "advp"), ["receive", ("to", "had-advp-prpp")]]
+    ["always", (), ("accept", ("value", "kind"))]
+  node had-advp-prpp
+    [[("cat", "cnj"), ("not", ("has", "mod", "big"))], "consume", ["build", ("to", "need-more")]]
+    ["always", (), ("accept", ("value", "kind"))]
+  node need-more
+    [("cat", "prp"), ("sub", "prpp"), ["receive", ("to", "had-prpp")]]
+    [("cat", "madj", "adv"), ("sub", "advp"), ["receive", ("to", "had-advp")]]
+
+graph np-cnj
+  node start
+    [("group", "npstart"), ("sub", "np"), [("lift", "hadnn"), ("lift", "hadprn"), ("lift", "prngen"), ("lift" , "nngen"),("lift", "numnn"), "receive", ("to", "had-np")]]
+  node had-np
+    [[("cat", "cnj"), ("not", ("has", "mod", "big"))], "consume", ["build", ("to", "had-cnj")]]
+    ["always", (), ("accept", "nosolo")]
+  node had-cnj
+    ["always", ("sub", "np"), ["receive", ("to", "had-np")]]
+
+
+
+graph np
+  node start
+    [("cat", "art", "dem"), \
+        "consume", \
+            [("note", "hadart", "true"), ("note", "artnum", ("tag", "num")), "build", ("to", "after-art")]]
+    [("cat", "prn"), "consume", [("note", "hadprn", "true"), ("note", "prngen", ("tag", "gen")), "build", "accept"]]
+    [("cat", "pos"), "consume", ["build", ("to", "after-art")]]
+    ["always", (), ("jump", "after-art")]
+  node after-art
+    [[("cat", "num") , ("=", ("value", "hadart"), "true"), ("not" , ("=", ("value", "artnum"), "p"))] , (), "fail"]
+    [("cat", "num"), "consume", ["build", ("to", "after-art-num")]]
+    ["always", (), ("jump", "after-art-num")]
+  node after-art-num
+    [("cat", "madj"), ("sub", "adj-grp"), ["receive", "stay"]]
+    [("cat", "adj"), "consume", ["build", "stay"]]
+    [[("cat", "nn"),("=", ("value", "hadart"), "true"), ("=", ("tag", "num"), "p"), ("not" , ("=", ("value", "artnum"), "p"))] , \
+        (), \
+            "fail"]
+    [[("cat", "nn"), ("cat", "adj")],      \
+         ("sub", "nn-grp"),                         \
+         ["receive", ("to", "after-nn")]]
+    [("cat", "nn"), "consume", [("note", "nngen", ("tag", "gen")), ("note", "hadnn", "true"), ("note", "numnn", ("tag", "num")), "build", ("to", "after-nn")]]
+  node after-nn
+    [("cat", "cnj"), "consume", ["build" , "stay"]]
+    [("cat", "prp", "madj"), ("sub", "prpp"), ["receive", "accept"]]
+    ["always", (), "accept"]
+
+
+graph adj-cnj
+  node start
+    [("cat", "madj", "adj"), "consume", ["build", ("to", "adj-start")]]
+  node adj-start
+    [[("cat", "cnj"), ("not", ("has", "mod", "big"))], "consume", ["build", ("to", "adj-next")]]
+    ["always", (), "accept"]
+  node adj-next
+    ["always", ("sub", "adj-grp"), ["receive", ("to", "adj-start")]]
+
+
+graph adj-grp
+  node start
+    [("cat", "adj"), "consume", ["build", "accept"]]
+    [("cat", "madj"), "consume", ["build", "stay"]]
+
+graph nn-grp
+  node start
+    [("cat", "nn"), "consume", ["build", ("to", "after-nn")]]
+  node after-nn
+    [("cat", "nn"), "consume", ["build", "accept"]]
+
+graph prpp
+  node start
+    [("cat", "madj"), "consume", ["build", ("to", "need-prp")]]
+    [("cat", "prp"), "consume", ["build", ("to", "after-prp")]]
+  node need-prp
+     [("cat", "prp"), "consume", ["build", ("to", "after-prp")]]
+  node after-prp
+    ["always", ("sub", "np"), ["receive", "accept"]]
+
+graph vp
+  node start
+    [("cat", "madj", "adv"), ("sub", "adv-cnj"), ["receive", ("to", "need-vb")]]
+    [("cat", "vb"), \
+        "consume", \
+        [("note", "numvb", ("tag", "num")), ("note", "vtype", ("tag", "typ")), "build", ("to", "had-vb")]]
+  node need-vb
+    [("cat", "vb"), "consume", [("note", "vtype", ("tag", "typ")), "build", ("to", "had-vb")]]
+  node had-vb
+    [("cat", "madj", "adv"), ("sub", "adv-cnj"), ["receive", "accept"]]
+    ["always", (), "accept"]
+
+
+graph adv-cnj
+  node start
+    [("cat", "madj"), "consume", ["build", "stay"]]
+    [("cat", "adv"), "consume", ["build", ("to", "after-advp")]]
+  node after-advp
+    [("cat", "cnj"), "consume", ["build", ("to", "start")]]
+    [("cat", "madj", "adv"), (), "fail"]
+
+
+graph advp
+  node start
+    [("cat", "madj"), "consume", ["build", "stay"]]
+    [("cat", "adv"), "consume", ["build", "accept"]]
+
+graph advp-grp
+  node start
+    [("cat", "madj", "adv"), ("sub", "advp"), ["receive", ("to", "after-advp")]]
+  node after-advp
+    [("cat", "cnj"), "consume", ["build", ("to", "start")]]
+    [("cat", "madj", "adv"), (), "fail"]
+    ["always", (), ("accept", "nosolo")]

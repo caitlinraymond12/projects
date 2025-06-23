@@ -1,0 +1,1239 @@
+thirty num num:p
+fourty num num:p
+fifty num num:p
+sixty num num:p
+seventy num num:p
+eighty num num:p
+ninety num num:p
+a art num:s typ:ind
+above prp
+ache vb num:s,p tns:pr typ:i
+ache nn num:s gen:n
+ached vb num:s tns:ps typ:i root:ache
+aches vb num:s tns:pr typ:i root:ache
+aching vb typ:g root:ache
+alive adj
+alligator nn num:s ani gen:f,m,n
+alligators nn num:p ani root:alligator gen:f,m,n
+almond adj
+almond nn num:s food gen:f,m,n
+almonds nn num:p food gen:f,m,n
+although cnj mod:big
+am vb num:s tns:pr typ:i,t,e root:be
+amanda nn num:s name gen:f
+an art num:s typ:ind
+anchor nn num:s gen:n
+anchors nn num:p root:anchor gen:n
+and cnj
+andrew nn num:s name gen:m
+angrily adv root:angry
+angry adj
+angrier adj mod:more root:angry
+angriest adj mod:most root:angry
+angus nn num:s name gen:m
+anne nn num:s name gen:f
+annabelle nn num:s name gen:f
+ant nn num:s ani gen:n
+anthony nn num:s name gen:m
+ants nn num:p root:ant ani gen:n
+anvil nn num:s gen:n
+anvils nn num:p root:anvil gen:n
+apple nn num:s gen:n
+apples nn num:p root:apple gen:n
+are vb num:p tns:pr typ:i,t,e root:be
+are que
+arm nn num:s gen:n
+arms nn num:p root:arm gen:n
+around prp
+arrow nn num:s gen:n
+arrows nn num:p root:arrow gen:n
+arthur nn num:s name gen:m
+at prp
+ate vb num:s,p tns:ps typ:i,t root:eat
+aunt nn num:s gen:f
+aunts nn num:p gen:f
+away adv
+bacon nn num:s,p food gen:n
+bad adj mod:neg root:good
+badger nn num:s ani gen:f,m,n
+badger vb num:s,p tns:pr typ:t
+badgered vb num:s,p tns:ps typ:t root:badger
+badgered adj root:badger
+badgerer nn num:s root:badger gen:f,m,n
+badgerers nn num:p root:badger gen:f,m,n
+badgering vb typ:g root:badger
+badgers nn num:p root:badger ani gen:f,m,n
+badgers vb num:s tns:pr typ:t root:badger
+badly adv mod:neg root:good
+bake vb num:s,p tns:pr typ:i,t
+baked vb num:s,p tns:ps typ:i,t root:bake
+baked adj root:bake
+bakes vb num:s tns:pr typ:i,t root:bake
+baker nn num:s root:bake gen:f,m
+bakers nn num:p root:bake gen:f,m
+baking vb typ:g root:bake
+ball nn num:s gen:n
+balls nn num:p root:ball gen:n
+banana nn num:s food gen:n
+bananas nn num:p root:banana food gen:n
+banjo nn num:s gen:n
+banjos nn num:p root:banjo gen:n
+bat nn num:s ani gen:n,f,m
+bat vb num:s,p tns:pr typ:t
+bats nn num:p root:bat ani gen:n,f,m
+bats vb num:s tns:pr typ:t root:bat
+batted vb num:s,p tns:ps typ:i,t root:bat
+batter nn num:s root:bat gen:n,f,m
+batters nn num:p root:bat gen:n,f,m
+batting vb typ:g root:bat
+be vb num:s,p tns:p typ:i,t,e
+because reason
+bean nn num:s food gen:n
+beans nn num:p food root:bean gen:n
+bear nn num:s ani gen:n,f,m
+bears nn num:p root:bear gen:n,f,m
+bed nn num:s gen:n
+beds nn num:p root:bed gen:n
+bee nn num:s ani gen:n,f,m
+beef nn num:p food gen:n
+beer nn num:s,p food gen:n
+bees nn num:p ani root:bee gen:n,f,m
+beetle nn num:s ani gen:n,f,m
+beetles nn num:p root:beetle ani gen:n,f,m
+being vb typ:g root:b
+being nn num:s gen:n,f,m
+beings nn num:p root:being
+believe vb num:s,p tns:pr typ:b
+believed vb num:s,p tns:ps typ:i,t,b root:believe
+believer nn num:s root:believe gen:f,m
+believers nn num:p root:believe gen:f,m
+believes vb num:s tns:pr typ:i,t,b root:believe
+believing vb typ:g root:believe
+below prp
+ben nn num:s name gen:m
+beside prp
+best adj mod:most root:good
+better adj mod:more root:good
+betty nn num:s name gen:f
+big adj
+bigger adj mod:more root:big
+biggest adj mod:most root:big
+bill nn num:s name gen:m
+bird nn num:s ani gen:n,f,m
+birds nn num:p root:bird ani gen:n,f,m
+bit vb num:s,p tns:ps typ:i,t root:bite
+bite vb num:s,p tns:pr typ:i,t
+bite nn num:s gen:n
+biter nn num:s root:bite gen:n,f,m
+biters nn num:p root:bite gen:n,f,m
+bites vb num:s tns:pr typ:i,t root:bite
+bites nn num:p root:bite gen:n
+biting vb typ:g root:bite
+black adj
+blacker adj mod:more root:black
+blackest adj mod:most root:black
+blue adj
+bluer adj mod:more root:blue
+bluest adj mod:most root:blue
+bold adj
+bolder adj mod:more root:bold
+boldest adj mod:most root:bold
+boldly adv root:bold
+bone nn num:s gen:n
+bones nn num:p root:bone gen:n
+bottle nn num:s gen:n
+bottles nn num:p root:bottle gen:n
+bought vb num:s,p tns:ps typ:t root:buy
+boy nn num:s gen:m
+boys nn num:p root:boy gen:m
+bread nn num:p food gen:n
+break vb num:s,p tns:pr typ:i,t
+breaks vb num:s tns:pr typ:i,t root:break
+breaking vb typ:g root:break
+brenda nn num:s name gen:f
+brian nn num:s name gen:m
+broke vb num:s,p tns:ps typ:t root:break
+broken adj root:break
+brother nn num:s gen:m
+brothers nn num:p root:brother gen:m
+buffalo nn num:s ani gen:n,f,m
+buffalos nn num:p root:buffalo gen:n,f,m
+but cnj mod:big
+buy vb num:s,p tns:pr typ:t
+buyer nn num:s root:buy gen:f,m
+buyers nn num:p root:buy gen:f,m
+buying vb typ:g root:buy
+buys vb num:s tns:pr root:buy
+by prp
+cabbage nn num:s gen:n
+cabbages nn num:p root:cabbage gen:n
+caitlin nn num:s name gen:f
+cake nn num:s food gen:n
+cakes nn num:p food root:cake gen:n
+call vb num:s,p typ:i,t tns:pr
+call nn num:s gen:n
+called vb num:s,p typ:i,t tns:ps root:call
+caller nn num:s root:call gen:n,f,m
+callers nn num:p root:call gen:n,f,m
+calling vb typ:g root:call
+calls vb num:s typ:i,t tns:pr
+calls nn num:p root:call gen:n
+calvin nn num:s name gen:m
+caroline nn num:s name gen:f
+cat nn num:s ani gen:n,f,m
+cats nn num:p root:cat ani gen:n,f,m
+cattle nn num:p root:cow ani gen:n
+chair nn num:s gen:n
+chairs nn num:p gen:n
+charles nn num:s name gen:m
+charlie nn num:s name gen:m
+charlotte nn num:s name gen:f
+chase vb num:s,p tns:pr typ:t
+chased vb num:s,p tns:ps typ:t root:chase
+chased adj root:chase
+chaser nn num:s root:chase gen:n,f,m
+chasers nn num:p root:chase gen:n,f,m
+chasing vb typ:g root:chase
+chases vb num:s tns:pr typ:t root:chase
+cheese nn num:p food gen:n,f,m
+chicken nn num:s ani gen:n,f,m
+chickens nn num:p root:chicken ani gen:n,f,m
+chris nn num:s name gen:m
+christine nn num:s name gen:f
+christopher nn num:s name gen:m
+circle nn num:s gen:n
+circles nn num:p root:circle gen:n
+club vb num:s,p tns:pr typ:t
+club nn num:s gen:n
+clubbed vb num:s,p tns:ps typ:t root:club
+clubber nn num:s root:club gen:n,f,m
+clubbers nn num:p root:club gen:n,f,m
+clubbing vb typ:g root:club
+clubs vb num:s tns:pr typ:t root:club
+clubs nn num:p root:club gen:n
+cluck vb num:s,p tns:pr typ:i
+clucked vb num:s,p tns:ps typ:i root:cluck
+clucker nn num:s root:cluck gen:n,f,m
+cluckers nn num:p root:cluck gen:n,f,m
+clucking vb typ:g root:cluck
+clucks vb num:s tns:pr typ:i root:cluck
+cold adj
+hot adj
+coal nn num:p gen:n
+cockroach nn num:s ani gen:n,f,m
+cockroaches nn num:p ani root:cockroach gen:n,f,m
+coffee nn num:p,s food gen:n
+colin nn num:s name gen:m
+computer nn num:s gen:n
+computers nn num:p root:computer gen:n
+cook vb num:s,p tns:pr typ:t
+cook nn num:s gen:n,f,m
+cooked vb num:s,p tns:ps typ:t,i root:cook
+cooked adj root:cook
+cooker nn num:s root:cook gen:n,f,m
+cookers nn num:p root:cook gen:n,f,m
+cooking vb typ:g root:cluck
+cooks vb num:s tns:pr typ:t,i root:cook
+cooks nn num:p root:cook gen:n,f,m
+couch nn num:s gen:n
+couches nn num:p gen:n
+cow nn num:s ani gen:n,f
+cows nn num:p root:cow ani gen:n,f
+crinkle nn num:s gen:n
+crinkle vb num:s,p tns:pr typ:i,t
+crinkled adj root:crinkle
+crinkled vb num:s,p tns:ps typ:i,t root:crinkle
+crinkles nn num:p root:crinkle gen:n
+crinkles vb num:s tns:pr typ:i,t root:crinkle
+crinkling vb typ:g root:crinkle
+cuddle vb num:s,p tns:pr typ:t,i
+cuddle nn num:s gen:n
+cuddled vb num:s,p tns:ps typ:t root:cuddle
+cuddled adj root:cuddle
+cuddler nn num:s root:cuddle gen:n,f,m
+cuddlers nn num:p root:cuddle gen:n,f,m
+cuddles vb num:s tns:pr typ:t,i root:cuddle
+cuddles nn num:p gen:n root:cuddle
+cuddling vb typ:g root:cuddle
+cup nn num:s gen:n
+cups nn num:p root:cup gen:n
+cute adj
+cuter adj mod:more root:cute
+cutest adj mod:most root:cute
+cutely adv root:cute
+damage vb num:s,p tns:pr typ:t
+damage nn num:s,p gen:n
+damaged vb num:s,p tns:ps typ:t root:damage
+damages vb num:s tns:pr typ:t root:damage
+damager nn num:s root:damage gen:n
+damagers nn num:p root:damage gen:n,f,m
+damaging vb typ:g root:damage
+dan nn num:s name gen:m
+daniel nn num:s name gen:m
+dannielle nn num:s name gen:f
+daughter nn num:s gen:f
+daughters nn num:p root:daughter gen:f
+david nn num:s name gen:m
+dead adj mod:neg root:alive
+dennis nn num:s name gen:m
+dense adj
+denser adj mod:more root:dense
+densest adj mod:most root:dense
+densely adv root:dense
+do vb num:s,p tns:pr typ:i,t
+did vb num:s,p tns:ps typ:i,t,s root:do
+dim adj
+dimmer adj mod:more root:dim
+dimmest adj mod:most root:dim
+dimple nn num:s gen:n
+dimpled adj root:dimple
+dimples nn num:p root:dimple gen:n
+dinner nn num:s gen:n
+dirt nn num:p gen:n
+dirty adj root:dirt
+dirtier adj mod:more root:dirt
+dirtiest adj mod:most root:dirt
+disc nn num:s gen:n
+discs nn num:p root:disc gen:n
+discourage vb num:s,p tns:pr typ:t mod:neg root:encourage
+discouraged vb num:s,p tns:ps typ:t mod:neg root:encourage
+discouraged adj mod:neg root:encourage
+discouraging vb typ:g mod:neg root:encourage
+dog nn num:s ani gen:n,f,m
+dogs nn num:p root:dog ani gen:n,f,m
+dolphin nn num:s,p ani gen:n,f,m
+dolphins nn num:p ani root:dolfin gen:n,f,m
+door nn num:s gen:n
+doors nn num:p root:door gen:n
+dopey adj
+dopier adj mod:more root:dopey
+dopiest adj mod:most root:dopey
+dora nn num:s name gen:f
+doreen nn num:s name gen:f
+dwarf adj
+dwarf nn num:s gen:n,f,m
+dwarves nn num:p root:dwarf gen:n,f,m
+eat vb num:s,p tns:pr typ:t,i
+eaten adj root:eat
+eaten vb tns:ps num:s,p typ:i,t root:eat
+eater nn num:s gen:n,f,m root:eat
+eaters nn num:p gen:n,f,m root:eat
+eating vb typ:g root:eat
+eats vb num:s tns:pr typ:i,t
+ed nn num:s name gen:m
+edward nn num:s name gen:m
+eight num num:p
+eighteen num num:p
+eleanor nn num:s name gen:f
+elephant nn num:s gen:n
+elephants nn num:p gen:n
+eleven num num:p
+elizabeth nn num:s name gen:f
+encourage vb num:s,p tns:pr typ:i,t
+encouraged vb num:s,p tns:ps typ:i,t root:encourage
+encouraged adj root:encourage
+encourages vb num:s tns:pr typ:t root:encourage
+encouraging vb typ:g root:encourage
+enjoy vb num:s,p tns:pr typ:t
+enjoyed vb num:s,p tns:ps typ:t root:enjoy
+enjoys vb num:s tns:pr typ:t root:enjoy
+enjoying vb typ:g root:enjoy
+entice vb num:s,p tns:pr typ:t
+enticed vb num:s,p tns:ps typ:i,t root:entice
+entices vb num:s tns:pr typ:i,t root:entice
+enticing vb typ:g root:entice
+eric nn num:s name gen:m
+erica nn num:s name gen:f
+exist vb num:s,p tns:pr typ:i
+existed vb num:s,p tns:ps typ:i root:exist
+existing vb typ:g root:exist
+exists vb num:s tns:pr typ:i root:exist
+eye nn num:s gen:n
+eye vb num:s,p tns:pr typ:t
+eyed vb num:s,p tns:ps typ:t root:eye
+eyed adj root:eye
+eyes vb num:s tns:pr typ:t root:eye
+eyes nn num:p root:eye gen:n
+eyeing vb typ:g root:eye
+face nn num:s gen:n
+faces nn num:p root:face gen:n
+fast adv
+fast adj
+faster adj mod:more root:fast
+fastest adj mod:most root:fast
+fat adj
+father nn num:s gen:m
+fathers nn num:p gen:m root:father
+fatter adj mod:more root:fat
+fattest adj mod:most root:fat
+few num num:p
+fifteen num num:p
+fig nn num:s food gen:n
+figs nn num:p food root:fig gen:n
+filth nn num:p gen:n
+filthy adj root:filth
+filthier adj mod:more root:filth
+filthiest adj mod:most root:filth
+find vb num:s,p typ:t tns:pr
+finding vb typ:g root:find
+finds vb num:s typ:t tns:pr root:find
+finger nn num:s gen:n
+finger vb num:s,p tns:pr typ:t
+fingered adj root:finger
+fingered vb num:s,p tns:ps typ:t root:finger
+fingering vb typ:g root:finger
+fingers nn num:p root:finger gen:n
+fingers vb num:s tns:pr typ:t root:finger
+fiona nn num:s name gen:f
+fish nn num:s,p ani gen:n,f,m
+fishes nn num:p root:fish ani gen:n,f,m
+five num num:p
+flame nn num:s gen:n
+flames nn num:p root:flame gen:n
+flew vb num:s,p tns:ps typ:i,t root:fly
+flies nn num:p root:fly ani gen:n
+flies vb num:s tns:pr typ:i,t root:fly
+float vb num:s,p tns:pr typ:i
+floats vb num:p tns:pr typ:i
+floor nn num:s gen:n
+floors nn num:p gen:n
+florence nn num:s name gen:f
+flower nn num:s gen:n
+flowers nn num:p root:flower gen:n
+flown adj root:flow
+fly nn num:s ani gen:n
+fly vb num:s,p tns:pr typ:i,t
+flying vb typ:g root:fly
+fool nn num:s gen:f,m
+fool vb num:s,p tns:pr typ:t
+fooled vb num:s,p tns:ps typ:t,i root:fool
+fooling vb typ:g root:fool
+foolish adj root:fool
+foolishly adv root:fool
+fools nn num:p root:fool gen:f,m
+fools vb num:s tns:pr typ:i,t root:fool
+foot nn num:s gen:n
+feet nn num:p gen:n
+forest nn num:s gen:n
+forests nn num:p root:forest gen:n
+found vb num:s,p tns:ps typ:i,t root:find
+found adj root:find
+four num num:p
+fourteen num num:p
+fox nn num:s ani gen:n,f,m
+foxes nn num:p root:fox ani gen:n,f,m
+fred nn num:s name gen:m
+frances nn num:s name gen:f
+francis nn num:s name gen:m
+frank nn num:s name gen:m
+frank adj
+fridge nn num:s gen:n
+friend nn num:s gen:n,f,m
+friendlily adv root:friend
+friendly adj root:friend
+friendlier adj mod:more root:friend
+friendliest adj mod:most root:friend
+friends nn num:p root:friend gen:n,f,m
+frightened adj
+frightened vb num:s,p tns:ps typ:t,i
+fruit nn num:s,p food gen:n
+fruit vb num:s,p tns:pr typ:t
+fruits nn num:p root:fruit food gen:n
+fruits vb num:s tns:pr typ:t root:fruit
+fun adj
+for prp
+geese nn num:p root:goose ani gen:n,f,m
+geoffrey nn num:s name gen:m
+george nn num:s name gen:m
+georgina nn num:s name gen:f
+gertrude nn num:s name gen:f
+girl nn num:s gen:f
+girls nn num:p root:girl gen:f
+goldfish nn num:s,p ani gen:n,f,m
+good adj
+goose nn num:s ani gen:n,f,m
+gorilla nn num:s ani gen:n,f,m
+gorillas nn num:p root:gorilla ani gen:n,f,m
+grass nn num:s gen:n
+grasses nn num:p root:grass gen:n
+gravy nn num:p food gen:n
+green adj
+greener adj mod:more root:green
+greenest adj mod:most root:green
+grumpy adj
+ham nn num:s gen:n
+had vb num:s,p tns:ps typ:t root:have
+hair nn num:s gen:n
+hairs nn num:p root:hair gen:n
+hairy adj mod:more root:hair
+hairiest adj mod:most root:hair
+halibut nn num:s ani gen:n
+halibuts nn num:s ani root:halibut gen:n
+harold nn num:s name gen:m
+harry nn num:s name gen:m
+happy adj
+happier adj mod:more root:happy
+happiest adj mod:most root:happy
+has vb num:s tns:pr typ:t root:have
+harm vb num:s,p tns:pr typ:t
+harm nn num:s gen:n
+harmed vb num:s,p tns:ps typ:t root:harm
+harms vb num:s tns:pr typ:t root:harm
+harms nn num:p root:harm gen:n
+hat nn num:s gen:n
+hats nn num:p gen:n
+hate vb num:s,p typ:t tns:pr mod:neg root:love
+hated vb num:s,p typ:t tns:ps mod:neg root:love
+hates vb num:s typ:t tns:pr mod:neg root:love
+hating vb typ:g mod:neg root:love
+have vb num:s,p tns:pr typ:t
+having vb typ:g root:have
+he prn num:s case:n gen:m
+henrietta nn num:s name gen:f
+henry nn num:s name gen:m
+her prn num:s case:a root:she gen:f
+her pos root:she gen:f num:s
+herbert nn num:s name gen:m
+hers prn root:she gen:f
+herring nn num:s ani gen:n
+herrings nn num:p ani root:herring gen:n
+hidden adj root:hide
+hide vb num:s,p tns:pr typ:i,t
+hider nn num:s root:hide gen:n,f,m
+hiders nn num:p root:hide gen:n,f,m
+hides vb num:s tns:pr typ:i,t root:hide
+hiding vb typ:g root:hide
+hilda nn num:s name gen:f
+hippopotamus nn num:s ani gen:n,f,m
+hippopotamusses nn num:p root:hippopotamus ani gen:n,f,m
+him prn num:s case:a root:he gen:m
+his pos root:he gen:m num:s
+hit vb num:s,p tns:pr,ps typ:t
+home nn num:s gen:n
+homer nn num:s name gen:m
+homes nn num:p root:home gen:n
+horse nn num:s ani gen:n,f,m
+horses nn num:p root:horse ani gen:n,f,m
+hortense nn num:s name gen:f
+house nn num:s gen:n
+houses nn num:p root:house gen:n
+human adj
+human nn num:s gen:f,m
+humans nn num:p root:human gen:f,m
+hungrily adv root:hungry
+hungrier adj mod:more root:hungry
+hungriest adj mod:most root:hungry
+hungry adj
+inside prp
+if reason
+incredibly adv
+incredibly madj
+i prn case:n num:s gen:f,m,n
+ill adj mod:neg root:well
+is vb num:s tns:pr typ:i,t,e root:be
+it prn num:s case:n
+its adj root:it
+ink nn num:s,p gen:n
+irate adj
+irene nn num:s name gen:f
+iris nn num:s name gen:f
+james nn num:s name gen:m
+jane nn num:s name gen:f
+janet nn num:s name gen:f
+jerry nn num:s name gen:m
+jim nn num:s name gen:m
+jimmy nn num:s name gen:m
+joe nn num:s name gen:m
+joseph nn num:s name gen:m
+josephine nn num:s name gen:f
+juice nn num:s,p food gen:n
+juices nn num:p food root:juice gen:n
+jump vb num:s,p tns:pr typ:i
+jumped vb num:s,p tns:ps typ:i root:jump
+jumps vb num:s tns:pr typ:i root:jump
+kangaroo nn num:s gen:n,f,m
+kangaroos nn num:p root:kangaroo gen:n,f,m
+kenneth nn num:s name gen:m
+kenny nn num:s name gen:m
+kevin nn num:s name gen:m
+kick vb num:s,p typ:t tns:pr
+kicked vb num:s,p typ:t tns:ps
+kicked adj root:kick
+kicker nn num:s root:kick gen:n,f,m
+kickers nn num:p root:kick gen:n,f,m
+kind adj
+kinder adj mod:more root:kind
+kindest adj mod:most root:kind
+kindly adv root:kind
+kitten nn num:s ani gen:n,f,m
+kittens nn num:p ani gen:n,f,m
+knew vb num:s,p tns:ps typ:b,i,t root:know
+know vb num:s,p tns:pr typ:b,i,t
+knower nn num:s root:know gen:n,f,m
+knowers nn num:p root:know gen:n,f,m
+knowing vb typ:g root:know
+known adj root:know
+knows vb num:s tns:pr typ:b,i,t root:know
+lame adj
+lament vb num:s,p tns:pr typ:t
+lamented vb num:s,p tns:ps typ:i,t root:lament
+lamented adj root:lament
+lamenting vb typ:g root:lament
+large adj
+larger adj mod:more root:large
+largest adj mod:most root:large
+larry nn num:s name gen:m
+laugh vb num:s,p tns:pr typ:i
+laughed vb num:s,p tns:ps typ:i
+laugher nn num:s root:laugh gen:n,f,m
+laughers nn num:p root:laugh gen:n,f,m
+laughing vb typ:g
+laughs vb num:s tns:pr typ:i
+lavinia nn num:s name gen:f
+lazy adj
+lazier adj mod:more root:lazy
+laziest adj mod:most root:lazy
+leg nn num:s gen:n
+lego nn num:p gen:n
+legs nn num:p root:leg gen:n
+lemon nn num:s food gen:n
+lemons nn num:p root:lemon food gen:n
+letitia nn num:s name gen:f
+lettuce nn num:s food gen:n
+lettuces nn num:p root:lettuce food gen:n
+leave vb num:s,p tns:pr typ:i,t
+leaves vb num:s tns:pr typ:i,t
+liar nn num:s root:lie gen:n,f,m
+liars nn num:p root:lie gen:n,f,m
+lie vb num:s,p tns:pr typ:i
+lie nn num:s gen:n
+lies vb num:s tns:pr typ:i root:lie
+lies nn num:p root:lie gen:n
+lied vb num:s,p tns:ps typ:i root:lie
+like vb num:s,p tns:pr typ:t
+like prp
+liked vb num:s,p tns:ps typ:t root:like
+liked adj root:like
+likes vb num:s tns:pr typ:t root:like
+liking vb typ:g root:like
+lisa nn num:s name gen:f
+little adj
+livid adj
+look vb num:s,p tns:pr typ:t,i
+looks vb num:s tns:pr typ:t,i root:look
+looked vb num:s,p tns:ps typ:t,e,i root:look
+looking vb typ:g root:look
+load nn num:s gen:n
+load vb num:s,p tns:pr typ:i,t
+loaded vb num:s,p tns:ps typ:i,t
+loading vb typ:g
+lose vb num:s,p tns:pr typ:i,t
+loser nn num:s root:lose gen:n,f,m
+losers nn num:p root:lose gen:n,f,m
+loses vb num:s tns:pr typ:i,t root:lose
+losing vb typ:g root:lose
+lost vb num:s,p tns:ps typ:i,t root:lose
+lost adj root:lose
+louise nn num:s name gen:f
+louisa nn num:s name gen:f
+love vb num:s,p tns:pr typ:t
+loved vb num:s,p tns:ps typ:i,t root:love
+loved adj root:love
+lover nn num:s root:love,f,m
+lovers nn num:p root:love gen:n,f,m
+loves vb num:s tns:pr typ:i,t root:love
+loving vb typ:g root:love
+loud adj
+lying vb typ:g root:lie
+mom nn num:s gen:f
+dad nn num:s gen:m
+money nn num:s gen:n
+mad adj
+man nn num:s gen:m
+many num num:p
+margaret nn num:s name gen:f
+marge nn num:s name gen:f
+marissa nn num:s name gen:f
+mark nn num:s name gen:m,n
+marmalade nn num:p food gen:n
+married vb num:s,p tns:ps typ:i,t root:marry
+married adj root:marry
+marries vb num:s tns:pr typ:i,t root:marry
+marry vb num:s,p tns:pr typ:i,t
+marrying vb typ:g root:marry
+mat nn num:s gen:n
+mats nn num:p root:mat gen:n
+maurice nn num:s name gen:m
+me prn case:a num:s root:i gen:f,m
+mellissa nn num:s name gen:f
+men nn num:p root:man gen:m
+mend vb num:s,p tns:pr typ:t
+mender nn num:s root:mend gen:n,f,m
+menders nn num:p root:mend gen:n,f,m
+mended vb num:s,p tns:ps typ:t root:mend
+mending vb typ:g root:mend
+mends vb num:s tns:pr typ:t root:mend
+mice nn num:p root:mouse gen:n,f,m
+michael nn num:s name gen:m
+michelle nn num:s name gen:f
+mike nn num:s name gen:m
+mine prn num:s root:i
+moon nn num:s gen:n
+moon vb num:s,p tns:pr typ:t
+mooned vb num:s,p tns:ps typ:t root:moon
+moons vb num:s tns:pr typ:t root:moon
+moons nn num:p root:moon gen:n
+mooning vb typ:g root:moon
+moth nn num:s ani gen:n,f,m
+mother nn num:s gen:f
+mothers nn num:p root:mother gen:f
+moths nn num:p root:moth ani gen:n
+mouse nn num:s gen:n,f,m
+mouth nn num:s gen:n
+mouths nn num:p root:mouth gen:n
+my pos root:i num:s
+much num
+nancy nn num:s name gen:f
+nasty adj
+nastier adj mod:more root:nasty
+nastiest adj mod:most root:nasty
+natasha nn num:s name gen:f
+nathan nn num:s name gen:m
+near prp
+nearer adj mod:most root:near
+nearest adj mod:most root:near
+nelly nn num:s name gen:f
+never adv
+nice adj
+nicely adv root:nice
+nicer adj mod:more root:nice
+nicest adj mod:most root:nice
+night nn num:s gen:n
+nigel nn num:s name gen:m
+nigella nn num:s name gen:f
+nine num num:p
+nineteen num num:p
+no num num:p
+noise nn num:s gen:n
+noises nn num:p root:noise gen:n
+noisier adj mod:more root:noise
+noisiest adj mod:most root:noise
+noisily adv root:noise
+nose nn num:s gen:n
+noses nn num:p root:nose gen:n
+notice vb num:s,p tns:pr typ:t
+notice nn num:s gen:n
+noticed vb num:s,p tns:ps typ:t root:notice
+notices vb num:s tns:pr typ:t root:notice
+notices nn num:p root:notice gen:n
+noticing vb typ:g root:notice
+office nn num:s gen:n
+officer nn num:p root:office gen:f,m
+often adv
+often madj
+okay adj
+old adj mod:neg root:young
+older adj mod:neg,more root:young
+oldest adj mod:neg,most root:young
+olive nn num:s name gen:f
+oliver nn num:s name gen:m
+olivia nn num:s name gen:f
+on prp
+one num num:s
+ophelia nn num:s name gen:f
+open adj
+open vb num:s,p tns:ps typ:t
+or cnj
+orange adj
+orange nn num:s food gen:n
+oranger adj mod:more root:orange
+orangest adj mod:most root:orange
+oranges nn num:p root:orange food gen:n
+our pos root:we num:p
+ours prn num:p root:we gen:f,m
+over prp
+owl nn num:s gen:n,f,m
+owlish adj root:owl
+owls nn num:p root:owl gen:n,f,m
+own vb num:s,p tns:pr typ:t
+own adj
+owned vb num:s,p tns:ps typ:t root:own
+owned adj root:own
+owner nn num:s root:own gen:n,f,m
+owners nn num:p root:own gen:n,f,m
+owning vb typ:g root:own
+owns vb num:s tns:pr typ:t root:own
+pam nn num:s name gen:f
+pamela nn num:s name gen:f
+panda nn num:s ani gen:n,f,m
+pandas nn num:p root:panda gen:n,f,m
+paper nn num:p gen:n
+papers nn num:p gen:n
+parroting vb typ:g root:parrot
+parrots nn num:p root:parrot gen:n,f,m
+parrots vb num:s tns:ps typ:t
+pat vb num:s,p tns:pr typ:t
+pats vb num:s tns:pr typ:t root:pat
+patted vb num:s,p tns:ps typ:t root:pat
+patting vb typ:g root:pat
+patricia nn num:s name gen:f
+patrick nn num:s name gen:m
+paul nn num:s name gen:m
+paula nn num:s name gen:f
+pauline nn num:s name gen:f
+pen nn num:s gen:n
+pencil nn num:s gen:f,m,n
+pencils nn num:p root:pencil gen:n
+penguin nn num:s ani gen:n,f,m
+penguins nn num:p root:penguin gen:n,f,m
+pens nn num:p root:pen gen:n
+people nn num:p root:person gen:n,f,m
+person nn num:s gen:n,f,m
+pet nn num:s ani gen:n,f,m
+pet adj
+pets nn num:p root:pet ani gen:n,f,m
+petula nn num:s name gen:f
+phil nn num:s name gen:m
+philip nn num:s name gen:m
+phone nn num:s root:telephone gen:n
+phone vb num:s,p tns:pr typ:i,t root:telephone
+phoned vb num:s,p tns:ps typ:i,t root:telephone
+phones nn num:p root:telephone gen:n
+phones vb num:s tns:pr typ:i,t root:telephone
+phoning vb typ:g root:telephone
+phyllis nn num:s name gen:f
+pig nn num:s gen:n,f,m
+pigeon nn num:s gen:n,f,m
+pigeons nn num:p root:pigeon gen:n,f,m
+pigs nn num:p root:pig gen:n,f,m
+piglet nn num:s gen:n,f,m
+piglets nn num:p root:piglet gen:n,f,m
+pink adj
+pie nn num:s gen:f,m,n
+pies nn num:p gen:n
+pinker adj mod:more root:pink
+pinkest adj mod:most root:pink
+pizza nn num:s food gen:n
+pizzas nn num:p food root:pizza gen:n
+poke vb num:s,p tns:pr typ:t root:poke
+poked vb num:s,p tns:ps typ:t root:poke
+pokes vb num:s tns:pr typ:t root:poke
+poker nn num:s root:poke gen:n,f,m
+pokers nn num:p root:poke gen:n,f,m
+poking vb typ:g root:poke
+poor adj
+poorer adj mod:more root:poor
+poorest adj mod:most root:poor
+poorly adv root:poor
+pork nn num:p food gen:n
+potato nn num:s food gen:n
+potatoes nn num:p food root:potato gen:n
+president nn num:s gen:f,m
+presidents nn num:p root:president gen:f,m
+pretty adj
+prettier adj mod:more root:pretty
+prettiest adj mod:most root:pretty
+prettily adv root:pretty
+puppy nn num:s ani gen:n,f,m
+puppies nn num:p root:puppy ani gen:n,f,m
+quick adj
+quicker adj mod:more root:quick
+quickest adj mod:most root:quick
+quickly adv root:quick
+quiet adj
+quieter adj mod:more root:quiet
+quietest adj mod:most root:quiet
+quietly adv
+quite madj
+rachel nn num:s name gen:f
+ran vb num:s,p tns:ps typ:i,t root:run
+rapid adj
+rapider adj mod:more root:rapid
+rapidest adj mod:most root:rapid
+rapidly adv root:rapid
+rat nn num:s gen:n,f,m
+rats nn num:p root:rat gen:n,f,m
+read vb num:s,p tns:pr,ps typ:t
+reads vb num:s tns:pr typ:i,t
+red adj
+redder adj mod:more root:red
+reddest adj mod:most root:red
+ridden adj root:ride
+ride vb num:s,p tns:pr typ:i,t
+rider nn num:s root:ride gen:f,m
+riders nn num:p root:ride gen:f,m
+rides vb num:s tns:pr typ:i,t root:ride
+riding vb typ:g root:ride
+rode vb num:s,p tns:ps typ:i,t root:ride
+roger nn num:s name gen:m
+ronald nn num:s name gen:m
+rot vb num:s,p tns:pr typ:i
+rots vb num:s tns:pr typ:i root:rot
+rotted vb num:s,p tns:ps typ:i root:rot
+rotten adj root:rot
+rotter nn num:s root:rot gen:n,f,m
+rotters nn num:p root:rot gen:n,f,m
+rotting vb typ:g root:rot
+run vb num:s,p tns:pr typ:i,t
+running vb typ:g root:run
+runs vb num:s tns:pr typ:i,t root:run
+rupert nn num:s name gen:m
+sad adj mod:neg root:happy
+sadder adj mod:more,neg root:happy
+saddest adj mod:most,neg root:happy
+sadly adv mod:neg root:happy
+sally nn num:s name gen:f
+sandwich nn num:s gen:n
+sandwiches nn num:p root:sandwich gen:n
+sat vb num:s,p tns:ps typ:i root:sit
+say vb num:s,p tns:pr typ:t
+said vb num:s,p tns:ps typ:t,i root:say
+saw vb num:s,p tns:ps typ:t root:see
+saw nn num:s gen:n
+sawing vb typ:g root:saw
+saws nn num:p root:saw gen:n
+scare: vb num:s,p tns:ps typ:t
+scared: vb num:s,p tns:ps typ:t root:scare
+scared: adj root:scare
+scaring: vb typ:g root:scare
+school nn num:s gen:n
+schools nn num:p root:school gen:n
+sea nn num:s gen:n
+seagull nn num:s ani gen:n,f,m
+seagulls nn num:p root:seagull gen:n,f,m
+seat nn num:s gen:n
+seats nn num:p gen:n
+see vb num:s,p tns:pr typ:t
+seeing vb typ:g root:see
+seen vb num:s,p tns:ps typ:i,t root:see
+sees vb num:s tns:pr typ:i,t root:see
+seven num num:p
+seventeen num num:p
+shark nn num:s ani gen:n,f,m
+sharks nn num:p root:shark ani gen:n,f,m
+she prn num:s case:n gen:f
+should vb num:s,p tns:pr typ:i,t
+sick adj mod:neg root:well
+sicker adj mod:neg,more root:well
+sickest adj mod:neg,most root:well
+sincere adj
+sincerely adv root:quick
+simon nn num:s name gen:m
+simone nn num:s name gen:f
+sister nn num:s gen:f
+sisters nn num:p root:sister gen:f
+sit vb num:s,p tns:pr typ:i
+sits vb num:s tns:pr typ:i root:sit
+sitting vb typ:g root:sit
+six num num:p
+sixteen num num:p
+sleep vb num:s,p tns:pr typ:i
+sleeping vb typ:g root:sleep
+sleeps vb num:s tns:pr typ:i root:sleep
+slept vb num:s,p tns:ps typ:i root:sleep
+slight adj
+slightly adv root:slight
+slightly madj root:slight
+slow adj
+slower adj mod:more root:slow
+slowest adj mod:most root:slow
+slowly adv root:slow
+slug nn num:s ani gen:n
+slug vb num:s,p tns:pr typ:i,t
+slugged vb num:s,p tns:ps typ:i,t root:slug
+slugging vb typ:g root:slug
+slugs nn num:p ani root:slug gen:n
+slugs vb num:s tns:pr typ:i,t root:slug
+small adj mod:neg root:large
+smaller adj mod:more,neg root:large
+smallest adj mod:most,neg root:large
+smell nn num:s gen:n
+smell vb num:s,p tns:pr typ:i,t
+smelled vb num:s,p tns:ps typ:i,t
+smells nn num:p root:smell gen:n
+smells vb num:s tns:pr typ:i,t root:smell
+smelly adj root:smell
+smelt vb num:s,p tns:ps typ:i,t root:smell
+snail nn num:s ani gen:n
+snails nn num:p ani root:snail gen:n
+snake nn num:s ani gen:n
+snakes nn num:p ani root:snake gen:n
+soap nn num:s,p gen:n
+soaps nn num:p root:soap gen:n
+soapy adj root:soap
+sofa nn num:s gen:n
+sofas nn num:p gen:n
+solomon nn num:s name gen:m
+some num num:p
+son nn num:s gen:m
+sons nn num:p root:son gen:m
+soup nn num:s,p food gen:n
+soups nn num:p food root:soup gen:n
+soupy adj root:soup
+spahettti nn num:p food gen:n
+sparrow nn num:s ani gen:n,f,m
+sparrows nn num:p root:sparrow ani gen:n,f,m
+speak vb num:s,p tns:pr typ:i
+speaker nn num:s root:speak gen:n,f,m
+speakers nn num:p root:speak gen:n,f,m
+speaks vb num:s tns:pr typ:i root:speak
+spider nn num:s ani gen:n,f,m
+spiders nn num:p ani root:spider gen:n,f,m
+spoke vb num:s,p tns:ps typ:i root:speak
+squash vb num:s,p tns:pr typ:t
+squashed vb num:s,p tns:ps typ:t root:squash
+squashed adj root:squash
+squasher nn num:s root:squash gen:n,f,m
+squashers nn num:p root:squash gen:n,f,m
+squashing vb typ:g root:squash
+squeeze vb num:s,p tns:pr typ:t
+squeezed vb num:s,p tns:ps typ:t root:squeeze
+squeezes vb num:s tns:pr typ:t root:squeeze
+squeezing vb typ:g root:squeeze
+stan nn num:s name gen:m
+stand vb num:s,p tns:pr typ:i
+standing vb typ:g root:stand
+stands vb num:s tns:pr typ:i root:stand
+stank vb num:s,p typ:i tns:ps root:stink
+stanley nn num:s name gen:m
+star nn num:s gen:n,f,m
+stars nn num:p root:star gen:n,f,m
+steal vb num:s,p tns:pr typ:t
+stealing vb typ:g root:steal
+steals vb num:s tns:pr typ:t
+stench nn num:s gen:n
+stenches nn num:p root:stench gen:n
+stick nn num:s gen:n
+sticks nn num:p root:stick gen:n
+stink vb num:s,p typ:i tns:pr
+stink nn num:s gen:n
+stinks vb num:s typ:i tns:pr root:stink
+stinks nn num:p root:stink gen:n
+stole vb num:s,p tns:ps typ:i,t root:steal
+stolen vb num:s,p tns:ps typ:t root:steal
+stolen adj root:steal
+stood vb num:s,p tns:ps typ:i root:stand
+stunk vb num:s,p typ:i tns:ps root:stink
+stupid adj
+stupider adj mod:more root:stupid
+stupidest adj mod:most root:stupid
+stupidly adv
+sun nn num:s gen:n
+susan nn num:s name gen:f
+susie nn num:s name gen:f
+swan nn num:s ani gen:n,f,m
+swans nn num:p root:swan ani gen:n,f,m
+swing vb num:s,p tns:pr typ:i,t
+swings vb num:s tns:pr typ:i,t root:swing
+swung vb num:s,p tns:ps typ:i,t root:swing
+swinging vb typ:g root:swing
+swiftly adj
+swim vb num:s,p tns:pr typ:i
+swims vb num:p tns:pr typ:i root:swim
+swimming vb typ:g root:swim
+swam vb num:s,p tns:ps typ:i root:swim
+sylvester nn num:s name gen:m
+sylvia nn num:s name gen:f
+tabitha nn num:s name gen:f
+table nn num:s gen:n
+tables nn num:p gen:n
+took vb num:s,p tns:ps typ:t,i root:take
+take vb num:s,p tns:pr typ:t,i
+taken vb num:s,p tns:ps typ:t,i root:take
+takes vb num:s tns:pr typ:t,i root:take
+taking vb typ:g root:take
+talk vb num:s,p tns:pr typ:i
+talked vb num:s,p tns:ps typ:i root:talk
+talking vb typ:g root:talk
+talks vb num:s tns:pr typ:i root:talk
+tall adj
+tammy nn num:s name gen:f
+tarquin nn num:s name gen:m
+tea nn num:s,p food gen:n
+ted nn num:s name gen:m
+teeth nn num:p root:tooth gen:n
+telephone nn num:s gen:n
+telephone vb num:s,p tns:pr typ:i,t
+telephoned vb num:s,p tns:ps typ:i,t root:telephone
+telephones nn num:p root:telephone gen:n
+telephones vb num:s tns:pr typ:i,t root:telephone
+telephoning adj root:telephone
+television nn num:s gen:n
+televisions nn num:p root:television gen:n
+ten num num:p
+that dem num:s
+the art num:s,p typ:def
+then cnj mod:effect
+their pos root:they num:p gen:n,f,m
+theirs prn num:p root:they  gen:n,f,m
+these dem num:p
+them prn num:p case:a root:they gen:n,f,m
+they prn num:p case:n gen:n,f,m
+thief nn num:s gen:f,m
+thieves nn num:p root:thief gen:f,m
+thieving vb typ:g root:thief
+thin adj mod:neg root:fat
+thinner adj mod:more,neg root:fat
+thinnest adj mod:most,neg root:fat
+thing nn num:s gen:n
+things nn num:p root:thing gen:n
+think vb num:s tns:pr type:i,t,b
+thinks vb num:s tns:pr typ:i,t,b root:think
+thirteen num num:p
+this dem num:s
+thomas nn num:s name gen:m
+those dem num:p
+three num num:p
+threw vb num:s,p tns:ps typ:t root:throw
+throw vb num:s,p tns:pr typ:t
+throwing vb typ:g root:throw
+thrown adj root:throw
+throws vb num:s tns:pr typ:t root:throw
+though cnj mod:big
+thought vb num:s,p tns:ps typ:i,t,b root:think
+tim nn num:s name gen:m
+time nn num:s gen:n
+time vb num:s,p tns:pr typ:t
+timed vb num:s,p tns:ps typ:t root:time
+timed adj root:time
+timely adv root:time
+times nn num:p root:time gen:n
+times vb num:s tns:pr typ:t root:time
+timing vb typ:g root:time
+timmy nn num:s name gen:m
+timothy nn num:s name gen:m
+to prp
+toe nn num:s gen:n
+toes nn num:p root:toe gen:n
+tom nn num:s name gen:m
+tomato nn num:s food gen:n
+tomatoes nn num:p food root:tomato gen:n
+tommy nn num:s name gen:m
+tooth nn num:s gen:n
+touch vb num:s,p tns:pr typ:t
+touching vb typ:g root:touch
+tree nn num:s gen:n
+trees nn num:p root:tree gen:n
+triangle nn num:s gen:n
+triangles nn num:p root:triangle gen:n
+two num num:p
+twelve num num:p
+twenty num num:p
+uglier adj mod:neg,more root:pretty
+ugliest adj mod:neg,most root:pretty
+ugly adj mod:neg root:pretty
+umberto nn num:s name gen:m
+uncle nn num:s gen:m
+uncles nn num:p root:uncle gen:m
+under prp
+us prn num:p case:a root:we gen:n,f,m
+using prp
+usual adj
+usually madj root:usual
+vallery nn num:s name gen:f
+vanessa nn num:s name gen:f
+veronica nn num:s name gen:f
+very madj
+vulture nn num:s ani gen:n,f,m
+vultures nn num:p ani root:vulture gen:n,f,m
+walk vb num:s,p tns:pr typ:i,t
+walks vb num:p tns:pr typ:i,t root:walk
+walking vb typ:g root:walk
+walked vb num:s,p tns:ps typ:i,t
+wail vb num:s,p tns:pr typ:i,t
+wailed vb num:s,p tns:ps typ:i,t
+wailing vb typ:g root:wail
+wails vb num:s tns:pr typ:i,t
+was vb num:s tns:ps typ:i,t,e root:be
+wash vb num:s,p tns:pr typ:i,t
+washed vb num:s,p tns:ps typ:i,t root:wash
+washed adj root:wash
+watcher nn num:s root:watch gen:n,f,m
+watchers nn num:p root:watch gen:n,f,m
+watches vb num:s,p tns:ps typ:i,t root:watch
+watches nn num:p root:watch gen:n
+watching vb typ:g root:watch
+well adj
+whale nn num:s ani gen:n,f,m
+whales nn num:p ani root:whale gen:n,f,m
+white adj
+whiter adj mod:more root:white
+whitest adj mod:most root:white
+will que mod:nv
+will vb num:s,p tns:fu typ:t,i,s
+wilfred nn num:s name gen:m
+william nn num:s name gen:m
+winifred nn num:s name gen:f
+window nn num:s gen:n
+windows nn num:p root:window gen:n
+wise adj
+wiser adj mod:more root:wise
+wisest adj mod:most root:wise
+wisely adv root:wise
+with prp
+we prn num:p case:n gen:n,f,m
+were vb num:p tns:ps typ:i,t,e root:be
+how que
+did que mod:nv
+what que mod:npa
+which que mod:npa
+who que
+whom que
+why que
+when que
+where que
+woman nn num:s gen:f
+women nn num:p gen:f
+wood nn num:s gen:n
+wooded adj root:wood
+woods nn num:s,p gen:n
+work nn num:s gen:n
+work vb num:s,p tns:pr typ:i,t
+worked vb num:s,p tns:ps typ:i,t
+worker nn num:s root:work gen:n,f,m
+workers nn num:p root:work gen:n,f,m
+working vb typ:g root:work
+works nn num:p root:work gen:n
+works vb num:s tns:pr typ:i,t
+worm nn num:s ani gen:n
+worms nn num:p root:worm gen:n
+wormy adj root:worm
+worse adj mod:more,neg root:good
+worst adj mod:most,neg root:good
+wrinkle nn num:s gen:n
+wrinkle vb num:s,p tns:pr typ:i,t
+wrinkled adj root:wrinkle
+wrinkled vb num:s,p tns:ps typ:i,t root:wrinkle
+wrinkles nn num:p root:wrinkle gen:n
+wrinkles vb num:s tns:pr typ:i,t root:wrinkle
+wrinkling vb typ:g root:wrinkle
+write vb num:s,p tns:pr typ:i,t
+writer nn num:s gen:f,m
+writers nn num:p root:write gen:f,m
+writes vb num:s tns:pr typ:i,t root:write
+writing vb typ:g root:write
+writing nn num:s gen:n root:write
+writings nn num:p gen:n root:write
+written adj root:write
+wrote vb num:s,p tns:ps typ:i,t root:write
+yellow adj
+yellower adj mod:more root:yellow
+yellowest adj mod:most root:yellow
+yeti nn num:s ani gen:n,f,m
+yetis nn num:p root:yeti ani gen:n,f,m
+yield nn num:s gen:n
+yield vb num:s,p tns:pr typ:i,t root:yield
+yieled vb num:s,p tns:ps typ:i,t root:yield
+yields vb num:s tns:pr typ:i,t root:yield
+yields nn num:p root:yield gen:n
+yielding vb typ:g root:yield
+you prn num:s,p case:n,a gen:n,f,m
+young adj
+younger adj mod:more root:young
+youngest adj mod:most root:young
+your adj pos root:you num:p,s
+your prn num:s case:a root:you gen:n,f,m
+yours prn num:p root:you gen:n,f,m
+zebidee nn num:s name gen:m
+zebra nn num:s ani gen:n,f,m
+zebras nn num:p root:zebra ani gen:n,f,m
