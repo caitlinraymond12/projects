@@ -1,5 +1,6 @@
-Project Created: Fall 2023
-Class: Intro to Programming
+### **Project Created**: Fall 2023 
+
+### **Class**: Intro to Programming
 
 This idea behind this game is a simple one: you input a velocity and angle, and try to hit the enemy base. On each play of the game, the enemy base moves. There is also a guard wall that you cannot hit or the also lose the game. 
 

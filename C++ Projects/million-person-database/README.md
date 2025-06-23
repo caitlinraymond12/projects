@@ -1,5 +1,6 @@
-Project Created: Spring 2023
-Class: Data Structures
+### **Project Created**: Spring 2023 
+
+### **Class**: Data Structures
 
 This directory actually contains two different assignments, but they are almost the exacty same. One sorts and searches a database of a million people using linked list, and one does the same thing but using a binary tree. This assignemnt was for my data structures class, so of course, I created the data structures (linked list, binary tree) on my own. The file the program reads in contains a millions lines, and on each line there is a (fake) person's social security number, day of birth, month of birth, year or birth, first name, last name, secret password, favorite day of the week, and favorite Beatle.
 

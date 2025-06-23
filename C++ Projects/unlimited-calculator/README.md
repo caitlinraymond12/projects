@@ -1,5 +1,7 @@
-Project Created: Spring 2023
-Class: Data Structures
+### **Project Created**: Spring 2023 
+
+### **Class**: Data Structures
+
 
 This project is simply a calculator, but there is essentially no limit as to how much it can calculate. Instead of storing the numbers as ints, doubles, short ints, etc., it stores them as unsigned chars. It works by doing the same operations any other numerical value can do, except it does them with the ASCII values that chars have.
 

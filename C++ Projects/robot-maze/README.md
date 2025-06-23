@@ -1,5 +1,6 @@
-Project Created: Fall 2023 
-Class: Intro to Programming
+### **Project Created**: Fall 2023 
+
+### **Class**: Intro to Programming
 
 This was the final project for my intro to programming class. The program reads in a text file and interprets where the player starts (marked by +), where the player must end (marked by E), and any borders the player cannot cross (marked by #). The two files used are in this directory, and I will copy one into this file for reference. 
 

@@ -1,5 +1,7 @@
-Project Created: Fall 2024
-Class: Algorithms 
+### **Project Created**: Fall 2024 
+
+### **Class**: Algorithms
+
 
 This project allows a user to input any two places in contential united states, and it will return the shortest path between the two places, written directions, and it will graphically draw it out on a map. 
 

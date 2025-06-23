@@ -1,5 +1,6 @@
-Project Created: Fall 2023
-Class: Intro to Programming
+### **Project Created**: Fall 2023 
+
+### **Class**: Intro to Programming
 
 This lab was my first experience coding in a terminal using UNIX. All my previous experience had been on Visual Studio code. 
 

@@ -1,5 +1,7 @@
-Project Created: Fall 2024
-Class: Algorithms 
+### **Project Created**: Fall 2024 
+
+### **Class**: Algorithms
+
 
 This project was created to help decrease the time it takes to type out class definitions by reading an input file and outputting a file with a correctly formatted class definition. 
 

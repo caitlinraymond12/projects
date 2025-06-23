@@ -1,6 +1,6 @@
-Project Created: Fall 2023
-Class: Intro to Programming
+### **Project Created**: Fall 2023 
 
+### **Class**: Intro to Programming
 
 This is a very simple program, designed to practice our skills in recursion, graphically representing aspects of our program, and relating it back to real-life by making it change based on the time at any given second. This program uses "library.h", which is a library given to us by our professor that allows us to create a window and draw on it. 
 
