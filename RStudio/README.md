@@ -1,0 +1,1 @@
+The folders titled "Homeworks" and "Labs" contain work that was done in my Data Science class taken Fall 2024. The set up and questions were provided by the professor, however it was up to the student to write the R code and know how to use certain functions to achieve what the question asked. 
