@@ -1,0 +1,351 @@
+---
+title: "CSC113 Homework #12: Prediction"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw12"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed. 
+
+This homework assignment is due __November 25 at 11:59PM__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading: 
+
+- Chapter [9](https://ds4world.cs.miami.edu/regression.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+faithful <- read_csv("data/faithful.csv")
+sea_mammal <- read_csv("data/dugongs.csv")
+customer_locations <- read_csv("data/customers.csv") 
+customer_locations2 <- read_csv("data/customers2.csv") 
+```
+
+
+**Part I: Comparing models.** Recall the tibble `faithful` from lab. The tibble contains two pieces of information about each eruption of the Old Faithful geyser in Yellowstone National Park:
+
+1. The duration of the eruption, in minutes.
+2. The time between this eruption and the next eruption (the "waiting time"), in minutes.
+
+The dataset is plotted below along with its line of best fit.
+
+```{r}
+ggplot(faithful, aes(x = duration, y = wait)) +
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+It appears from the scatter plot that there are two clusters of points: one for durations around 2 and another for durations between 3.5 and 5. A vertical line at 3 divides the two clusters.
+
+Let us see if we can obtain an overall better model by fitting *two* linear regression lines on each of the two clusters. This time we will also use built-in functions that R has to support statistical analyses like this, rather than rolling our own as we did in lab.  
+
+**Question 1.** Add a new *factor* variable to `faithful` named `duration_less_than_3_sec` that has two possible values: `TRUE` if the `duration` for that row is less than 3, and `FALSE` otherwise. Assign the resulting tibble to the name `faithful_split`. 
+
+```{r tags=c()}
+
+faithful_split <- faithful |>
+  mutate(duration_less_than_3_sec = (duration < 3))
+
+faithful_split
+```
+
+```{r}
+. = ottr::check("tests/clusters_q1.R")
+```
+
+In lecture and in [Section 9.3](https://ds4world.cs.miami.edu/regression.html#using-linear-regression) we saw that we can use `lm` to fit a linear model to a dataset. 
+
+**Question 2.**  Use `lm` to fit a simple linear regression model of `wait` on `duration` on the `faithful_split` data. Assign the model to the name `lmod_simple`. 
+
+__NOTE:__ The slope and intercept you get should be the same as the slope and intercept you found during lab -- just this time we are letting R do the work. 
+
+```{r tags=c()}
+lmod_simple <- lm(wait ~ duration, data = faithful_split)
+
+lmod_simple
+```
+
+```{r}
+. = ottr::check("tests/clusters_q2.R")
+```
+
+**Question 3.** Using `lm` again, fit a regression model of `wait` on `duration`, but this time adding a new regressor which is the factor `duration_less_than_3_sec`. Use the `faithful_split` data. Assign this model to `lmod_with_factor`. 
+
+```{r tags=c()}
+lmod_with_factor <- lm(wait ~ duration + duration_less_than_3_sec, data = faithful_split)
+
+
+lmod_with_factor
+```
+
+```{r}
+. = ottr::check("tests/clusters_q3.R")
+```
+
+The following code chunk uses the `faithful_split` tibble you generated to plot these two clusters and overlays the regression model `lmod_with_factor` you computed -- two different regression lines, one for each cluster! The slopes for both lines are actually the same; the only difference is the intercept.  
+
+```{r}
+faithful_split |> 
+  mutate(prediction = predict(lmod_with_factor)) |> 
+  ggplot(aes(x = duration, y = wait, color = duration_less_than_3_sec)) +
+  geom_point() + 
+  geom_line(aes(y = prediction)) 
+```
+
+Is the `lmod_with_factor` model any better than `lmod_simple`? One way to check is by computing the $RSS$ for each model and seeing which model has a lower $RSS$. 
+
+**Question 4.** The function `residuals()` can be used to compute the residuals from a linear model (recall that we found the residuals manually during lab). Compute the $RSS$ for each model and assign the result to the appropriate name below. 
+
+```{r tags=c()}
+lmod_simple_rss <- sum(residuals(lmod_simple)^2)
+lmod_with_factor_rss <- sum(residuals(lmod_with_factor)^2)
+
+print(paste("simple linear regression RSS :",lmod_simple_rss))
+print(paste("linear regression with factor RSS :", lmod_with_factor_rss))
+```
+
+```{r}
+. = ottr::check("tests/clusters_q4.R")
+```
+
+**Question 5.** Based on what you found, do you think the predictions produced by `lmod_with_factor` would be more or less accurate than the predictions from `lmod_simple`? Explain your answer.  
+
+The predictions produced by lmod_with_factor are likely to be more accurate than the predictions from lmod_simple as the RSS is smaller, which means that the predictions given by this model are less far away from the actual values than the predictions given by lmod_simple. 
+
+
+
+**Part II: Quantifying sampling errors in `faithful`.** Before we move forward using our linear model for Old Faithful eruptions, we would like to know whether or not there truly exists a relationship between duration and wait time. If there is no relationship between the two, then we'd expect a correlation of 0, which would give us a slope of 0. In the language of *hypothesis tests*, we'd like to test the following hypotheses:
+
+- **Null Hypothesis:** The true slope of the regression line that predicts wait from duration, computed using the population of all eruptions that have ever happened, is 0. If the slope of the regression line computed from our sample isn't 0, that's just the result of chance variation.
+- **Alternate Hypothesis:** The true slope of the regression line is not 0.
+
+Suppose that we apply the resampling approach taken in [Section 9.3](https://ds4world.cs.miami.edu/regression.html#using-linear-regression) and find the approximate 95% confidence interval for the slope to be $[10.1089, 11.2981]$.
+
+**Question 1.** Based on this confidence interval, would you accept or reject the null hypothesis that the true slope is 0?  Why? 
+
+I would reject that the null hypothesis of the true slope is 0. I would reject it because this confidence interval tells us that we are 95% confident that the population parameter is between 10.1089 and 11.2981. The value 0 is not found in this interval, so it is not likely to be the population parameter, therefore we reject the null hypothesis. 
+
+Park ranger Jeffrey tells us that the most recent eruption lasted 5 minutes. We would like to use our linear model `lmod_simple` to make a prediction about the waiting time, but we know that we can't give an exact estimate because our prediction depends on our sample of 272 eruptions! 
+
+Instead, we will provide an approximate 95% confidence interval for the prediction using the resampling approach in Section 9.3. Recall that such an interval goes by a special name: *confidence interval for the mean response*. 
+
+**Question 2.** We find this interval to be $[85.9, 88.3]$. Does this interval cover around 95 percent of eruptions in `faithful` that had an eruption duration of 5 minutes? If not, what does this confidence interval mean?
+
+No, this interval does not cover 95% of eruptions in faithful that had an eruption duration of 5 minutes. Instead, what this confidence interval tells us, is that if the most previous eruption lasted 5 minutes, we are 95% confidence that we will have to wait between 85.9 and 88.3 minutes until the next one. 
+
+
+
+**Part III: Visual Diagnostics.** Linear regression isn't always the best way to describe the relationship between two variables. We'd like to develop techniques that will help us decide whether or not to use a linear model to predict one variable based on another.
+
+We will use the insight that if a regression fits a set of points well, then the residuals from that regression line will show no pattern when plotted against the predictor variable. We call this the *residual plot*. [Section 9.4](https://ds4world.cs.miami.edu/regression.html#the-residual-plot) shows how we can use `ggplot` to directly generate a residual plot from a linear model.
+
+The tibble `sea_mammal` gives the age and length of a species of marine mammal. Age is measured in years and length in meters.
+
+```{r}
+sea_mammal
+```
+
+**Question 1.** Generate a scatter plot of `Age` versus `Length`.
+
+```{r tags=c()}
+
+sea_mammal |>
+  ggplot() +
+  geom_point(aes(x = Age, y = Length))
+
+
+```
+
+**Question 2.** Generate the residual plot for a linear regression of `Age` on `Length`.
+
+```{r tags=c()}
+
+lm(Length ~ Age, data = sea_mammal) |>
+  ggplot() +
+  geom_point(aes(x = .fitted, y = .resid), color = "red") + 
+  geom_hline(lty = "dashed", 
+             color = "gray", 
+             yintercept = 0)
+
+
+
+
+
+```
+
+**Question 3.** Following are some statements that can be made about the above residual plot. For each of these statements, state whether or not the statement is correct and explain your reasoning.
+
+1. The residuals are distributed roughly the same around the horizontal line passing through 0. Because there is no visible pattern in the residual plot, the linear model is a good fit. 
+2. The residual plot shows uneven variation around the horizontal line passing through 0. 
+3. The residual plot shows a pattern, which points to nonlinearity between the variables.
+
+1. The statement is not correct. There is a visible pattern in the residual plot that looks like an upside down U.
+2. This statement is correct. There is uneven variation as the points above the line are grouped close together while the points below the line are spread far apart on the two different ends. 
+3. This statement is correct. There is a pattern in the residual plot, a pattern of an upside down U. Because there is a patten, we have evidence that the data might be nonlinear.
+
+**Part IV: Better Ice Cream Sales through Minimization (EXTRA CREDIT)** In this exercise, we'll use the `optim` function we saw in lecture to find an optimal location for an ice cream truck.  Minimization is useful in many applications -- it's not just for finding the best line through a scatter plot!
+
+CSC113 is poised to disrupt the ice cream market. We're catering to beachgoers in Miami Beach, so we operate a truck that sells our signature Mango-Passionfruit and Cuban Coffee Crunch ice cream. Today we have driven our truck to South Pointe, which is at the southern tip of Miami Beach.
+
+![](data/south_pointe.png){width=70%}
+
+Upon arriving, we find that our potential customers are spread out along the beach.  We decide we want to park our truck in the location that's closest *on average* to all the customers.  That way, customers will be more likely to come to our truck.
+
+(This may not be a great way to choose our truck's location. Maybe you can think of a better way to decide on a location.)
+
+We canvas the beach and record the location of each beachgoer in a tibble called `customers`. Since Miami Beach is oriented North/South and is relatively narrow, we'll focus on the North-South position of each customer. We record how far north each person is from the southern end of the beach.
+
+Suppose there are 2 people on the beach, at 600 meters and 950 meters from the Southern end, respectively. If we park our truck at 750 meters, the average distance from our truck to customers is:
+
+$$\frac{|600 - 750| + |950 - 750|}{2}$$
+
+**Question 1.** A new person shows up on the beach, so the new customer locations are 600, 950, and 1,150 meters from the southern end, which we have recorded in `three_customer_locations`. If we park our ice cream truck at the *mean* of those locations, what is the average distance from our truck to customers? Write R code to compute this. Assign the result to a name `three_customers_mean_distance_from_mean`. 
+
+```{r error=TRUE, tags=c()}
+three_customer_locations <- c(600, 950, 1150)
+
+mean_3 = mean(three_customer_locations)
+
+three_customers_mean_distance_from_mean <- sum(abs(600-mean_3), abs(950-mean_3),abs(1150-mean_3)) / 3
+
+
+
+
+```
+
+```{r}
+. = ottr::check("tests/icecream_ec_q1.R")
+```
+
+**Question 2.** The mean is 900 meters. If we park our truck at 925 meters instead, what's the average distance from our truck to a customer? 
+
+```{r error=TRUE, tags=c()}
+three_customers_mean_distance_from_925 <- sum(abs(600-925), abs(950-925),abs(1150-925)) / 3
+```
+
+```{r}
+. = ottr::check("tests/icecream_ec_q2.R")
+```
+
+The average distance went down!  Despite what your intuition might say, the mean of the customer locations isn't the best location to pick.
+
+Now let's look at the full customer dataset in `customer_locations`.  In this dataset, there are 1,000 people on the beach. The next code chunk displays a histogram of their locations.
+
+```{r error=TRUE}
+ggplot(customer_locations) + 
+  geom_histogram(aes(x = `Distance from south end (m)`), 
+                 breaks = seq(0, 2001, 100), 
+                 fill = "darkcyan", color = "gray")
+```
+
+Let's think about what we're trying to optimize.  Given these customer locations, we want to find a *single location*.  If we park our truck at that location, we want it to result in the smallest *average distance from our truck to customers*.
+
+**Question 3.** Write a function called `average_distance`.  It should take two arguments: `customers`, a tibble containing customer locations, and `location`, a specific truck location. The function returns the average distance from that location to the customers in the given `customers` tibble. 
+
+```{r error=TRUE, tags=c()}
+
+
+average_distance <- function(customer, location)
+{
+  return (sum(abs(customer - location)) / 1000)
+}
+
+
+average_distance(customer_locations, 1000) # an example call 
+```
+
+```{r}
+. = ottr::check("tests/icecream_ec_q3.R")
+```
+
+The following code chunk plots a histogram of customer distances from the south end, with a vertical red line indicating a specific location. It uses your function `average_distance` to display in the title the average distance from the specified location to the customers. 
+
+```{r error=TRUE}
+plot_location_distance <- function(customer_tibble, given_location) {
+  avg_dist <- average_distance(customer_tibble, given_location)
+  customer_tibble |>
+    ggplot(aes(x = `Distance from south end (m)`)) +
+      geom_histogram(breaks = seq(0, 2001, 100), 
+                     fill = "darkcyan", color = "gray") +
+      geom_vline(xintercept = given_location, 
+                 color = "red", linewidth = 1) +
+      labs(
+        title = str_interp("Average distance: $[.1f]{avg_dist} m"),
+        x = "Distance from South End (m)",
+        y = "Count"
+      ) 
+}
+
+
+plot_location_distance(customer_locations, 1250)
+```
+
+**Question 4.** Use the above function `plot_location_distance` to find approximately the best location for the `customer_locations` dataset by changing the value passed to the `given_location` argument. What location did you find, and what was the average distance to customers from that location?
+
+The best location I found was 1250, which gave an average distance of 526.1m. 
+
+
+The function `optim` does basically the same thing you just did.
+
+It takes as its argument a *function*, the objective function, an initial guess, and any additional arguments the objective function requires.  It returns the input (that is, the argument) that produces the smallest output value of the objective function. 
+
+**Question 5.** Use minimization to find the best location for our ice cream truck. Assign the result to a name `best_location`. 
+
+```{r error=TRUE, tags=c()}
+
+best_location <- optim(100, average_distance, customer = customer_locations)
+
+
+```
+
+```{r}
+. = ottr::check("tests/icecream_ec_q5.R")
+```
+
+Later in the day, the distribution of potential customers along the beach has changed. `customer_locations2` contains their new locations. Here is what the new distribution looks like. We set our truck's position to be 500 meters from the south end. 
+
+```{r error=TRUE}
+plot_location_distance(customer_locations2, 500)
+```
+
+**Question 6.** Find the new best location for our ice cream truck. Assign the result to the name `best_location2`. 
+
+```{r error=TRUE, tags=c()}
+
+best_location2 <- optim(100, average_distance, customer = customer_locations2)
+
+```
+
+```{r}
+. = ottr::check("tests/icecream_ec_q6.R")
+```
+
+**Question 7.** Examine the best locations that you found in **Question 4**, **Question 5**, and **Question 6**. Are these locations around the same as any familiar statistic of the data we have seen? 
+
+Best Location Q4: 1250
+Best Location Q5: 1216
+Best Location Q6: 1248.75
+
+Yes, the optimal answer for both customer_locations and customer_locations2 is the median of the dataset.
+
+
+
+

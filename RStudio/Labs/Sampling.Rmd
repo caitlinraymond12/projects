@@ -1,0 +1,234 @@
+---
+title: "CSC113 Lab #8: Sampling"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "lab08"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.  
+
+If you are having trouble submitting, ask your lab instructor for help. 
+
+This lab assignment is due __October 21 at 11:59PM__.
+
+Reading: 
+
+- Chapter [5](https://ds4world.cs.miami.edu/sampling) textbook
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+```
+
+
+**Part I: Expected value of a 20-sided die.** The following function `twenty_sided_die_roll()` simulates one roll of a 20-sided die. It uses the function `sample()` which we saw during lecture. Run it a few times to see how the rolls vary.  
+
+```{r}
+twenty_sided_die_roll <- function() {
+  return(sample(seq(1:20), size = 1))
+}
+twenty_sided_die_roll()
+```
+
+As a warm-up, let us determine the *mean* value of a twenty-sided die by simulation.
+
+**Question 1.** Create a vector `sample_rolls` that contains 10,000 simulated rolls of the 20-sided die. Use `replicate()`. 
+
+```{r tags=c()}
+
+sample_rolls <- replicate(10000, twenty_sided_die_roll())
+
+
+
+```
+
+```{r}
+. = ottr::check("tests/twenty_sided_q1.R")
+```
+
+**Question 2.** Compute the mean of the vector `sample_rolls` you computed and assign it to the name `twenty_sided_die_expected_value`. 
+
+```{r tags=c()}
+
+twenty_sided_die_expected_value <- mean(sample_rolls)
+
+```
+
+```{r}
+. = ottr::check("tests/twenty_sided_q2.R")
+```
+
+By the way, the mean we computed also goes by another name: the *expected* value. Statisticians gave it this name because it is the number that we can *expect* to get in the long run, say after doing an extremely large number of trials. This is usually calculated using probability theory, but we can get to the same answer through simulation. What is that number? That's (approximately) the answer you got in **Question 2.**! 
+
+The expected value is about 10. 
+
+
+**Part II: Dungeons & Dragons & Sampling.** In the game Dungeons & Dragons, each player plays the role of a fantasy character.
+
+A player performs actions by rolling a 20-sided die, adding a "modifier" number to the roll, and comparing the total to a threshold for success.  The modifier depends on her character's competence in performing the action.
+
+For example, suppose Alice's character, a barbarian warrior named Roga, is trying to knock down a heavy door.  She rolls a 20-sided die, adds a modifier of 11 to the result (because her character is good at knocking down doors), and succeeds if the total is greater than 15.
+
+**Question 1.** Write code that simulates the procedure. Compute three values: the result of Alice's roll (`roll_result`), the result of her roll plus Roga's modifier (`modified_result`), and a boolean value indicating whether the action succeeded (`action_succeeded`).  **Do not fill in any of the results manually**; the entire simulation should happen in code.
+
+*Hint:* It will be helpful to use the `twenty_sided_die_roll()` function from the previous part. 
+
+```{r tags=c()}
+
+roll_result <- twenty_sided_die_roll()
+modifier <- 11
+modified_result <- roll_result + modifier
+action_succeeded <- (modified_result > 15)
+
+if(action_succeeded) {
+  print(paste("On a modified roll of", modified_result, "Alice's action succeeded"))
+} else {
+  print(paste("On a modified roll of", modified_result, "Alice's action failed"))
+}
+```
+
+```{r}
+. = ottr::check("tests/dnd_q1.R")
+```
+
+**Question 2.** Run the above cell 7 times to manually estimate the chance that Alice succeeds at this action. Your answer should be a fraction. Assign this to the name `rough_success_chance`.
+
+```{r tags=c()}
+rough_success_chance <- 7/7
+```
+
+Suppose we don't know that Roga has a modifier of 11 for this action.  Instead, we observe the modified roll (that is, the die roll plus the modifier of 11) from each of 7 of her attempts to knock down doors.  We would like to estimate her modifier from these 7 numbers.
+
+**Question 3.** Write a function called `simulate_sample()`.  It should take no arguments, and it should return a vector of 7 numbers.  Each of the numbers should be the modified roll from one simulation.  **Then**, call your function once to compute a vector of 7 simulated modified rolls.  Name that vector `one_sample`.
+
+```{r tags=c()}
+simulate_sample <- function() {
+  sample <- replicate(7, twenty_sided_die_roll() + 11)
+}
+
+one_sample <- simulate_sample()
+one_sample
+```
+
+**Question 4.**  Draw a histogram to display the *probability distribution* of the modified rolls we might see using `one_sample`.  Check with a neighbor or lab instructor to make sure you have the right histogram.
+
+```{r tags=c()}
+
+one_sample |>
+  as_tibble()|>
+  ggplot() +
+  geom_histogram(aes(x = value, y = after_stat(density)), color = "grey", fill = "blue")
+
+```
+
+Now let's imagine we don't know the modifier and try to *estimate* it from the sample in `one_sample`.
+
+One straightforward (but suboptimal) way to do that is to find the *smallest* total roll, since the smallest roll on a 20-sided die is 1. The estimate would then be the smallest roll minus 1. 
+
+**Question 5.** Using that method, write a function `min_based_estimator()` which takes a sample as an argument (e.g., `one_sample`), estimates the modifier from this sample, and then returns it.  
+
+```{r tags=c()}
+min_based_estimator <- function(sample) {
+  minvalue = min(sample)
+  return(minvalue- 1)
+}
+
+min_based_estimator(one_sample) # an example call
+
+
+```
+
+Another way to estimate the modifier involves the mean of `observations`.
+
+**Question 6.** Figure out a good estimate based on that quantity.  **Then**, write a function named `mean_based_estimator()` that computes your estimate. Just as with **Question 5**, it should take a vector of modified rolls (e.g., `one_sample`) as its argument and return an estimate of `modifier` based on those numbers.
+
+__HINT:__ You will need to use a finding from **Part I**. 
+
+```{r tags=c()}
+mean_based_estimator <- function(sample) {
+  samplemean = mean(sample)
+  return(samplemean - twenty_sided_die_expected_value)
+}
+
+mean_based_estimator(one_sample) 
+```
+
+We now have two ways of computing a *statistic* from a sample of modified rolls: (1) a min-based estimator, and (2) a mean-based estimator.
+
+**Question 7.** Write a function `one_sample_statistic()` that takes a functional as an argument (e.g., `min_based_estimator` or `mean_based_estimator`), simulates one sample, computes a statistic from the sample using the functional, and then returns it. 
+
+```{r tags=c()}
+one_sample_statistic <- function(estimator) {
+  sample <- simulate_sample()
+  return(estimator(sample))
+}
+
+one_sample_statistic(min_based_estimator)
+one_sample_statistic(mean_based_estimator)
+```
+
+```{r}
+. = ottr::check("tests/dnd_q7.R")
+```
+
+**Question 8.** Write code to simulate 10,000 *mean* estimates and 10,000 *min* estimates. Store the results in the vectors `mean_estimates` and `min_estimates`, respectively.
+
+```{r tags=c()}
+mean_estimates <- replicate(10000, one_sample_statistic(mean_based_estimator))
+min_estimates <- replicate(10000, one_sample_statistic(min_based_estimator))
+```
+
+```{r}
+. = ottr::check("tests/dnd_q8.R")
+```
+
+The following code creates a tibble named `estimate_tibble` using the estimates you generated in **Question 8.**. 
+
+```{r}
+estimate_tibble <- tibble(mean_estimates = mean_estimates, 
+                      min_estimates = min_estimates) |>
+  pivot_longer(c(mean_estimates, min_estimates), 
+               names_to = "estimator", values_to = "estimate")
+estimate_tibble
+```
+
+**Question 9.** Make a plot of the sampling distributions of both statistics. This should be a single plot containing *two* histograms. You will need to use a positional adjustment to view clearly both distributions together.  
+
+```{r tags=c()}
+
+estimate_tibble |>
+  ggplot(aes(x = estimate)) +
+  geom_histogram(aes(fill = estimator), position = "identity", alpha = .7)
+
+```
+
+**Question 10.** Why do the `min`-based estimates bottom out at 11, while some of the `mean`-based estimates are smaller than that?
+
+The min based estimated can't go lower than 11 because they are computed by subtracting 1 from the lowest value in the sample. The sample comes from rolling a die and adding 11 to it, so the lowest possible value that can be present in the sample is 12. This means the the lowest possible value that can got from subtracting 1 from 12 is 11. The mean based estimates can go lower than 11 because they are computed by taking the mean of the sample and subtracting from that the expected value from a normal dice roll, which is 10. However, if the average of the sample is something low, such as 12 (if every sample is the lowest it can be), then the mean would be foudn by subracting 10 from 12, which is 2. 
+
+**Question 11.** Consider the following statements about the two estimators. For each of these statements, state whether or not you think it is correct and explain your reasoning.
+
+1. The min-based estimator is *biased*, that is, it almost always overestimates. 
+2. The min-based estimator has *higher* variability than the mean-based estimator.
+3. The mean-based estimator is *unbiased*, that is, it overestimates about as often as it underestimates. 
+
+1. True. The min-based estimator can only ever either get the answer right, or overestimate it. It is not possible for it to underestimate it. So generally, it will overestimate the answer. 
+
+2. False. The min-based estimator and the mean-based estimator have about the same variability. The min-based estimator ranges from 11-26, while the mean-based estimator ranges from 3-18. They have the same variablity.
+
+3. True. The mean-based estimator has the ability to get the answer right, under estimate it, and over estimate it. From the graph, it looks as though it underestimates at roughly the same rate at which it overestimates. 
+

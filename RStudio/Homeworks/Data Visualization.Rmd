@@ -1,0 +1,231 @@
+---
+title: "CSC113 Homework #6: Data Visualization"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw06"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed.
+
+This homework assignment is due __October 4 at (G1 Lab: 3:30PM / H1 Lab: 6:00PM)__. Directly sharing answers is forbidden, but discussing problems with instructors and/or classmates is encouraged.
+
+Reading: 
+
+- Chapter [3](https://ds4world.cs.miami.edu/data-visualization.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(babynames)
+library(testthat)
+assault_deaths <- read_csv("data/oecd-assault-deaths.csv") |> 
+  filter(!is.na(Country))
+```
+
+__REMEMBER__ to use the *pipe* (`|>`) operator whenever possible!
+
+\pagebreak
+
+**Part I: Baby names.** The tibble `babynames` has full baby name data provided by the United States Social Security Administration (SSA). We will visualize the number of male and female babies named "Jessie" over time. 
+
+**Question 1.** Form a tibble called `jessie_babies` that contains only babies named "Jessie".
+
+```{r tags=c()}
+jessie_babies <- babynames |>
+  filter(name == "Jessie")
+```
+
+```{r}
+. = ottr::check("tests/p1q1.R")
+```
+
+\pagebreak
+
+**Question 2.** On one graph, create a line plot showing the number of male and female babies named "Jessie" over time. 
+
+```{r tags=c()}
+ggplot(jessie_babies) + geom_line(aes(x = year, y = n, color = sex))
+```
+
+\pagebreak
+
+**Question 3.** Using your above visualization, select which of the following statements are *TRUE* by including them in the following *vector* `jessie_answers`. 
+
+1. There were more male than female "Jessie"s from 1950 to 1980.
+2. There were about the same number of male and female "Jessie"s between 1980 and 2010.
+3. There were less female than male "Jessie"s from 1880 to 1950. 
+4. There were more female than male "Jessie"s from 1880 to 2010. 
+
+```{r tags=c()}
+
+jessie_answers <- c(1, 2)
+```
+
+```{r}
+. = ottr::check("tests/p1q3.R")
+```
+
+\pagebreak
+
+**Question 4.** The tibble `babynames` contains five variables: `year`, `sex`, `name`, `n`, and `prop`. Are any of these categorical variables and, if so, what kind (e.g., nominal, ordinal, binary)? Are there any numerical variables and, if so, what kind (e.g., continuous, discrete)? 
+
+The numerical variable is prop and it's continuous. The rest are categorical. Year and N are discrete, they can only be integer values. Sex is binary, it can only be female or male. Name is nominal, it is an unordered description of something. 
+
+\pagebreak
+
+**Part II: Assault Deaths in the OECD.** Data scientist Kieran Healy [created a widely circulated figure](https://kieranhealy.org/files/misc/assault-deaths-oecd-ts-1960-2015.png) about assault deaths in the OECD from 1960 to 2015. Read Healy’s [blog post](https://kieranhealy.org/blog/archives/2017/10/02/assault-deaths-to-2015/) and then [his follow up post](https://kieranhealy.org/blog/archives/2012/12/18/assault-death-rates-in-america-some-follow-up/). We will try to recreate this plot as well as we can, and then address some questions about the reasonableness of this visualization.
+
+The tibble `assault_deaths` contains the data Healy used. It has already been loaded in for you. Let's have a glance at that data. 
+
+```{r}
+assault_deaths
+```
+
+**Question 1.** It should be clear that the current form of the dataset is *not* tidy (why? what's violated?). Consider the transformation techniques we have covered and apply a transformation to reshape this tibble into tidy data format. There should be *three* columns in the resulting tibble: `Country`, `Year`, and `Assault_deaths_per_100k`. Store this resulting tibble in a name called `assault_deaths_long`. 
+
+```{r tags=c()}
+
+assault_deaths_long <- assault_deaths |>
+  pivot_longer(cols=-1, names_to="Year", values_to="Assault_deaths_per_100k")
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q1.R")
+```
+
+\pagebreak
+
+**Question 2.** One issue with this new tibble is that `Year` is being treated as a character column when it is really a numeric column. Similarly, the countries in `Country` should be thought of as categories (or, more formally, *factors*). Using a `mutate` verb, convert your `Year` column to a numeric variable and `Country` to a factor. Store the resulting tibble in the name `assault_deaths_long`. 
+
+__HINT:__ Use `as_factor()` to convert a column to a factor type. 
+
+```{r tags=c()}
+
+assault_deaths_long <- assault_deaths_long |>
+  mutate(Year = as.numeric(Year), 
+         Country = as_factor(Country))
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q2.R")
+```
+
+**Question 3.** One of the issues you may have found with `assault_deaths_long` is the presence of missing values. For instance, according to this dataset, no assault deaths were reported for Czech Republic until 1986. A simple solution (and reasonable in this case) would be to eliminate rows with missing values in `Assault_deaths_per_100k`. Eliminate missing values from `assault_deaths_long` using this strategy and assign the resulting tibble to the name `assault_deaths_long`. 
+
+```{r tags=c()}
+
+assault_deaths_long <- assault_deaths_long |>
+  na.omit()
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q3.R")
+```
+
+\pagebreak
+
+**Question 4.** Healy's visualization draws a comparison between the United States and the other OECD countries (which he deliberately included). Add a new column to `assault_deaths_long` called `is_usa` where each value in the column is `TRUE` if the country is "United States" and `FALSE` otherwise. Assign the resulting tibble to the name `assault_deaths_long`.
+
+```{r tags=c()}
+
+assault_deaths_long <-assault_deaths_long |>
+  mutate(is_usa = (Country == "United States"))
+
+```
+
+```{r}
+. = ottr::check("tests/p2q4.R")
+```
+
+\pagebreak
+
+**Question 5.** Healy mentions in his blog post that:
+
+> "The original post (and the note attached to the figures) made it clear I excluded two OECD countries with higher assault death rates than the US: Estonia and Mexico. I also excluded some other OECD countries whose rates are lower than the US, again on the grounds of useful comparison. These were Chile, the Czech Republic, Israel, Poland, Slovakia, and Slovenia." 
+
+Since we are trying to recreate his visualization, we should exclude these countries from our dataset as well. The following vector `exclude_oecd` gives the countries he excluded.
+
+```{r}
+exclude_oecd <- c("Mexico", "Estonia", "Chile", "Czech Republic", 
+                  "Israel", "Poland", "Slovak Republic", "Slovenia")
+```
+
+Use `dplyr` code to filter these countries from the `assault_deaths_long` tibble. Store the resulting tibble into a name called `assault_deaths_long_excluded`.  
+
+__HINT:__ The `%in%` operator may be helpful. 
+
+```{r tags=c()}
+
+assault_deaths_long_excluded <- assault_deaths_long |>
+  filter(!(Country %in% exclude_oecd))
+  
+```
+
+```{r}
+. = ottr::check("tests/p2q5.R")
+```
+
+\pagebreak
+
+**Question 6.** Finally, time to visualize! We have everything we need to recreate Healy's visualization. Using what you know about `ggplot` and the layered grammar of graphics, [recreate his (in)famous plot](https://kieranhealy.org/files/misc/assault-deaths-oecd-ts-1960-2015.png).
+
+```{r tags=c()}
+assault_deaths_long_excluded
+
+ggplot(assault_deaths_long_excluded, aes(x= Year, y = Assault_deaths_per_100k, color = is_usa, fill = is_usa)) +
+  geom_point() + 
+  geom_smooth(aes(group = Country))
+
+
+```
+
+\pagebreak
+
+**Question 7.** This figure has been used to make claims about gun violence in the United States. Following are some possible interpretations/criticisms. For each of these statements, state whether or not you think it is a fair claim and briefly explain your reasoning. Be sure you have read Healy's blog posts before answering. 
+
+1. It is misleading to exclude from the visualization countries with 
+   higher assault death rates. 
+2. The figure says nothing about how someone was killed, e.g., through 
+   gun violence. It only says that there was a fatal assault.
+3. It is problematic that Healy compared only assault deaths across
+   countries and not specifically gun-related violence across countries.
+4. This figure can be used to argue that the United States
+   has a higher assault death rate compared to other OECD countries.
+5. This figure can be used to argue that ownership of firearms 
+   causes higher number of deaths due to assault, as demonstrated by 
+   the high assault death rate in the United States. 
+
+1. Yes, it is misleading to exclude these countries because it shows that there are countries that have similar assault death rates to the United States, which would reduce the shock of seeing the United States so high. 
+
+2. This is true. Although he talks about the amount of mass shootings, the data he shows is only about fatal assult deaths. 
+
+3. It's not problematic in itself because his main claim isn't specifically about gun-related violence, he did mention that it is just assault death rate in general.
+
+4. The figure could be used as supporting evidence that the United States might have a higher assault death rate, but it shouldn't be used alone as sole evidence. 
+
+5. No, this figure could not be used to argue anything about the ownership of firearms as the data only contains information about assault deaths, nothing about the ownership of firearms. 
+
+
+

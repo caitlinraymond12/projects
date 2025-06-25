@@ -1,0 +1,241 @@
+---
+title: 'CSC113 Homework #11: Normality'
+author: "Caitlin Raymond"
+date: "Fall 2024 | Data Science for the World"
+output:
+  word_document: default
+assignment_name: "hw11"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed.
+
+This homework assignment is due __November 15 by the start of your enrolled lab section__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading: 
+
+- Chapter [8](https://ds4world.cs.miami.edu/towards-normality.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+library(nycflights13)
+```
+
+
+**Part I: Testing the Central Limit Theorem.** Suppose in the town of Raines, the rain falls throughout the year. A student created a record of 30 consecutive days whether there was a precipitation of at least a quarter inch. The observations are stored in a tibble named `rain_record`.
+
+```{r}
+rain_record <- tibble(had_rain = c(1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 
+                                   1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 
+                                   0, 0, 0, 0, 1, 0))
+rain_record
+```
+
+In the column `had_rain`, `1` represents the day in which there was enough precipitation and `0` represents the day in which there was not enough precipitation.
+
+The Central Limit Theorem (CLT) tells us that the probability distribution of the *sum* or *average* of a large random sample drawn __with replacement__ will look roughly normal (i.e., bell-shaped), *regardless of the distribution of the population from which the sample is drawn*.
+
+**Question 1.** Let us visualize the precipitation distribution in Raines (given by `had_rain`) using a histogram. Plot the histogram under density scale so that the y-axis shows the chance of the event. Use only 2 bins.  
+
+```{r tags=c()}
+
+rain_record |>
+  ggplot() +
+  geom_histogram(aes(x = had_rain, y = after_stat(density)), color = "grey", fill = "lightblue", bins = 2)
+
+
+```
+
+It looks like there is about a 40% chance of rain and a 60% chance of no rain, which definitely does not look like a normal distribution. The proportion of rainy days in a month is equal to the average number of `1`s that appear, so the CLT should apply if we compute the sample proportion of rainy days in a month many times.
+
+**Question 2.** Let us examine the Central Limit Theorem using `rain_record`. Write a function called `rainy_proportion_after_period` that takes a `period` number of days to simulate as input. The function simulates `period` number of days by sampling from the column `had_rain` in `rain_record` *with replacement*. It then returns the *proportion* of rainy days (i.e., `1`) in this sample as a double.
+
+```{r tags=c()}
+
+rainy_proportion_after_period <- function(period)
+{
+  num_rainy_days <- rain_record |>
+    slice_sample(n = period, replace = TRUE) |>
+    pull(had_rain)
+  return(sum(num_rainy_days) / period)
+}
+
+rainy_proportion_after_period(5) # an example call
+
+
+```
+
+```{r}
+. = ottr::check("tests/hw11_clt_q2.R")
+```
+
+**Question 3.** Write a function `rainy_experiment()` that receives two arguments, `days` and `sample_size`, where `days` is the number of days in Raines to simulate and `sample_size` is the number of times to repeat the experiment. It executes the function `rainy_proportion_after_period(days)` you just wrote `sample_size` number of times. The function returns a tibble with the following variables:  
+
+* `iteration`, for the rounds `1:sample_size`
+* `sample_proportion`, which gives the sample proportion of rainy days in each experiment 
+
+```{r tags=c()}
+
+rainy_experiment <- function(days, sample_size)
+{
+  prop = replicate(sample_size, rainy_proportion_after_period(days))
+  return(
+    tibble(
+      iteration = 1:sample_size,
+      sample_proportion = prop
+    )
+  )
+}
+
+rainy_experiment(30, 10)
+
+```
+
+```{r}
+. = ottr::check("tests/hw11_p1_q3.R")
+```
+
+Here is one example call of your function. We simulate 30 days following the same regimen the student did in the town of Raines, and repeat the experiment for 5 times.     
+
+```{r}
+rainy_experiment(30, 5)
+```
+
+The CLT only applies when sample sizes are "sufficiently large." That isn't very helpful -- how large is that? 10? 100? Maybe 5000? Let's use a simulation to get a feel for how the distribution of the sample proportion changes as the sample size goes up.
+
+The following function `draw_ggplot_for_rainy_experiment()` takes a single argument `sample_size`. It calls your `rainy_experiment()` with the argument `sample_size` and then plots a histogram from the sample proportions generated.   
+
+```{r}
+draw_ggplot_for_rainy_experiment <- function(sample_size) {
+  g <- rainy_experiment(30,sample_size) |> 
+    ggplot(aes(x = sample_proportion)) +
+    geom_histogram(aes(y = after_stat(density)),
+                   fill = "darkcyan", 
+                   color="gray", 
+                   bins=22)
+  return(g)
+}
+draw_ggplot_for_rainy_experiment(500)
+```
+
+
+**Question 4.** Play with different calls to `draw_ggplot_for_rainy_experiment()` by passing in different sample size values. For what value of `sample_size` do you begin to observe the application of the CLT? What does the shape of the histogram look like for the value you found?    
+
+Even with just a sample size of 500 I could begin to see the application of the CLT. At this value, the histogram begins to look bell shaped, with the middle having a larger proportion of values than either of the sides. 
+
+**Part II: Standard deviation of a normal distribution.** The CLT actually goes further to state that the standard deviation of a *normal distribution* is given by 
+
+$$
+\frac{\text{SD of original distribution}}{\sqrt{\text{sample size}}}
+$$
+
+Let us test the claim that the *SD of the sample mean* is the SD of the original distribution, divided by the square root of the sample size.
+
+We have imported `flights` from the `nycflights13` package and computed the standard deviation of flight delays for you.
+
+```{r}
+nycflights_sd <- flights |>
+  summarize(sd = sd(dep_delay, na.rm = TRUE)) |> 
+  pull(sd)
+nycflights_sd
+```
+
+**Question 1.** Write a function called `theory_sd`. It takes a sample size `sample_size` as its argument. It returns the theoretical standard deviation of the mean for samples of size `sample_size` from the flight delays according to the Central Limit Theorem. 
+
+```{r tags=c()}
+
+theory_sd <- function(sample_size)
+{
+  return(nycflights_sd / sqrt(sample_size))
+  
+}
+
+theory_sd(10)
+```
+
+```{r}
+. = ottr::check("tests/hw11_sd_q1.R")
+```
+
+The following function `one_sample_mean()` simulates one sample mean of size `sample_size` from the `flights` data. 
+
+```{r}
+one_sample_mean <- function(sample_size) {
+  one_sample_mean <- flights |>
+    slice_sample(n = sample_size, replace = FALSE) |>
+    summarize(mean = mean(dep_delay, na.rm = TRUE)) |>
+    pull(mean)
+  return(one_sample_mean)
+}
+
+one_sample_mean(10) # an example call
+```
+
+
+**Question 2.** Write a function called `sample_sd` that takes a sample size `sample_size` as its argument. The function simulates 500 samples of size `sample_size` from `flights`, and it returns the standard deviation of the 500 sample means. Your function should make repeated use of the `one_sample_mean()` function above. 
+
+```{r tags=c()}
+
+sample_sd <- function(sample_size)
+{
+  samples <- replicate(500, one_sample_mean(sample_size))
+  return(sd(samples))
+}
+
+
+sample_sd(10)  # an example call 
+```
+
+```{r}
+. = ottr::check("tests/hw11_sd_q2.R")
+```
+
+The chunk below puts together the theoretical and sample SDs for flight delays for various sample sizes into a tibble called `sd_tibble`.
+
+```{r}
+sd_tibble <- tibble(
+    sample_size = seq(10, 100, 5),
+    theory_sds = map_dbl(sample_size, theory_sd),
+    sample_sds = map_dbl(sample_size, sample_sd)
+    ) |>
+  pivot_longer(c(theory_sds,sample_sds), names_to = "category", values_to = "sd")
+  
+sd_tibble
+```
+
+**Question 3.** Plot these theoretical and sample SD quantities from `sd_tibble` using either a line plot or scatter plot with `ggplot`. A line plot may be easier to spot differences between the two quantities, but feel free to use whichever visualization makes most sense to you. Regardless, your visualization should show both quantities in a single plot.     
+
+```{r tags=c()}
+
+sd_tibble |>
+  ggplot() +
+  geom_line(aes(x = sample_size, y =sd, color = category))
+
+```
+
+**Question 4.** Observe that the sample SDs are very close to the theoretical SDs, but they are not exactly the same. Why? 
+
+The theoretical SD is a smooth line. This makes sense because it is calculated with the same numerator each time and only the denominator is changing. From this, we can expect a smooth, solid line. The sample SD, on the other hand, is just the standard deviation being calculated from many different samples. There's nothing in that calculation that we can expect to be the same from one sample to another, so it's going to be a little more jagged than the theoretical SD, although still will be very close. 
+
+**Question 5.**  As the sample size increases, do the SDs change in a way that is consistent with your answer to **Question 4**?
+
+Yes. As the sample sizes increases, both SD's decrease. This makes sense for the theoretical SD as when you increase the denominator in a fraction, the value decreases. As for the sample SD, the larger a sample size is, the less variation you are going to have, so it makes sense why the SD would decrease. Thus, they both are expected to decrease, and that's exactly what we observe in the graph.  
+
+
+
+

@@ -1,0 +1,252 @@
+---
+title: "CSC113 Lab #10: Hypothesis Testing"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "lab10"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.  
+
+If you are having trouble submitting, ask your lab instructor(s) for help. 
+
+This lab assignment is due __November 4 at 11:59PM__.
+
+Reading: 
+
+- Chapter [6](https://ds4world.cs.miami.edu/hypothesis-testing.html) textbook
+- Jared Wilber's [permutation test primer](https://www.jwilber.me/permutationtest/) 
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+```
+
+
+## The "Deflategate" scandal 
+
+"Deflategate" refers to a scandal about the NFL team New England Patriots using deliberately deflated balls in its 2014-2015 American Football Conference Championship against the Indianapolis Colts. The game took place on January 18, 2015 and the Patriots beat the Colts by 45 - 7. In any National Football League's game, each team prepares a dozen balls to use in their offensive plays. The league dictates that each ball must be inflated so it has air pressure between 12.5 and 13.5 psi (pounds force per square inch). A deflated ball is easier to grab, throw, and catch, and so using a deflated ball gives an advantage to the offensive team.
+
+Prior to the start of the game, the game officials examined the pressure of the balls to find that all the Patriots balls are at around 12.5 psi and the Colts balls are at around 13.0 psi. During the second quarter, a ball thrown by Tom Brady, the then-quarterback of the Patriots, was intercepted by the Colts. The Colts inspected the ball pressure and found it to be below the minimum 12.5 psi and alerted the game officials.
+
+During the half time, two officials Blakeman and Prioleau checked the pressure of the remaining 11 Patriots balls and 4 Colts balls. They did not have time to check the remaining 8 Colts balls. The results of the inspection are given in `deflategate`.
+
+```{r}
+deflategate <- read_csv("data/deflategate.csv")
+deflategate
+```
+
+In this lab, we will perform our own analysis of the data using a hypothesis testing technique that we saw during lecture: the *permutation test*.
+
+**Part I: The problem.** Let's explore the data a bit to see whether the Patriots’ drops were indeed larger than the Colts’.  
+
+**Question 1.** Add three new columns to `deflategate` as follows: 
+
+* A column `average`, which is the average between `Blakeman` and `Prioleau`.
+* A column `pregame`, which is 12.5 for the first 11 rows and 13.0 for the rest. The column represents the pressure of the balls at the start of the game. You can create a vector in which a value X repeats Y times by `rep(X,Y)` and you can join two vectors using `c()`.
+* A column `pressure_drop`, which is `pregame - average`.
+
+Store the resulting tibble in the name `deflategate_with_drop`. 
+
+```{r tags=c()}
+before <- c(rep(12.5, 11), rep(13, 4))
+
+
+
+deflategate_with_drop <- deflategate |>
+  mutate(
+    average = (Blakeman + Prioleau)/2,
+    pregame = before,
+    pressure_drop = pregame - average
+  )
+
+
+```
+
+```{r}
+. = ottr::check("tests/deflate_p1_q1.R")
+```
+
+It looks as though the Patriots’ drops were larger than the Colts’. Let’s look at the average drop in each of the two groups.
+
+**Question 2.** Summarize the `deflategate_with_drop` by computing the mean pressure drop in each of the two teams. The resulting tibble should have two columns: `Team` and `pressure_drop_average`. Name this tibble `summarized_average_drops`. 
+
+```{r tags=c()}
+
+summarized_average_drops <- deflategate_with_drop |>
+  group_by(Team) |>
+  summarize(pressure_drop_average = mean(pressure_drop))
+
+
+
+```
+
+```{r}
+. = ottr::check("tests/deflate_p1_q2.R")
+```
+
+The question now is why the Patriots’ footballs had a larger drop in pressure, on average, than the Colts footballs. Could it be due to chance?
+
+**Part II: Hypothesis testing.** How does chance figure in here? We can make a chance model by hypothesizing that the 11 Patriots’ drops look like a random sample of 11 out of all the 15 drops, with the Colts’ drops being the remaining four. That’s a completely specified chance model under which we can simulate data. Therefore, it is the __null hypothesis__.
+
+**Question 1.** Given this null hypothesis, give a good definition for the alternative hypothesis. 
+
+The pressure drop in the Patriots' balls dropped a significant amount more when compared to the Colt's balls and this difference was not due to chance. 
+
+As we have seen before, we must also define a test statistic for this experiment. A natural statistic we can use is the difference between the two average drops, which we will compute as "average drop for Patriots - average drop for Colts". 
+
+**Question 2.** Write a function called `difference_of_means` that takes a tibble as its single argument. It then summarizes this tibble by computing the average pressure drop (in `pressure_drop`) for each group (in `Team`). The function returns the difference between the two average drops, as defined just above. 
+
+```{r tags=c()}
+
+difference_of_means <- function(tib)
+{
+  new_tib <- tib |>
+    group_by(Team) |>
+    summarize(pressure_drop_average = mean(pressure_drop))
+  pats <- new_tib |>
+    filter(Team == "Patriots") |>
+    pull(pressure_drop_average)
+  colts <- new_tib |>
+    filter(Team == "Colts") |>
+    pull(pressure_drop_average)
+  return(pats - colts)
+}
+
+difference_of_means(deflategate_with_drop) # an example call
+```
+
+```{r}
+. = ottr::check("tests/deflate_p2_q2.R")
+```
+
+We can use your function to compute the observed test statistic, which we will refer to as `observed_test_stat`: 
+
+```{r}
+observed_test_stat <- difference_of_means(deflategate_with_drop)
+observed_test_stat
+```
+
+If the null hypothesis were true, then it shouldn’t matter which footballs are labeled Patriots and which are labeled Colts. The distributions of the two sets of drops would be the same. Thus, the *permutation test*. 
+
+**Part III: Permutation testing.** We will now run a permutation test. For each permutation, using the same calculation we compute the difference between the average deflation amount as we did in the previous question.
+
+**Question 1.** Write a function `deflategate_permute_test()` that does the following:
+
+* From `deflategate_with_drop` create a new column that shuffles the values in `pressure_drop` (you can use `sample()`). Overwrite the column `pressure_drop` with the shuffled values. The resulting tibble can be named whatever you like. 
+* Call the `difference_of_means()` function you wrote on this shuffled tibble. 
+* Return the difference. 
+
+```{r tags=c()}
+
+deflategate_permute_test <- function()
+{
+  shuffled_values <- deflategate_with_drop |>
+    pull(pressure_drop) |>
+    sample(15, replace = FALSE)
+  
+  shuffled_deflategate <- deflategate_with_drop |>
+    mutate(pressure_drop = shuffled_values)
+  
+  return(difference_of_means(shuffled_deflategate))
+    
+}
+
+deflategate_permute_test()
+
+```
+
+```{r}
+. = ottr::check("tests/deflate_p3_q1.R")
+```
+
+**Question 2.** Use `replicate()` on the `deflategate_permute_test()` function you wrote to generate 1,000 sample differences. Store the results in a tibble named `differences_tibble` with a single column named `differences` that gives the generated sample differences.
+
+```{r tags=c()}
+
+num_repetitions <- 1000
+differences_tibble <- tibble(differences = replicate(num_repetitions, deflategate_permute_test()))
+
+```
+
+```{r}
+. = ottr::check("tests/deflate_p3_q2.R")
+```
+
+**Part IV: Visualization & Conclusion.** Let us unpack the results from our simulation. 
+
+**Question 1.** We are ready to put the data on a histogram. Plot a histogram using `ggplot`.
+Use 10 as the number of bins and "darkcyan" as the fill color. Add also the point representing the `observed_test_stat` using `geom_point` at `y = 0` with the color "red" and size 3.
+
+```{r tags=c()}
+
+differences_tibble |>
+  ggplot() +
+  geom_histogram(aes(x = differences, y = after_stat(density)), fill = "darkcyan", color = "grey" ,bins = 10) +
+  geom_point(aes(x = observed_test_stat, y = 0), color = "red", size = 3)
+
+
+```
+
+**Question 2.** The bulk of the distribution is centered around 0. Using what you know about the stated null hypothesis, why should the distribution turn out this way?
+
+
+Based on our null hypothesis, it makes sense that our histogram would be centered around 0 and not have any skew. It is centered around 0 because our null hypothesis states that there is no real difference between the two groups, and that in any random test the two groups would be equal, so their difference of means would be zero. Our test statistic is the difference of means, and because we were taking random samples, there's an equal chance that the difference was positive or negative, so we don't see any skew in our graph. 
+
+Where do you see the red point appear relative to the histograms? Is it close or beyond the end of the range of the differences? We can see that the observed difference is an unlikely event.
+
+The red point is on the very end of our histogram, with only a few values similar to it. It is close to the end of the range of our simulated differences, but not beyond it. 
+
+**Question 3.** Formalize the observation by computing the p-value.
+
+```{r tags=c()}
+
+simulated_test_stat <- differences_tibble |>
+  pull(differences)
+
+
+pvalue <- sum(simulated_test_stat >= observed_test_stat) / 1000
+pvalue
+```
+
+```{r}
+. = ottr::check("tests/deflate_p4_q3.R")
+```
+
+**Question 4.** Following are some conclusions that could be drawn based on the p-value you just found. Evaluate each of these statements and explain whether or not the statement is correct.  
+
+1. We reject the NH with over 99% confidence. 
+2. We fail to reject the NH at a significance level of 99%. 
+3. We accept the NH with over 99% confidence. 
+4. The p-value obtained is evidence that the observed difference is not due to chance.  
+5. The p-value obtained is enough evidence to show that the excess drop of pressure in the Patriots' footballs was indeed deliberate. 
+
+1. True. To reject with 99% percent confidence, we need a p-value of .01 or less. Our p-value is .002. 
+
+2. False. The p-value is .002, which is enough to reject the NH at a 99% significance level.
+
+3. False. You never accept the NH. You only reject it or fail to reject it. 
+
+4. True. We rejected the null hypothesis and have evidence that the difference we observed was not due to chance. 
+
+5. False. Although we have evidence to support the alternative hypothesis, we aren't able to say based on a hypothesis test whether it's proven or not. 
+
+
+## Further reading
+
+If you are curious about the scandal, you can read more about it [here](https://en.wikipedia.org/wiki/Deflategate).
+
+Touchdown -- you finished Lab #10! 

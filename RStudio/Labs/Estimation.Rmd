@@ -1,0 +1,226 @@
+---
+title: "CSC113 Lab #11: Estimation"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "lab11"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.  
+
+If you are having trouble submitting, ask your lab instructor for help. 
+
+This lab assignment is due __November 11 at 11:59PM__.
+
+Reading: 
+
+- Chapter [7](https://ds4world.cs.miami.edu/quantifying-uncertainty.html) Textbook
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+```
+
+
+**Part I: Rock Band Popularity.** The University of Lost World has conducted a staff and faculty survey regarding their most favorite rock bands. The university received 200 votes, which are summarized as follows:
+
+* Pink Floyd (35%)
+* Led Zeppelin (22%)
+* Allman Brothers Band (20%)
+* Yes (12%)
+* Uncertain (11%)
+
+In the following, we will use `"P"`, `"L"`, `"A"`, `"Y"`, and `"U"` to refer to the artists. The following tibble `rock_bands` summarizes the information: 
+
+```{r}
+rock_bands <- tibble(
+  band_initial = c("P", "L", "A", "Y", "U"),
+  proportion = c(0.35, 0.22, 0.20, 0.12, 0.11), 
+  votes = proportion * 200
+)
+rock_bands
+```
+
+These proportions represent just a *sample* of the population of University of Lost World. We will attempt to estimate the corresponding population parameters - the *proportion* of listening preference for each rock band in the population of University of Lost World staff and faculty. We will use confidence intervals to compute a range of values that reflects the uncertainty of our estimate.
+
+**Question 1.** Using `rock_bands`, generate a tibble `votes` containing 200 rows corresponding to the votes. You can group by `band_initial` and repeat each band's row `votes` number of times by using `rep(1, each = votes)` within a `slice()` call (remember computing *within groups*?). Then form a tibble with a single column named `vote`. 
+
+Here is what the first few rows of this tibble should look like:
+
+| vote |
+|------|
+| A    |
+| A    |
+| A    |
+| A    |
+| A    |
+| ...  |
+
+
+```{r tags=c()}
+
+votes <- rock_bands |>
+  group_by(band_initial) |>
+  slice(rep(1, each = votes)) |>
+  rename(vote = band_initial) |>
+  select(vote) |>
+  ungroup()
+
+votes
+
+```
+
+```{r}
+. = ottr::check("tests/band_p1_q1.R")
+```
+
+We will conduct bootstrapping using the tibble `votes`.
+
+**Question 2.**  Write a function `one_resampled_statistic(num_resamples)` that receives the number of samples to sample *with replacement* (why not without?) from `votes`. The function resamples from the tibble `votes` `num_resamples` number of times and then computes the proportion of votes for each of the 5 rock bands. It returns the result as a  *tibble* in the same form as `rock_bands`, but containing the resampled votes and proportions from the bootstrap. 
+
+Here is one possible tibble after running `one_resampled_statistic(100)`. The answer will be different each time you run this! 
+
+| vote | votes | proportion |
+|------|-------|------------|
+| A    | 23    | 0.23       |
+| L    | 19    | 0.19       |
+| P    | 40    | 0.40       |
+| U    | 7     | 0.07       |
+| Y    | 11    | 0.11       |
+
+```{r tags=c()}
+one_resampled_statistic <- function(num_resamples) {
+  return( 
+    votes |>
+    slice_sample(n = num_resamples, replace = TRUE) |>
+    group_by(vote) |>
+    summarize(votes = n(),
+              proportion = votes / num_resamples)
+  )
+}
+
+
+
+one_resampled_statistic(100) # a sample call
+```
+
+```{r}
+. = ottr::check("tests/band_p1_q2.R")
+```
+
+**Question 3.** Let us set two names, `num_resamples` and `trials`, to use when conducting the bootstrapping. `trials` is the desired number of resampled proportions to simulate for each of the bands. This can be set to some large value; let us say 1,000 for this experiment. But what value should `num_resamples` be set to, which will be the argument passed to `one_resampled_statistic(num_resamples)` in the next step? 
+
+```{r tags=c()}
+num_resamples <- 100
+trials <- 1000
+```
+
+```{r}
+. = ottr::check("tests/band_p1_q3.R")
+```
+
+The following code chunk conducts the bootstrapping using your `one_resampled_statistic()` function and the names `trials` and `num_resamples` you created above. It stores the results in a vector `bstrap_props_tibble`.
+
+```{r}
+bstrap_props_tibble <- replicate(n = trials, 
+                                 one_resampled_statistic(num_resamples), 
+                                 simplify = FALSE) |>
+                       bind_rows()
+bstrap_props_tibble
+```
+
+
+**Question 4.** Generate an overlaid histogram using `bstrap_props_tibble`, showing the five distributions for each band. Be sure to use a positional adjustment to avoid stacking in the bars. You may also wish to set an alpha to see each distribution better. Use 20 for the number of bins.  
+
+```{r tags=c()}
+
+
+bstrap_props_tibble |>
+  ggplot() +
+  geom_histogram(aes(x = proportion, y = after_stat(density), fill = vote), position = "identity", alpha = .5, bins = 20)
+
+
+```
+
+We can see significant difference in the popularity between some bands. For instance, we see that the bootstrapped proportions for $P$ is significantly higher than $Y$'s by virtue of no overlap between their two distributions; conversely, $U$ and $Y$ overlap each other completely showing no significant preference for $U$ over $Y$ and vice versa. Let us formalize this intuition for these three bands using an approximate 95% confidence interval. 
+
+**Question 5.**  Define a function `cf95` that receives a *vector* `vec` and returns the approximate "middle 95%" using `quantile`. 
+
+```{r tags=c()}
+cf95 <- function(vec) {
+  left <- quantile(vec, 2.5/100, type = 1)
+  right <- quantile(vec, 97.5/100, type = 1)
+  return(c(left, right))
+}
+```
+
+```{r}
+. = ottr::check("tests/band_p1_q5.R")
+```
+
+Let us examine the 95% confidence intervals of the bands $P$, $Y$, and $U$, respectively.
+
+```{r}
+bstrap_props_tibble |> filter(vote == "P") |> pull(proportion) |> cf95()  # 95% CI for P
+bstrap_props_tibble |> filter(vote == "Y") |> pull(proportion) |> cf95()  # 95% CI for Y
+bstrap_props_tibble |> filter(vote == "U") |> pull(proportion) |> cf95()  # 95% CI for U
+```
+
+**Question 6.** By looking at the upper and lower endpoints of each interval, and the overlap between intervals (if any), can you say whether $P$ is more popular than $Y$ or $U$? How about for $Y$, is $Y$ more popular than $U$?   
+
+Yes, we can say that P is more popular than Y or U. We are 95% percent confident that the proportion of people that like P is between .25 and .44, while the proportion of people that like Y is between .06 and .18 and that like U is .05 and .17. Even the top proportion of these two intervals are not as high as the very bottom of the P interval, so we can say with 95% confidence that P is more popular than Y or U. For Y, we cannot say whether it is more popular than U or not. There is significant overlap between the two groups. We are only 95% sure that it is within this range, we cannot say whether it is more likely to be on the higher end or lower end of the range. 
+
+
+**Part II: More Confidence Intervals!** Your instructors computed the following approximate 95% confidence interval for the proportion of band $P$ votes (your answer might have been different and that is okay!). 
+
+$$
+[.285, .42]
+$$
+
+**Question 1.** Can we say that 95% of the population of faculty lies in the range $[.285, .42]$? Explain your answer.
+
+No. This confidence interval tells us that we are 95% confident that the true proportion of people that prefer P is between .285 and .42 of the faculty. It says nothing about the proportion of faculty that lies within this range.  
+
+**Question 2.** Can we say that there is a 95% probability that the interval $[.285, .42]$ contains the *true* proportion of the population who listens to band $P$? Explain your answer.
+
+
+
+__HINT:__ Be careful with this one! Think about how chance enters the picture. Once some interval has been generated, as above, is there *chance* involved in determining whether the parameter was captured? If not, what does it mean to have an "approximate 95% confidence interval"? 
+
+No. A confidence interval doesn't tell us the probability that our interval contains the parameter. It's fair to say that if we were to repeat this process many times, 95% of the time we would capture the true proportion. But for each trial individually, we cannot say that there is a .95 probability that the parameter is in the interval. Either the paramter is in the interval, or it's not. It's not a matter of probability. 
+
+
+
+
+**Question 3.** The instructors also created 80%, 90%, and 99% confidence intervals from one sample for the popularity of band $P$, but they forgot to label which confidence interval represented which percentages! Match the interval to the percent of confidence the interval represents. Then, explain your thought process.
+
+
+
+* $[0.265, 0.440]$ A
+* $[0.305, 0.395]$ B
+* $[0.285, 0.420]$ C
+
+A: This has the largest range of .175, so it will have the largest confidence interval of 99%. 
+B: This has the smallest range of .09, so it will have the smallest confidence interval of 80%.
+C: This has the middle range of .135, so it will have the middle confidence interval of 90%. 
+
+We can make this assumption because if we are 99% sure that our parameter is in our interval, that interval is going to be larger because it has to cover more values. The more values we cover, the more sure we are that our parameter is going to be in that interval. If our confidence interval is smaller, such as 80%, then our range will be smaller. A smaller range covers less values, so we are less confident that the actual parameter is going to be in there. 
+
+Yowza -- you finished Lab #11! 
+
+
+
+

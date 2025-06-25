@@ -1,0 +1,229 @@
+---
+title: "CSC113 Homework #4: Data Transformation"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw04"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed Discussion. 
+
+This homework assignment is due __September 20 by the start of your enrolled lab section__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading: 
+
+- Chapter [2](https://ds4world.cs.miami.edu/data-transformation.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gapminder)
+library(testthat)
+```
+
+__REMEMBER__ to use the *pipe* (`|>`) operator whenever possible!
+
+**Part I: Exploring `gapminder` (continued).** In this part we will continue exploring the `gapminder` data to further practice the `dplyr` verbs we saw this week. As before, we will keep an explicit copy of the Gapminder data in a variable called `gap`. 
+
+```{r}
+gap <- gapminder
+
+```
+
+**Question 1.** Let’s begin with counting. How many observations are there __per continent__? Store the resulting tibble in a name called `summarized_counts` with two variables: `continent` (gives the continents) and `n` (gives the counts). 
+
+```{r tags=c()}
+summarized_counts <- gap |> count(continent)
+summarized_counts
+
+  
+```
+
+```{r}
+. = ottr::check("tests/p1q1.R")
+```
+
+**Question 2.** Let's have a look at the life expectancy in the continent Africa. What is the minimum and maximum life expectancy in each year? You will need to use the pair `group_by()` and `summarize()` to answer this. Store the resulting tibble in a variable called `summarized_years`. 
+
+The first few rows of this tibble should look like:
+
+| year   | min_life_exp | max_life_exp |
+|--------|--------------|--------------|
+| 1952   |     30.0     |   52.724     |
+| 1957   |     31.57    |   58.089     |
+| ...    |      ...     |    ...       |
+
+
+```{r tags=c()}
+
+summarized_years <- gap |>
+  filter(continent == "Africa") |>
+  group_by(year) |>
+  summarize(min_life_exp = min(lifeExp), max_life_exp = max(lifeExp))
+summarized_years
+
+```
+
+```{r}
+. = ottr::check("tests/p1q2.R")
+```
+
+So far when working with `group_by()` and `summarize()` we have collapsed the rows in each group to just a single row, e.g., one row gives the number of observations in Africa, another for the number of observations in Asia, and so on. But sometimes we would like to keep the groups and simply compute *within* them. 
+
+**Question 3.** From `gap`, create a new column named `life_exp_gain` which gives the amount life expectancy increased by when compared to the previous year's, __for each country.__ For the first year entry (1952) for each country, assign the special value `NA` ("not available"/missing value). Then, select only the variables `country`, `year`, `lifeExp`, and `life_exp_gain`. Store the resulting tibble into a name `country_gains_from_prev`. 
+
+__HINT 1:__ Don't forget to `ungroup()` when you are done, as we saw during lecture.
+
+__HINT 2:__ The function `lag()` from `dplyr` may be helpful, e.g.,
+
+```{r}
+lag(c(10, 4, 9, 42, -2))
+```
+
+```{r tags=c()}
+
+country_gains_from_prev <- gap |>
+  group_by(country) |>
+  mutate(life_exp_gain = lifeExp - lag(lifeExp)) |>
+  ungroup() |>
+  select(country, year, lifeExp, life_exp_gain )
+
+
+```
+
+```{r}
+. = ottr::check("tests/p1q3.R")
+```
+
+**Question 4.** Which country had the *highest* life expectancy when compared to the previous year's and in what year? Which country had the *lowest* and, similarly, what year did that occur? Use `country_gains_from_prev` and a `dplyr` verb to help you answer this. Assign your answers to the names `highest_country`, `highest_year`, `lowest_country`, and `lowest_year`. 
+
+```{r tags=c()}
+highest_country <- country_gains_from_prev |> 
+  slice_max(life_exp_gain) |>
+  pull(country) |>
+  as.character()
+
+
+highest_year <- country_gains_from_prev |> 
+  slice_max(life_exp_gain) |>
+  pull(year) |>
+  as.double()
+
+lowest_country <- country_gains_from_prev |> 
+  slice_min(life_exp_gain) |>
+  pull(country) |>
+  as.character()
+
+lowest_year <- country_gains_from_prev |> 
+  slice_min(life_exp_gain) |>
+  pull(year) |>
+  as.double()
+
+highest_country
+highest_year
+lowest_country
+lowest_year
+
+```
+
+```{r}
+. = ottr::check("tests/p1q4.R")
+```
+
+**Question 5.** Reflect on the results you found in `highest_country` and `highest_year`, as well as `lowest_country` and `lowest_year`. What significant events or conditions were occurring in these countries during those periods? Feel free to search online! 
+
+There was a plague in Cambodia around 1980. There was also the Cambodian-Vietnamese War that took place from 1978 to 1989. 
+
+The Rwandan civil war started in 1990 and ended in 1994. 
+
+
+**Part II: Unemployment.** The Federal Reserve Bank of St. Louis publishes data about jobs in the US. Below we've obtained data on unemployment in the United States. There are many ways of defining unemployment, and our dataset includes two notions of the unemployment rate:
+
+1. Among people who are able to work and are looking for a full-time job, the percentage who can't find a job.  This is called the Non-Employment Index, or NEI.
+2. Among people who are able to work and are looking for a full-time job, the percentage who can't find any job *or* are only working at a part-time job.  The latter group is called "Part-Time for Economic Reasons", so the acronym for this index is NEI-PTER.  (Economists are great at marketing.)
+
+The source of the data is [here](https://fred.stlouisfed.org/series/NEIM156SFRBRIC#0).
+
+**Question 1.** The data are in a CSV file called `unemployment.csv` inside the `data` directory. Load that file into a tibble called `unemployment` by referring to the path `data/unemployment.csv`.
+
+```{r tags=c()}
+unemployment <- read_csv('./data/unemployment.csv')
+
+unemployment # inspect your tibble
+```
+
+```{r}
+. = ottr::check("tests/p2q1.R")
+```
+
+Note that the published data is broken out by fiscal *quarters*, so we expect to have four records per year. The only exception is 2024, which has entries only for the first and second quarters. 
+
+**Question 2.** Sort the data in *decreasing* order by NEI, naming the sorted tibble `by_nei`.  Create another tibble called `by_nei_pter` that is sorted in *decreasing* order by NEI-PTER instead.
+
+```{r tags=c()}
+
+by_nei <- unemployment |>
+  arrange(desc(NEI))
+
+by_nei_pter <- unemployment |>
+  arrange(desc(`NEI-PTER`))
+
+```
+
+```{r}
+. = ottr::check("tests/p2q2.R")
+```
+
+**Question 3.** Use a `dplyr` verb to generate a tibble that contains data for the 10 quarters when NEI was greatest.  Call that tibble `greatest_nei`.
+
+```{r tags=c()}
+greatest_nei <- head(by_nei, n = 10)
+
+greatest_nei # inspect your tibble
+```
+
+```{r}
+. = ottr::check("tests/p2q3.R")
+```
+
+**Question 4.** It is believed that many people became PTER (recall: "Part-Time for Economic Reasons") during the COVID-19 pandemic in 2020. NEI-PTER is the percentage of people who are unemployed (and counted in the NEI) *plus* the proportion of people who are PTER. 
+
+* Add a new column `PTER` containing the percentage of people who were PTER in each quarter. 
+* Sort the tibble by this new `PTER` column in descending order.
+* Call the resulting tibble `by_pter`.
+
+*Note:* Use the original `unemployment` tibble for this.
+
+```{r tags=c()}
+
+by_pter <- unemployment |>
+  mutate(PTER = `NEI-PTER` - NEI) |>
+  arrange(desc(PTER)) 
+
+by_pter # inspect your tibble
+```
+
+```{r}
+. = ottr::check("tests/p2q4.R")
+```
+
+**Question 5.** Does it seem true that the PTER rate was very high during the COVID-19 pandemic, compared to other periods in the dataset? Are there other periods that saw higher PTER rate? Briefly explain your answer using the results you found.  
+
+Yes, it seems likely that the PTER rate was high due COVID-19. It has the highest PTER rate out of any other quarters in this dataset. The other years that saw a similarly high PTER rate were 2009, 2010, and 2011, and these are likely due to the economic depression that occurred in 2008. 
+
+

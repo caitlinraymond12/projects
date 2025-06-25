@@ -1,0 +1,320 @@
+---
+title: "CSC113 Lab #12: Prediction"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "lab12"
+---
+
+
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file.
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given
+    by resubmitting your work as many times as you like up to the deadline.
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you are having trouble submitting, ask your lab instructor for help.
+
+This lab assignment is due __November 18 at 11:59PM__.
+
+Reading:
+
+- Chapter [9](https://ds4world.cs.miami.edu/regression.html) textbook
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+faithful <- read_csv("data/faithful.csv")
+```
+
+
+**Part I: How Faithful is Old Faithful?** (Note: clever title comes from [here](http://web.pdx.edu/~jfreder/M212/oldfaithful.pdf).) Old Faithful is a geyser in Yellowstone National Park in the central United States.  It's famous for erupting on a fairly regular schedule.  You can see a [video of it in action here](https://www.youtube.com/watch?v=wE8NDuzt8eg).
+
+Some of Old Faithful's eruptions last longer than others.  When it has a long eruption, there's generally a longer wait until the next eruption.
+
+If you visit Yellowstone, you might want to predict when the next eruption will happen, so you can see the rest of the park and later see the geyser when it happens. In lab today we will use a dataset on eruption durations and waiting times to see if we can make such predictions accurately with linear regression.
+
+The dataset has one row for each observed eruption. It includes the following variables:
+
+- **duration**: Eruption duration, in minutes
+- **wait**: Time between this eruption and the next, also in minutes
+
+Let's have a look at the data:
+
+```{r}
+faithful
+```
+
+We would like to use linear regression to make predictions, but that won't work well if the data aren't roughly linearly associated. To check that, we should visualize the data.
+
+**Question 1.** Make a scatter plot of the data.  It is convention to put the variable we will try to predict on the vertical axis and the other variable -- the *predictor* -- on the horizontal axis.
+
+```{r tags=c()}
+
+ggplot(faithful) +
+  geom_point(aes(x = duration, y = wait))
+
+
+
+```
+
+**Question 2.** Are eruption duration and waiting time roughly linearly associated?  Is the relationship positive, negative, or neither?
+
+Yes, there is a rough linear association between the two. The relationship is positive. 
+
+We're going to continue with the assumption that they are linearly associated, so it is reasonable to use linear regression to analyze this data. We'd next like to plot the data in standard units.
+
+**Question 3.** Create a tibble called `faithful_standard` containing the eruption durations and waiting times *in standard units*. There should be two variables in this tibble: `duration_su` and `wait_su`.
+
+```{r tags=c()}
+faithful_standard <- faithful |>
+  mutate(wait_su = scale(wait), 
+         duration_su = scale(duration)) |>
+  select(duration_su, wait_su)
+
+
+
+
+
+faithful_standard
+```
+
+```{r}
+. = ottr::check("tests/part1_q3.R")
+```
+
+**Question 4.** Plot the data again, but this time in standard units.
+
+```{r tags=c()}
+
+ggplot(faithful_standard) +
+  geom_point(aes(x = duration_su, y = wait_su))
+
+
+```
+
+Notice that this plot looks exactly the same as the last one!  The data really are different, but the axes are scaled differently. It is important to read the ticks on the axes.
+
+**Question 5.**  Among the following numbers, which would you guess is closest to the correlation between eruption duration and waiting time in this dataset? Assign your guess to the name `my_corr_guess`.
+
+* -1
+* 0
+* 1
+
+```{r tags=c()}
+my_corr_guess <- 1
+```
+
+```{r}
+. = ottr::check("tests/part1_q5.R")
+```
+
+**Question 6.** Compute the correlation `r` using `faithful_standard`. Do *NOT* try to shortcut this step by using `cor()`! You should use the same approach as shown in lecture and [Section 9.1](https://ds4world.cs.miami.edu/regression.html#correlation). Assign your answer to the name `r`.
+
+```{r tags=c()}
+
+r <- faithful_standard |>
+  mutate(prod = wait_su * duration_su) |>
+  pull(prod) |>
+  mean()
+
+r
+```
+
+```{r}
+. = ottr::check("tests/part1_q6.R")
+```
+
+**Part II: The regression line.** Recall that the correlation is the *slope* of the regression line when the data are put in standard units.
+
+The next cell plots the regression line in standard units:
+
+$$\text{waiting time (standard units)} = r \times \text{eruption duration (standard units)}.$$
+
+The regression line is overlayed atop the original data, for comparison.
+
+```{r message=FALSE}
+ggplot(faithful_standard,
+       aes(x = duration_su, y = wait_su)) +
+  geom_point(color = "darkcyan") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+How would you take a point in standard units and convert it back to original units?  We'd have to "stretch" its horizontal position by the SD of `duration` and its vertical position by the SD of `wait`. That means the same thing would happen to the slope of the line.
+
+* Stretching a line horizontally makes it less steep, so we divide the slope by the stretching factor.
+* Stretching a line vertically makes it more steep, so we multiply the slope by the stretching factor.
+
+**Question 1.** What is the slope of the regression line in *original units*? Use `dplyr` code and the tibble `faithful` to answer this. Assign your answer (a double value) to the name `faithful_slope`.
+
+```{r tags=c()}
+
+stretch_duration <- faithful |>
+  pull(duration) |>
+  sd()
+
+stretch_wait <- faithful |>
+  pull(wait) |>
+  sd()
+
+
+
+faithful_slope <- (r / stretch_duration) * stretch_wait
+```
+
+```{r}
+. = ottr::check("tests/part2_q1.R")
+```
+
+We know that the regression line passes through the point `(duration_mean, wait_mean)`.  You might recall from [high school algebra](https://www.mathsisfun.com/algebra/line-equation-point-slope.html) that the equation for the line is therefore:
+
+$$\text{waiting time} - \verb|wait_mean| = \texttt{slope} \times (\text{eruption duration} - \verb|duration_mean|)$$
+
+**Question 2.** After rearranging that equation slightly, what is the intercept *in original units*? Assign your answer (a double value) to the name `faithful_intercept`.
+
+```{r tags=c()}
+duration_mean <- faithful |>
+  pull(duration) |>
+  mean()
+
+
+wait_mean <- faithful |>
+  pull(wait) |>
+  mean()
+
+faithful_intercept <- faithful_slope*(-duration_mean)+ wait_mean
+
+faithful_intercept 
+```
+
+```{r}
+. = ottr::check("tests/part2_q2.R")
+```
+
+**Part III: Investigating the regression line.** The slope and intercept tell you exactly what the regression line looks like. To predict the waiting time for an eruption is easy! Just multiply the eruption's duration by `faithful_slope` and then add `faithful_intercept`.
+
+**Question 1.** Compute the predicted waiting time for an eruption that lasts 2 minutes, and for an eruption that lasts 5 minutes.
+
+```{r tags=c()}
+two_minute_predicted_waiting_time <- 2 * faithful_slope + faithful_intercept
+five_minute_predicted_waiting_time <- 5 * faithful_slope + faithful_intercept
+
+print(two_minute_predicted_waiting_time)
+print(five_minute_predicted_waiting_time)
+```
+
+```{r}
+. = ottr::check("tests/part3_q1.R")
+```
+
+The next cell plots the regression line and these two points (in purple); you can see that the regression line passes through them.
+
+```{r message=FALSE}
+ggplot(faithful,
+       aes(x = duration, y = wait)) +
+  geom_point(color = "darkcyan") +
+  geom_abline(aes(slope = faithful_slope,
+                  intercept = faithful_intercept),
+              size = 1, color = "salmon") +
+  annotate("point",
+           x = 2,
+           y = two_minute_predicted_waiting_time,
+           size = 3, color = "purple") +
+  annotate("point",
+           x = 5,
+           y = five_minute_predicted_waiting_time,
+           size = 3, color = "purple")
+```
+
+
+**Question 2.** Make predictions for the waiting time after each eruption in the `faithful` tibble.  (Of course, we know exactly what the waiting times were!  We are doing this so we can see how accurate our predictions are.)  Put these numbers into a variable called `prediction` in a new tibble called `faithful_predictions`.  Its first row should look like this:
+
+|duration|wait|   prediction |
+|--------|----|--------------|
+|3.6     | 79 |       72.096 |
+
+```{r tags=c()}
+
+predict <- function(duration)
+{
+  return( (duration * faithful_slope) + faithful_intercept )
+}
+
+
+
+
+faithful_predictions <- faithful |>
+  mutate(prediction = map_dbl(duration, predict))
+
+
+faithful_predictions
+```
+
+```{r}
+. = ottr::check("tests/part3_q2.R")
+```
+
+**Question 3.** How close were we?  Compute the *residual* for each eruption in the dataset.  The residual is the difference (__not__ the absolute difference!) between the actual waiting time and the predicted waiting time.  Add the residuals to `faithful_predictions` as a new variable called `residual`, naming the resulting tibble `faithful_residuals`.
+
+```{r tags=c()}
+
+faithful_residuals <- faithful_predictions |>
+  mutate(residual = wait - prediction )
+
+
+faithful_residuals
+```
+
+```{r}
+. = ottr::check("tests/part3_q3.R")
+```
+
+Here is a plot of the residuals you computed.  Each point corresponds to one eruption.  It shows how much our prediction over- or under-estimated the waiting time.
+
+```{r message=FALSE}
+ggplot(faithful_residuals,
+       aes(x = duration, y = residual)) +
+  geom_point(color = "darkred")
+```
+
+There isn't really a pattern in the residuals, which confirms that it was reasonable to try linear regression.  It's true that there are two separate clouds; the eruption durations seemed to fall into two distinct clusters. But that's just a pattern in the eruption durations, not a pattern in the relationship between eruption durations and waiting times.
+
+**Part IV: How accurate are different predictions?** Earlier you should have found that the correlation is fairly close to 1, so the line fits fairly well on the data we have available in `faithful` (students taking a machine learning course would rightly label this data as *training data*). That means the residuals are overall small (close to 0; see the residual plot above) in comparison to the waiting times.
+
+However, unless there is a strong reason to believe that the linear regression model is true, you should be wary of applying your prediction model to data that are very different from the training data.
+
+**Question 1.** In `faithful`, no eruption lasted exactly 0, 2.5, or 60 minutes.  Using this line, what is the predicted waiting time for an eruption that lasts 0 minutes?  2.5 minutes?  An hour? Assign your answers to the names in the following cell:
+
+```{r tags=c()}
+zero_minute_predicted_waiting_time <- predict(0)
+two_point_five_minute_predicted_waiting_time <- predict(2.5)
+hour_predicted_waiting_time <- predict(60)
+
+print(paste("After an eruption lasting", 0, "minutes, we predict you'll wait ", zero_minute_predicted_waiting_time, "minutes until the next eruption."))
+print(paste("After an eruption lasting", 2.5, "minutes, we predict you'll wait ", two_point_five_minute_predicted_waiting_time, "minutes until the next eruption."))
+print(paste("After an eruption lasting", 60, "minutes, we predict you'll wait ", hour_predicted_waiting_time, "minutes until the next eruption."))
+```
+
+```{r}
+. = ottr::check("tests/part4_q1.R")
+```
+
+**Question 2.** Do you believe any of these values are reliable predictions? Explain why or why not.
+
+
+Our faithful data had points close to 2, so it's reasonable to say that our prediction for an eruption lasting 2.5 minutes is reasonable, because it is within the range of our original data. 0 minutes and 60 minutes, however, were not in the range of our original data, so we cannot say that our predictions for these values are reliable because we didn't base on our model on values close to these. We cannot predict a wait time for values outside of our original range. 
+
+
+Yippee -- you are done with Lab #12! Time to submit.
+
+

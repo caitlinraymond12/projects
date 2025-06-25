@@ -1,0 +1,195 @@
+---
+title: "CSC113 Homework #10: Estimation"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw10"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed.
+
+This homework assignment is due __November 8 by the start of your enrolled lab section__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading: 
+
+- Chapter [7](https://ds4world.cs.miami.edu/quantifying-uncertainty.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+deflategate <- read_csv("data/deflategate.csv")
+```
+
+
+**Part I: Deflategate (continued).** Let's return to the "Deflategate" simulation we saw during lab. We evaluated the claim that the Patriots' average drops were significantly larger than the Colts' by means of a permutation test. Permutation analysis seeks to quantify what the null distribution looks like. For this reason, it tries to *break* whatever structure may be present in the dataset and quantify the patterns we would expect to see under a chance model. 
+
+There is another way we could approach the analysis. We could quantify the uncertainty in the mean pressure drop difference by estimating a *confidence interval* with the *resampling* technique we saw during lecture. Under this scheme, we assume that each team inflates their footballs identically and that the 15 drops available to us (11 from Patriots' and the remainder the Colts') is a sample from some larger distribution of footballs owned by each team which we do not have access to. 
+
+Thus, we will sample *with* replacement from each team and then compute the mean difference in pressure drop from this bootstrapped sample. The interval we obtain from this process can be used to test the hypothesis that the average drop difference is different from chance.
+
+**Question 1.** Recall the work from lab. Copy over your work for generating the tibble `deflategate_with_drop` and the function `difference_of_means()`. 
+
+```{r tags=c()}
+
+
+before <- c(rep(12.5, 11), rep(13, 4))
+
+deflategate_with_drop <- deflategate |>
+  mutate(
+    average = (Blakeman + Prioleau)/2,
+    pregame = before,
+    pressure_drop = pregame - average
+  )
+
+
+difference_of_means <- function(tib)
+{
+  new_tib <- tib |>
+    group_by(Team) |>
+    summarize(pressure_drop_average = mean(pressure_drop))
+  pats <- new_tib |>
+    filter(Team == "Patriots") |>
+    pull(pressure_drop_average)
+  colts <- new_tib |>
+    filter(Team == "Colts") |>
+    pull(pressure_drop_average)
+  return(pats - colts)
+}
+
+difference_of_means(deflategate_with_drop)
+
+```
+
+```{r}
+. = ottr::check("tests/deflate_resample_p1_q1.R")
+```
+
+**Question 2.** Generate an overlaid histogram for `pressure_drop` from `deflategate_with_drop` showing two distributions in the same plot, the pressure drops for the Colts team and for the Patriots. Remember to use an `alpha` and a positional adjustment like `identity` to avoid stacking in the bars.  
+
+```{r tags=c()}
+
+
+deflategate_with_drop |>
+  ggplot() +
+  geom_histogram(aes(x = pressure_drop, y = after_stat(density), fill = Team), color = "grey", position = "Identity", alpha = .75)
+
+
+
+```
+
+Resampling calls for sampling *with replacement*. Suppose that we are to resample drops with replacement from the "Colts" group, then likewise for the "Patriots" group, and compute the difference in means between the groups. Would the bulk of this distribution be centered around 0? Let's find out! 
+
+**Question 3.** State a null and alternative hypothesis for this problem. 
+
+
+Null Hypothesis: Any difference between the two groups is due to chance and could be found in a random sample of the actual population. The true difference between the two groups is zero. 
+
+Alternative Hypothesis: The pressure drop in the Patriot's ball is not due to chance and it is significantly more than the pressure drop in the Colts' balls.
+
+
+Let us use resampling to build a confidence interval and address the hypothesis. 
+
+**Question 4.** Write a function `resample_tibble` that takes a tibble as its single argument, e.g., `deflategate_with_drop`. The function samples `pressure_drop` __with replacement WITHIN each group__ in `Team`. It overwrites the column `pressure_drop` with the result of the sampling. The resampled tibble is returned.  
+
+```{r tags=c()}
+
+resample_tibble <- function(tib)
+{
+  sampled_values <- tib |>
+    group_by(Team) |>
+    mutate(pressure_drop = sample(pressure_drop, size = n(), replace = TRUE)) |>
+    ungroup()
+  
+  return(sampled_values)
+
+}
+
+
+resample_tibble(deflategate_with_drop)  # an example call
+```
+
+**Question 5.** Write a function `deflategate_one_resample()` that takes no arguments. The function resamples from `deflategate_with_drop` using the function `resample_tibble()`. It then computes and returns the mean difference in pressure drop using the `difference_of_means()` function you wrote during lab. 
+
+```{r tags=c()}
+
+deflategate_one_resample <- function()
+{
+  tib <- resample_tibble(deflategate_with_drop)
+  return(difference_of_means(tib))
+}
+
+
+
+deflategate_one_resample() 
+```
+
+**Question 6.** Using `replicate()`, generate 1,000 resampled mean differences. Store the resulting vector in the name `resampled_differences`.
+
+```{r tags=c()}
+resampled_differences <- replicate(1000, deflategate_one_resample())
+
+
+```
+
+```{r}
+. = ottr::check("tests/deflate_resample_p1_q6.R")
+```
+
+**Question 7.** Generate an approximate 95% confidence interval using `resampled_differences`. Store your interval in the name `middle`.
+
+```{r tags=c()}
+
+
+left <- quantile(resampled_differences, 2.5/100, type = 1)
+right <- quantile(resampled_differences, 97.5/100, type = 1)
+
+middle <- c(left, right)
+
+middle
+
+```
+
+The following plots a histogram of your results and annotates it with the approximate 95% confidence interval you found. 
+
+```{r}
+tibble(resampled_differences) |>
+  ggplot() +
+  geom_histogram(aes(x = resampled_differences, y = after_stat(density)),
+                 color = "gray", fill = "darkcyan", bins = 10) +
+  annotate("segment", x = middle[1], y = 0, xend = middle[2], yend = 0, 
+                   size = 2, color = "salmon")
+```
+
+Observe how the mean pressure drop difference of about 0.73 psi falls squarely in this interval (if you like, plot the point in your visualization!). 
+
+**Question 8.** Based on this confidence interval, what is the conclusion of the hypothesis test? Do we reject the null hypothesis? If not, what conclusion can we make?  
+
+Based on this confidence interval, we will reject the null hypothesis. The null hypothesis states that there is no difference between the two groups, which would mean that we would find a difference of 0 when we run these tests. However, as we can see on our graph, zero is not inside our confidence interval. We are 95% percent confidence that the real pressure drop between the two groups was between 0.46 and 0.98 psi. We cannot be confident that zero is the population parameter as it is not contained by our interval. 
+
+
+
+**Question 9.** Suppose that the 95% confidence interval you found is $[0.46, 0.99]$. Does this mean that 95% of the pressure drops were between $[0.46, 0.99]$? Why or why not? 
+
+
+No. This would that mean that there is a 95% probability that the population parameter will fall between .46 and .99. 
+
+According to the [independent investigative report](http://online.wsj.com/public/resources/documents/Deflategate.pdf) that analyzed the data in several different ways, our confidence interval seems consistent with the official analysis:
+
+> In addition, the average pressure drop of the Patriots game balls exceeded the average pressure drop of the Colts balls by 0.45 to 1.02 psi, depending on various possible assumptions regarding the gauges used, and assuming an initial pressure of 12.5 psi for the Patriots balls and 13.0 psi for the Colts balls.
+

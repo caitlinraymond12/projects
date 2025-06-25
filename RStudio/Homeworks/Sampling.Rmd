@@ -1,0 +1,232 @@
+---
+title: "CSC113 Homework #8: Sampling"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw08"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed.
+
+This homework assignment is due __October 25 by the start of your enrolled lab section__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading: 
+
+- Chapter [5](https://ds4world.cs.miami.edu/sampling) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+player_data <- read_csv("data/player_data.csv")
+salary_data <- read_csv("data/salary_data.csv")
+```
+
+
+**Part I: Sampling Basketball Players.** This part uses salary data and game statistics for basketball players from the 2014-2015 NBA season. The data was collected from [basketball-reference](http://www.basketball-reference.com) and [spotrac](http://www.spotrac.com).
+
+Let's have a look at the data:
+
+```{r}
+player_data
+
+View(player_data)
+
+```
+
+```{r}
+salary_data
+```
+
+**Question 1.** We would like to relate players' game statistics to their salaries.  Compute a tibble called `full_data` using `dplyr` code that includes one row for each player who is listed in *both* `player_data` and `salary_data`.  It should include all the columns from `player_data` and `salary_data`, except the `"PlayerName"` column.
+
+```{r tags=c()}
+
+full_data <- inner_join(player_data, salary_data, by = c("Name" = "PlayerName"))
+
+full_data
+
+```
+
+```{r}
+. = ottr::check("tests/sampling_players_q1.R")
+```
+
+Rather than getting data on every player, imagine that we had gotten data on only a smaller subset of the players.  For a dataset of this size, it's not so unreasonable to expect to see all the data, but usually we aren't so lucky.  Instead, we often make *statistical inferences* about a large underlying population using a smaller sample.
+
+A statistical inference is a statement about some statistic of the underlying population, such as "the average salary of NBA players in 2014 was $3".  You may have heard the word "inference" used in other contexts.  It's important to keep in mind that statistical inferences, unlike, say, logical inferences, can be __wrong__!
+
+A general strategy for inference using samples is to estimate *parameters* of the (unknown) population by computing it on a sample that we do have -- this is what we call the *statistic*. This strategy sometimes works well and sometimes doesn't.  The degree to which it gives us useful answers depends on several factors, and we'll touch lightly on a few of those in this assignment. 
+
+One very important factor in the utility of samples is how they were gathered. Let's see how they behave on the NBA player dataset.
+
+**Question 2**. Complete the `plot_age_salary_histograms()` function, which takes a tibble as an argument that has columns `Age` and `Salary`, and draws a histogram for each one. The histograms should be drawn in density scale. Use the bins provided (`age_bins` and `salary_bins`) in your geom histogram call. 
+
+```{r tags=c()}
+
+
+
+plot_age_salary_histograms <- function(tib) {
+  age_bins <- seq(min(tib |> pull(Age)), max(tib |> pull(Age)) + 1)
+  salary_bins <- seq(min(tib |> pull(Salary)), max(tib |> pull(Salary)) + 1, 1e6)
+  
+  x <- tib |>
+  ggplot() +
+    geom_histogram(aes(x = Age, y = after_stat(density)), breaks = age_bins, fill = "lightblue", color = "black")
+  
+  y <- tib|>
+  ggplot() +
+    geom_histogram(aes(x = Salary, y = after_stat(density)), breaks = salary_bins, fill = "lightgreen", color = "black")
+  
+  print(x)
+  print(y)
+  
+}
+
+
+plot_age_salary_histograms(full_data) # an example call 
+
+
+
+```
+
+**Question 3**. Create a function called `compute_statistics()` that takes a tibble as an argument containing ages and salaries and:
+
+- Draws a histogram of ages
+- Draws a histogram of salaries
+- Return a two-element *integer vector* containing the average age and average salary
+
+You can call your `plot_age_salary_histograms()` function to draw the histograms!
+
+```{r tags=c()}
+compute_statistics <- function(tib) {
+  plot_age_salary_histograms(tib)
+  
+  return(c(mean(tib |> pull(Age)), mean(tib |> pull(Salary))))
+}
+
+compute_statistics(full_data)
+
+```
+
+Let us call the function you wrote on `full_data`, which is the *population* of 490 players.  
+
+```{r}
+full_data_stats <- compute_statistics(full_data)
+full_data_stats
+```
+
+
+**Part II: Convenience sampling.** One sampling methodology, which is **generally a bad idea**, is to choose players who are somehow convenient to sample.  For example, you might choose players from one team that's near your house, since it's easier to survey them. This is called *convenience sampling*.
+
+Suppose you survey only *relatively new* players with ages less than 22. Sadly, the experienced players didn't bother to answer your surveys about their salaries...
+
+**Question 1.**  Assign `convenience_sample_data` to a subset of `full_data` that contains only the rows for players under the age of 22.
+
+```{r tags=c()}
+
+convenience_sample_data <- full_data |>
+  filter(Age < 22)
+
+convenience_sample_data
+```
+
+```{r}
+. = ottr::check("tests/convenience_q1.R")
+```
+
+**Question 2.** Assign `convenience_stats` to a *vector* of the average age and average salary of your convenience sample, using the `compute_statistics` function you wrote earlier.  Since they're computed on a sample, these are called *sample means*. 
+
+```{r tags=c()}
+convenience_stats <- compute_statistics(convenience_sample_data)
+convenience_stats
+```
+
+Next, we'll compare the convenience sample salaries with the full data salaries in a single histogram. To do that, we'll plot the histogram __this time in count scale__ rather than density scale. The following cell should not require any changes; just run it.
+
+```{r}
+age_bins <- seq(min(full_data$Age), max(full_data$Age) + 1)
+salary_bins <- seq(min(full_data$Salary), max(full_data$Salary) + 1, 1e6)
+
+annotated <- full_data |> mutate(less_than_21 = Age < 22)
+
+# FYI: Why doesn't this plot need a positional adjustment? 
+ggplot(annotated,
+       aes(x = Age, fill = less_than_21)) +
+  geom_histogram(breaks = age_bins, color = "gray") + 
+  labs(title = "NBA Player Age 2014-2015 Distribution",
+       subtitle = "Convenience sample vs. full data",
+       caption = "Caption: uses count scale")
+
+ggplot(annotated,
+       aes(x = Salary, fill = less_than_21)) +
+  geom_histogram(breaks = salary_bins, color = "gray", 
+                 alpha = 0.8, position = "identity") +
+  labs(title = "NBA Salary 2014-2015 Distribution",
+       subtitle = "Convenience sample vs. full data",
+       caption = "Caption: uses count scale")
+```
+
+
+**Question 3.** Does the convenience sample give us an accurate picture of the age and salary of the full population of NBA players in 2014-2015?  Would you expect it to, in general? Provide a short explanation. You can refer to the statistics calculated above in `convenience_stats` and compare that to `full_data_stats`.
+
+No it does not give us an accurate picture. I wouldn't expected it to. As we can see from the age histogram, players less than 22 only make up a small percentage of total players. What makes it worse is that they all have something in common, they are all new players, so their statistics won't be a good representation of the overall population. As we can see in the salary histogram, their salaries tend to be on the lower end. 
+
+**Part III: Simple random sampling.** A more principled approach is to sample uniformly at random from the players. If we ensure that each player is selected at most once, this is a *simple random sample without replacement*, sometimes abbreviated to "simple random sample". Imagine writing down each player's name on a card, putting the cards in an urn, and shuffling the urn. Then, pull out cards one by one and set them aside, stopping when the specified *sample size* is reached.
+
+**Question 1.** Produce a simple random sample *without replacement* of size 44 from `full_data`. Run `compute_statistics()` on this sample and store the returned vector in a name called `small_stats`.  
+
+```{r tags=c()}
+
+random_sample <- full_data |>
+  slice_sample(n = 44, replace = FALSE)
+
+small_stats <- compute_statistics(random_sample)
+
+```
+
+**Question 2.** Ditto the previous question, but now a simple random sample of size 100 from `full_data`. Store the resulting vector in a name called `large_stats`. 
+
+```{r tags=c()}
+
+random_sample2 <- full_data |>
+  slice_sample(n = 100, replace = FALSE)
+
+large_stats <- compute_statistics(random_sample2)
+
+
+```
+
+For your convenience, here are all the statistics you should have computed: 
+
+```{r}
+print(small_stats) 
+print(large_stats)
+print(convenience_stats) # from the convenience sample 
+print(full_data_stats) # statistic computed directly from the population 
+```
+
+You should analyze several simple random samples of sizes 44 and 100 to get a good sense of how much the statistics vary in each analysis. Then proceed to the following question: 
+
+**Question 3.** Do the mean and histogram statistics seem to change more or less across samples of size 100 than across samples of size 44? For which sample size are the sample means and histograms closer to their true values for age and for salary? Do these results surprise you or is this what you expected to see? Please explain. 
+
+
+The mean and histogram statistics seem to change less across sample sizes of 100. For sample size 100 the mean and histograms are closer to the true values for age and salary. This is what we would expect to see. The larger the sample size is, the larger percentage of population it will represents. The closer our sample size is to the actual population size, the more accurately reflect the results of the entire population.
+
+
+

@@ -1,0 +1,222 @@
+---
+title: 'CSC113 Lab #6: Data Visualization'
+author: "Caitlin Raymond"
+date: "Fall 2024 | Data Science for the World"
+output:
+  word_document: default
+  pdf_document: default
+assignment_name: "lab06"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you are having trouble submitting, ask your lab instructor(s) for help. 
+
+This lab assignment is due __October 2 at 11:59PM__.
+
+Reading: 
+
+- Chapter [3](https://ds4world.cs.miami.edu/data-visualization.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+compensation <- read_csv("data/compensation_cleaned.csv")
+```
+
+__REMEMBER__ to use the *pipe* (`|>`) operator whenever possible!
+
+\pagebreak
+
+**Part I: Atlantic Hurricanes.** The dataset `storms` includes the positions and attributes of tropical storms in the Atlantic from 1975-2022. Further information about the data can be obtained using `?storms`. 
+
+**Question 1.** Generate a histogram of the `wind` speeds in this dataset. Fill your bars using the `category` variable so you can see the bands of color corresponding to the different storm categories.
+
+```{r tags=c()}
+
+storms |>
+  ggplot(aes(x = wind)) +
+  geom_histogram(aes(fill = as_factor(category)))
+
+storms |>
+  ggplot() +
+  geom_histogram(aes(x = wind, fill = as_factor(category)), position = "identity", alpha = .5)
+
+
+```
+
+\pagebreak
+
+**Question 2.** Repeat *Question 1* but make a histogram of the `pressure` variable. You should observe that high category storms have low pressure.
+
+```{r tags=c()}
+
+storms |>
+  ggplot(aes(x = pressure)) +
+  geom_histogram(aes(fill = as_factor(category)))
+
+storms |>
+  ggplot(aes(x = pressure)) +
+  geom_histogram(aes(fill = as_factor(category)), position = "identity", alpha = .5)
+
+```
+
+\pagebreak
+
+**Question 3.** Adjust your code in **Question 2** to include the `identity` positional adjustment. You may wish to set an [alpha](https://ggplot2.tidyverse.org/reference/aes_colour_fill_alpha.html#alpha) as well to better distinguish the differences. What do you observe when including/not including this adjustment? 
+
+
+By including "position = 'identity'", it makes it so that the different groups are able to overlap. This makes it so each bar only goes up to the total count, but then it messes with the counting between the variables within one bar. Without it, they are not able to over lap.This allows you to compare the groups within a bar because you can see the exact amount that is in each group. However, it could make the count in each group look higher than it actually is because the bars are just stacked on one another.
+
+\pagebreak
+
+**Question 4.** Now try the same `identity` positional adjustment, but this time for the plot in **Question 1**. Do you see a difference? Why or why not? 
+
+
+__HINT:__ To help you answer this, read about the [Saffir-Simpson Hurricane Wind Scale](https://www.nhc.noaa.gov/aboutsshws.php). 
+
+Yes, there is a slight difference, but only in one bar. This is likely not a huge difference because there is little to no overlap between the different bars. Hurricanes have a certain range of winds that divide them into different categories, so it makes sense that there's no overlap between the categories and wind speeds. 
+
+\pagebreak
+
+**Question 5.** Following are some statements about the above two distributions. Select those that are *FALSE* by including its corresponding number in the following *vector* `hurricane_answers`. 
+
+1. We used histograms because both of these variables are categorical. 
+2. Both of these distributions are skewed. 
+3. We observe the histogram for `pressure` follows a left-tailed distribution. 
+4. Excluding storms that were not hurricanes, different category storms may 
+   overlap in pressure but not in wind speed. 
+5. We can color the different category storms using the variable `category` 
+   because it is a numerical variable. 
+
+```{r tags=c()}
+
+hurricane_answers <- c(1, 5)
+
+```
+
+```{r}
+. = ottr::check("tests/p1q5.R")
+```
+
+\pagebreak
+
+**Question 6.** The following code visualizes a map of the United States. Overlay this map with a position track for each of the tropical storms from 2006 (use `long` for x and `lat` for y) using a point geom. Color your points by the name of the storm so you can distinguish the storm tracks. 
+
+__Hint:__ You will need to specify a different dataset to use (i.e., `storms2006`) when creating your geom layer. 
+
+```{r tags=c()}
+
+us <- map_data("state") |>
+  mutate(name = tolower(region)) |>
+  select(long, lat, group, name)
+
+us_map <- ggplot(us) +
+  geom_polygon(aes(x = long, y = lat, group = group), 
+               fill = "white", color = "grey50") +
+  coord_quickmap()  
+
+
+storms2006 <- storms |>
+  filter(year == 2006)
+
+
+us_map + geom_point(data = storms2006, aes(x = long, y = lat, color = name))
+
+
+
+
+```
+
+\pagebreak
+
+**Question 7.** Which storm in 2006 made landfall in Miami, Florida? Indicate your answer by setting the name `landfall_in_miami` to the appropriate thing. 
+
+```{r tags=c()}
+landfall_in_miami <- "Ernesto"
+```
+
+```{r}
+. = ottr::check("tests/p1q7.R")
+```
+
+\pagebreak
+
+**Part II: CEO Incomes & Histograms.** In an earlier lab we computed the average pay among the 200 highest-paid chief executives at public companies in 2019-2020. The average doesn't tell us everything about the amounts CEOs are paid, though.  Maybe just a few CEOs make the bulk of the money, even among this select group. We can use a *histogram* to display more information about a set of numbers. 
+
+**Question 1.** Make a histogram of the pay of the CEOs (`2019 Total Pay (M)`) in `compensation` in *density scale*. Use the sequence `seq(0, 80, 5)` for your bin `breaks`. 
+
+__HINT:__ To help you spot the density values on the y-axis, we suggest also adding a position scale layer to your plot using `scale_y_continuous()` with `breaks` from the sequence `seq(0, 0.07, 0.005)`. 
+
+```{r tags=c()}
+
+
+ggplot(data = compensation) + geom_histogram(aes(x = `2019 Total Pay (M)`, y = after_stat(density)),
+                                             color = 'gray', breaks=seq(0,80,5)) +
+  scale_y_continuous(breaks=seq(0, 0.07, .005))
+
+
+```
+
+
+\pagebreak
+
+**Question 2.** Looking at the histogram, how many CEOs made more than \$30 million?  Answer the question manually using the density formulas we learned in lecture. You will need to do a bit of arithmetic; feel free to use R as a calculator.
+
+
+proportion = n /nrow(compensation)
+density = proportion / binwidth
+
+density = n / (nrow) (binwidth)
+
+sum( n = (nrow) (binwidth) (density) )
+
+4.15 + 2.075 + 2.075 + 1.0375 + 1.0375 + 1.0375 = 11.4
+
+So there are 11 CEOs that made more than $30 million.
+
+
+
+
+
+\pagebreak
+
+**Question 3.** Answer the same question using `dplyr` code. Give your answer as a tibble containing a single row and a single column named `n`. Store this in a tibble called `tibble_ceos_more_than_30_million`. 
+
+```{r tags=c()}
+
+tibble_ceos_more_than_30_million <- compensation |>
+  filter(`2019 Total Pay (M)` > 30) |>
+  count()
+
+
+```
+
+
+```{r}
+. = ottr::check("tests/p2q3.R")
+```
+
+\pagebreak
+
+**Question 4.** Do most CEOs make around the same amount, or are there some who make a lot more than the rest?  Discuss with a neighbor. 
+
+From the graph, it looks like most CEO's make around 15-20 million. There are a a few that make a lot more than the rest, but the majority are clumped together aroudn 15-20 million.
+
+
+Huzzah -- you are done with Lab #6! Time to submit. 
+
+
+

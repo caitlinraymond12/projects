@@ -1,0 +1,249 @@
+---
+title: "CSC113 Homework #7: Simulation"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw07"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours schedule appears on Ed.
+
+This homework assignment is due __October 18 by the start of your enrolled lab section__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading: 
+
+- Chapter [4](https://ds4world.cs.miami.edu/building-simulations.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+alana <- read_csv("data/alana.csv") |> 
+  mutate(day = seq(1, 80)) |> 
+  relocate(day, .before = heron)
+```
+
+
+**Part I: Walden Pond?** Every day Alana, an amateur [transcendentalist](https://en.wikipedia.org/wiki/Transcendentalism) and photographer, walks by a pond for one hour, rain or shine. During the walk she sometimes sees some animals. Notable ones among them: jumping fish, great blue heron, and squirrels. Over the past 80 days she has witnessed these 40 times, 40 times, and 40 times, respectively.
+
+**Question 1.** What are the probabilities that she witnesses jumping fish, that she witnesses a blue heron, and that she witnesses a squirrel on any particular day individually? Write down three expressions that provide these probabilities and assign them to names `wit_fish`, `wit_heron`, and `wit_squirrel` respectively.
+
+```{r tags=c()}
+
+wit_fish <- 40 / 80
+wit_heron <- 40 / 80
+wit_squirrel <- 40 / 80
+
+
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p1_q1.R")
+```
+
+Alana is suspect that when she observes a jumping fish on a given day, she is more likely to also encounter the other two animals on the same day. Likewise if she first sees a great blue heron or a squirrel.    
+
+The tibble `alana` is the actual record of Alana's witnessing events. 
+
+```{r}
+alana
+```
+
+The rows are the 80 days and the columns are witness (1) or non-witness (0) of the three animals. 
+
+**Question 2.** If the observational unit is an individual observation made by Alana during her walk, then the tidy data guidelines tell us that each row contains multiple observations. Let us tidy the `alana` tibble using a `tidyr` function so that the three variables become materialized: `day`, `animal_observed`, and `witness`. Call the resulting tibble `alana_tidy`.
+
+```{r tags=c()}
+
+alana_tidy <- alana |>
+  pivot_longer(cols = c('heron','fish', 'squirrel'), names_to = "animal_observed" , values_to = "witness")
+
+alana_tidy
+
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p1_q2.R")
+```
+
+**Question 3.** Form a tibble called `summarized_observations` that gives the total number of times that Alana saw each of the three animals during her trip (or, more technically, the total number of `1` witnessing events for each animal). The tibble should have two variables named `animal_observed` and `n`. Do the values match the stated counts of 40? 
+
+
+```{r tags=c()}
+
+summarized_observations <- alana_tidy |>
+  filter(witness == 1) |>
+  count(animal_observed)
+
+summarized_observations
+
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p1_q3.R")
+```
+
+**Question 4.** From your tibble `alana_tidy`, extract the number of days in which Alana witnessed *all* three animals. Store your answer (a single double value) in the name `observed_witness3`. 
+
+```{r tags=c()}
+
+observed_witness3 <- alana_tidy |>
+  group_by(day) |>
+  summarise(n = sum(witness)) |>
+  filter(n == 3) |>
+  nrow()
+  
+
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p1_q4.R")
+```
+
+We can now apply *simulation* to help address Alana's question. That is, we will assume that the true probability of observing any of the three animals follows what you found in **Question 1** and that the observation of one animal has no influence on the observation of any of the other two animals (i.e., each observation is *independent* of the other). 
+
+We can then simulate Alana's 80-day trip a great number of times. More specifically, we will simulate the number of days Alana saw all three animals during the said "artificial" trip. If the actual record of observing all three animals is different from what our simulation shows, we have evidence that supports Alana's claim that the probability of observing some animal may be *dependent* on the probability of first observing any of the other two. That would be welcome news -- no more waiting around for the great blue heron! 
+
+Let us approach this simulation in parts, using the same recipe for simulation we learned. Be sure you have read and understood the examples from the textbook before proceeding.  
+
+**Part II: Figuring how to simulate one value.** The above discussion has already formalized what we want to simulate. We now attempt to figure out how to simulate one value in the simulation. 
+
+**Question 1.** Write a function `findings_from_one_walk` that takes a double `day` as an argument and returns a tibble giving the results after one simulated walk in Alana's trip. Here is what this tibble looks like after one possible run for day 5. 
+
+| day | animal_observed | witness |
+|-----|-----------------|---------|
+| 5   | heron           | 1       |
+| 5   | fish            | 0       |
+| 5   | squirrel        | 1       |
+
+__NOTE:__ The values in the `witness` column should be different every time this function is called! How to generate these values? See the `sample` function we saw in class.
+
+```{r tags=c()}
+
+findings_from_one_walk <- function(day)
+{ 
+  animal_observed <- c("heron", "fish", "squirrel")
+  witness <- replicate(3, sample(c(0,1), 1))
+  tibble(day, animal_observed, witness)
+}
+
+
+findings_from_one_walk(5) # an example call for a simulated "day 5"
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p2_q1.R")
+```
+
+Using your function `findings_from_one_walk`, we can simulate a full 80-day trip as follows: 
+
+```{r}
+map(1:80, findings_from_one_walk) |>
+  bind_rows()
+```
+
+**Question 2.** Write a function `one_alana_trial` that takes no arguments, simulates a full 80-day trip, and returns the number of days that all three animals were witnessed. The result should vary each time it is run.
+
+__HINT:__ To complete this, you can re-use code you have already written.    
+
+```{r tags=c()}
+
+one_alana_trial <- function()
+{
+  map(1:80, findings_from_one_walk) |>
+  bind_rows() |>
+  group_by(day) |>
+  summarise(n = sum(witness)) |>
+  filter(n == 3) |>
+  nrow()
+  
+}
+
+one_alana_trial() # an example call
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p2_q2.R")
+```
+
+The returned value from your function `one_alana_trial()` composes one simulated value in our simulation. 
+
+**Part III: Run and visualize!** We are now ready to put everything together and run the simulation.   
+
+**Question 1.** Set a name `num_repetitions` to 1,000. Run your function `one_alana_trial()` `num_repetitions` number of times and store the simulated values in a vector named `witness3_trials`.
+
+__NOTE:__ This may take a few seconds to run. 
+
+```{r tags=c()}
+
+num_repetitions <- 1000
+
+witness3_trials <- replicate(num_repetitions, one_alana_trial())
+
+
+
+
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p3_q1.R")
+```
+
+**Question 2.** Construct a tibble named `results` by aligning `num_repetitions` (create a sequence from 1 to `num_repetitions`) and `witness3_trials` with the column names `repetition` and `witness3_trial`, respectively. 
+
+```{r tags=c()}
+
+results <- tibble(
+  repetition = seq(1, num_repetitions),
+  witness3_trial = witness3_trials
+)
+
+
+```
+
+```{r}
+. = ottr::check("tests/hw7_walden_p3_q2.R")
+```
+
+**Question 3.** Using `ggplot2`, generate a histogram of `witness3_trial` from the tibble `results`. Remember to plot in density scale; you may also wish to lower the number of bins to a smaller value, say, 10. Your plots should label all axes appropriately and include a title informing what is being visualized.   
+
+
+```{r tags=c()}
+
+results |>
+  ggplot() +
+  geom_histogram(mapping = aes(x = witness3_trial, y = after_stat(density)), bins = 10) +
+  labs(x = "Days All Three Animals Were Witnessed", y = "Density", title = "Distribution of Days Where All Animals Witnessed")
+
+
+```
+
+Compare your histogram with the value `observed_witness3` computed earlier. Where does it fall in this histogram? Is it close to the center where the "bulk" of the simulated values are?  
+
+```{r}
+observed_witness3
+```
+
+**Question 4.** Based on what you see in the above histogram and how it compares with `observed_witness3`, what would you say to the following statement?
+
+> "Since each animal is observed 40 out of 80, the chance of seeing all three animals after first seeing one of them is still 50-50, about the same as the chance of heads or tails after a fair coin toss."
+
+I would say that this statement is false. When we simulated this situation, we simulated it as if seeing each animal was 50-50, and that each observation was independent of each other. When we did this, it was found that seeing all three animals 10 days out of 80 occurred the most. The number that was actually observed was 29 days out of 80. In our simulation of 1000 trials, we didn't observe a singular trial where she observed all three animals 29 days. Because we never observed this in 1000 trials, we can say that it is not likely that in real life the chance of seeing each one is 50-50, and we can conclude that if you see one you are more likely to see another. 
+
+
+Ta da! You are done.
+

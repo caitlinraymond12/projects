@@ -1,0 +1,288 @@
+---
+title: "CSC113 Homework #9: Hypothesis Testing"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw09"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file.
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given
+    by resubmitting your work as many times as you like up to the deadline.
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed.
+
+This homework assignment is due __November 1 by the start of your enrolled lab section__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading:
+
+- Chapter [6](https://ds4world.cs.miami.edu/hypothesis-testing) textbook
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+
+sample_proportions <- function(distribution, size) {
+  # Note the additional "size" argument.
+  return(rmultinom(n = 1, size = size, prob = distribution) / size)
+}
+```
+
+**Part I: Testing Dice.** Some students in CSC113 get together and are eager to apply what they know about hypothesis testing. They have a six-sided die and want to figure out whether it is fair or not. On a *fair* die, each face of the die appears with chance 1/6 on each roll, regardless of the results of other rolls. Otherwise, a die is called *unfair*.  We can describe a die by the probability of landing on each face.
+
+We decide to test the die by rolling it 5 times. We will store the proportions of the 6 faces in these 5 rolls in a tibble with 6 rows. Here is what that tibble would look like if the die rolls ended up being 1, 2, 3, 3, and 5:
+
+```{r}
+roll_dist_table <- tribble(~Face, ~Probability,
+        1, 0.2,
+        2, 0.2,
+        3, 0.4,
+        4, 0.0,
+        5, 0.2,
+        6, 0.0)
+roll_dist_table
+```
+
+Let us also define a distribution table for what we know is a *fair* six-sided die.
+
+```{r}
+fair_die <- tibble(
+  Face = seq(1:6),
+  Probability = rep(1/6, 6)
+)
+fair_die
+```
+
+Here is what the `roll_dist_table` distribution would look like if we were to visualize it.
+
+```{r}
+ggplot(roll_dist_table) +
+  geom_bar(aes(x = as_factor(Face), y = Probability), stat = "identity")
+```
+
+The lack of any rolls of `4` or `6` -- or the fact that that the bar for `3` is so tall -- may prompt the students to say the die is not fair. Time for a hypothesis test!
+
+For this exercise, you can use the function `sample_proportions()` we wrote in lab. We've defined it already for you to use in the setup cell above. We made it slightly more general this time, so be sure to review it.
+
+Null Hypothesis: The die is fair and any of the six sides have an equal chance of being rolled.
+
+Alternate Hypothesis: The die is not fair and one side has a higher chance of being rolled than any other side. 
+
+
+Can you tell what the mean face value is by looking at the distribution table given in `roll_dist_table`? In [Section 7.4 of the textbook](https://ds4world.cs.miami.edu/power-of-sampling.html#the-mean-of-two-identical-distributions-are-identical), we saw that the mean is equivalent to weighting each unique value by the proportion of times it appears. Therefore, we can compute the mean of `roll_dist_table` as follows:
+
+```{r}
+roll_dist_table |>
+  summarize(mean = sum(Face * Probability))
+```
+
+The following function `mystery_test_statistic()` takes a single tibble like `roll_dist_table` as its argument and returns a number. We will use that number as a test statistic.
+
+```{r}
+mystery_test_statistic <- function(dist_table) {
+  # We've intentionally used weird function and
+  # variable names to avoid giving away answers.
+  # It's rarely a good idea to use names
+  # like "x" and "y" in your code.
+  x <- dist_table |>
+    summarize(mean = sum(Face * Probability)) |>
+    pull(mean)
+  y <- fair_die |>
+    summarize(mean = sum(Face * Probability)) |>
+    pull(mean)
+  return(abs(x-y))
+}
+```
+
+**Question 2.** Describe in words what test statistic is being used in the function `mystery_test_statistic`. Is it equivalent to the total variation distance (the test statistic we saw in lab and lecture) between the observed face distribution and the fair die distribution? If not, what is it?
+
+The test statistics that is being used in the function is not the total variation distance, and instead it is the mean absolute difference. In this function, first we take the mean of the die that is passed in and save it as x. Then we take the mean of a fair die and save it as y. Then we take the difference of these two values and take the absolute value of that. 
+
+**Question 3.** Write a function called `one_simulated_stat()`. The function takes no arguments. It should generate sample proportions from one set of 5 die rolls *under the assumption of the null hypothesis*, compute the test statistic for this sample, and then return it.
+
+```{r tags=c()}
+
+
+
+one_simulated_stat <- function()
+{
+
+  dist_table <- tibble(Face = seq(1:6),
+                       Probability = sample_proportions(rep(1/6, 6), 5))
+
+  return(mystery_test_statistic(dist_table))
+  
+}
+
+
+
+
+one_simulated_stat()
+
+```
+
+```{r}
+. = ottr::check("tests/dice_q3.R")
+```
+
+**Question 4.** Using `replicate()`, run the simulation **10,000** times to produce **10,000** test statistics. Assign the results to a vector called `test_stats`.
+
+```{r tags=c()}
+test_stats <- replicate(10000, one_simulated_stat())
+
+```
+
+```{r}
+. = ottr::check("tests/dice_q4.R")
+```
+
+**Question 5.** Compute the *observed test statistic* for the die that we are testing, given by `roll_dist_table`. Assign the result to a vector called `observed_stat`.
+
+```{r tags=c()}
+observed_stat <- mystery_test_statistic(roll_dist_table)
+
+```
+
+```{r}
+. = ottr::check("tests/dice_q5.R")
+```
+
+The following cell plots a histogram of the 10,000 test statistics you generated. Also shown is where the observed value falls on this histogram (orange dot) and the cut-off point for the 95% significance level, according to arbitrary convention (a vertical red line).
+
+```{r}
+p_value_cutoff <- 0.05
+
+ggplot(tibble(test_stats)) +
+  geom_histogram(aes(x = test_stats, y = after_stat(density)),
+                 bins=12, color = "gray", fill='darkcyan') +
+  geom_vline(aes(xintercept=quantile(test_stats, 1-p_value_cutoff)),
+             color='red', linewidth = 1) +
+  annotate("point", x=observed_stat, y=0, size=7, color='orange')
+```
+
+**Question 6.** Using R code, compute the p-value using the `test_stats` you generated by comparing it with `observed_stat`. Assign your answer to `p_value`.
+
+```{r tags=c()}
+p_value <- sum(test_stats >= observed_stat) / 10000
+p_value
+```
+
+```{r}
+. = ottr::check("tests/dice_q6.R")
+```
+
+**Question 7.** At a p-value cutoff of 5% (or, equivalently, at a significance level of 95%), what do we conclude from this test?
+
+We conclude that we do not have sufficient evidence to reject the null hypothesis. Our p-value cutoff is at 5%, since our p-value is around 44%, we can say that it is very likely to observe what we did when we rolled our die assuming that the die is fair.
+
+
+**Question 8.** Which of the following statements are __FALSE__? Indicate them by including its number in the following vector `pvalue_answers`.
+
+1. `p_value` is the probability that the die is fair.
+2. `p_value` is the probability that the die is NOT fair.
+3. 5% (the p-value cutoff we used) is the probability that the die is NOT fair.
+4. 5% (the p-value cutoff we used) is the probability of seeing a test statistic as extreme or more extreme than this one if the null hypothesis were true.
+
+```{r tags=c()}
+pvalue_answers <- c(1, 2, 3)
+```
+
+```{r}
+. = ottr::check("tests/dice_q8.R")
+```
+
+**Question 9.** For the statements you selected to be FALSE, please explain why they are wrong.
+
+1 and 2 are wrong because the P-value does not give us any indication about whether or not the dice we've rolled is fair. 
+
+3 is wrong because the 5% cutoff that we have tells us that if our p-value was less than 5% then we could reject the null hypothesis, it does not tell us anything about whether the die is fair or not. 
+
+**Part II: Error Probabilities.** In this part we continue with our die testing simulation.
+
+The following function `hypothesis_test_experiment()` takes as its argument a tibble describing the probability distribution of a die, a p-value cutoff, and the number of repetitions to use. It simulates one set of 5 rolls of that die, then tests the null hypothesis about that die using our test statistic function above. It returns `FALSE` if it *rejects* the null hypothesis about the die, and `TRUE` otherwise.
+
+```{r}
+hypothesis_test_experiment <- function(test_die_probs,
+                                       p_value_cutoff, num_repetitions) {
+  # Compute the observed test statistic.
+  observation_dist_table <- tibble(
+    Face = seq(1:6),
+    Probability = sample_proportions(test_die_probs, 5)
+  )
+  observed_stat <- mystery_test_statistic(observation_dist_table)
+
+  # Simulate the test statistic repeatedly to get a
+  # sampling distribution of the test statistic,
+  # as predicted by the model in the null hypothesis.
+  # Store the simulated values of the test statistic
+  # in a vector.
+  simulated_stats <- replicate(n = num_repetitions, one_simulated_stat())
+
+  # Compute the p-value
+  p_value <- sum(simulated_stats >= observed_stat) / num_repetitions
+
+  # If the P-value is below the cutoff, reject the
+  # null hypothesis and return FALSE. Otherwise,
+  # return TRUE.
+  return(p_value >= p_value_cutoff)
+}
+
+fair_die_probs <- fair_die |> pull(Probability)
+hypothesis_test_experiment(fair_die_probs, 0.2, 250)
+```
+
+
+**Question 1.** Run the above cell a few times to see what it does. Most of the time it will return `TRUE`, but sometimes it will return `FALSE`. Using your knowledge of hypothesis tests and interpretation of the code above, what is the *probability* that `hypothesis_test_experiment(fair_die_probs, 0.2, 250)` returns `FALSE` when its argument is `fair_die_probs` (the probabilities for a fair die)? Put another way, what is the probability that we *reject* the Null Hypothesis when the die is actually fair?
+
+Do NOT perform a simulation to find this probability. Use only your knowledge of hypothesis tests. You shouldn't have to write any code.
+
+In this example, there is a probability of .20 that we reject the null hypothesis when it is actually true due to the p_value_cutoff being at .20. In this example, we have an 80% confidence interval.
+
+
+**Question 2.** From the perspective of someone who wants to know the truth about the die, what does it mean when the function returns `FALSE` when `fair_die_probs` is passed as an argument?
+
+When the function returns false even when fair_die_probs is passed as an argument, this means that the simluation did not have sufficient evidence to support the null hypothesis, that the die is fair, and instead rejected it and said there is not sufficient evidence to conclude that the die is fair. 
+
+**Question 3.**  Simulate the process of running `hypothesis_test_experiment(fair_die_probs, 0.2, 250)` 300 times using `replicate()`. Assign `test_results` to a vector that stores the result of each of these trials.
+
+__Note__: This will be a little slow. 300 repetitions of the simulation should require a minute or so of computation, and should be enough to get an answer that is roughly correct.
+
+```{r tags=c()}
+test_results <- replicate(300, hypothesis_test_experiment(fair_die_probs, 0.2, 250))
+```
+
+```{r}
+. = ottr::check("tests/error_q3.R")
+```
+
+**Question 4.** Verify your answer to Question 1 by computing an approximate probability from the values you collected in `test_results` that `hypothesis_test_experiment(fair_die_probs, 0.2, 250)` returns `FALSE`. Assign your answer to `approximate_probability_of_false`.
+
+```{r tags=c()}
+
+approximate_probability_of_false <- 1 - ((sum(test_results) / 300) )
+
+approximate_probability_of_false
+```
+
+```{r}
+. = ottr::check("tests/error_q4.R")
+```
+
+
+
+
+
+
+

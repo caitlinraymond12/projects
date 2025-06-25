@@ -1,0 +1,226 @@
+---
+title: "CSC113 Homework #5: Tidy Transformations"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "hw05"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.
+
+If you cannot submit online, come to office hours for assistance. The office hours
+schedule appears on Ed Discussion. 
+
+This homework assignment is due __September 27 by the start of your enrolled lab section__. Directly sharing answers is forbidden, but discussing problems with instructors and/or with classmates is encouraged.
+
+Reading: 
+
+- Chapter [2](https://ds4world.cs.miami.edu/data-transformation.html) textbook
+
+Run the cell below to prepare the notebook. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+pres_election2008 <- read_csv("data/pres_election.csv") |> 
+  drop_na() |> 
+  filter(year == 2008)
+unemp2008 <- read_csv("data/unemp_usda.csv") |> 
+  mutate(FIPS_Code = as.double(FIPS_Code)) |>
+  select(FIPS_Code, State, Unemployment_rate_2008)
+```
+
+__REMEMBER__ to use the *pipe* (`|>`) operator whenever possible!
+
+**Part I: Billboard Top 100.** The tibble `billboard` has song rankings for Billboard top 100 in the year 2000. We are told that five measurements (i.e., *variables*) are kept with each song: *artist*, *track*, *date* the song entered the top 100, the *week*, and the *rank* of the song in the corresponding week after it entered.
+
+Let us inspect it: 
+
+```{r eval=FALSE}
+billboard
+```
+
+**Question 1.** It should be evident that, based on the observational unit defined above, this data is *not* tidy. Cite at least two violations of the tidy data guidelines. Explain your reasoning.  
+
+The variables are artist, track, date, week, and rank. Every week is it's own column when it should just be one column for week. Also, there is no rank column. Rank is a variable so it should form a column. 
+
+
+**Question 2.** Using one of the pivot functions we saw in lecture, create a new tibble from `billboard` that has the following columns: `artist`, `track`, `date.entered`, `week`, and `rank`. Assign the new tibble to the name `billboard_tidy`. 
+
+```{r tags=c()}
+
+billboard_tidy <- billboard |>
+  pivot_longer(cols = contains("wk"), names_to = "week", values_to = "rank")
+
+billboard_tidy
+
+```
+
+```{r}
+. = ottr::check("tests/billboard_q2.R")
+```
+
+**Question 3.** An immediate concern with `billboard_tidy` (as well as `billboard`) is the presence of missing values in the variable `rank`. Why are these present in the dataset? 
+
+These values would be present because there are 79 weeks shown, but not every song was on the billboard 100 for 79 weeks, so any weeks they weren't on it up to 79 are NA.
+
+**Question 4.** Let us handle missing values in the variable `rank` by removing those rows from `billboard_tidy` (this strategy should seem reasonable based on your answer to the previous question). Assign the resulting tibble again to the name `billboard_tidy`.  
+
+```{r tags=c()}
+
+billboard_tidy <- billboard_tidy |>
+  drop_na()
+
+billboard_tidy
+
+
+```
+
+```{r}
+. = ottr::check("tests/billboard_q4.R")
+```
+
+**Question 5.** Which track from 2000 spent the most weeks at #1? Your answer should be expressed as a tibble with a single row and two columns named `track` and `weeks_on_chart`. Assign your tibble to the name `top_track_most_weeks`. 
+
+__HINT:__ To answer this, you should filter your `billboard_tidy` to include only those tracks that are at #1. Then think about how a `group_by()` and `summarize()` could help you. There are a few different ways to get to the answer. 
+
+```{r tags=c()}
+
+
+top_track_most_weeks <- billboard_tidy |>
+  filter(rank == 1) |>
+  group_by(track) |>
+  summarize(weeks_on_chart = n()) |>
+  arrange(desc(weeks_on_chart)) |>
+  slice_head(n = 1)
+
+top_track_most_weeks
+
+
+
+```
+
+```{r}
+. = ottr::check("tests/billboard_q5.R")
+```
+
+**Part II: U.S. presidential elections and unemployment.** Consider the tibbles `pres_election2008` and `unemp2008` that have been loaded in for you. These datasets give county-level results for presidential elections in the USA from 2008, and the population and unemployment rate of all counties in the US. The data in `unemp2008` was prepared by [USDA, Economic Research Service](https://www.ers.usda.gov/data-products/county-level-data-sets/) and we selected the relevant unemployment data for 2008. 
+
+Let us have a look at the data:
+
+```{r eval=FALSE}
+pres_election2008
+```
+
+```{r eval=FALSE}
+unemp2008
+```
+
+An important variable in both datasets is the FIPS code. FIPS codes are numbers which uniquely identify geographic areas. Every county has a unique five-digit FIPS code. For instance, `12086` is the FIPS code that identifies Miami-Dade, Florida. 
+
+**Question 1.** Suppose that we want to create a new tibble that contains both the election results and the unemployment data. More specifically, we would like to add unemployment information to the election data by *joining* `pres_election2008` with `unemp2008`. Make sure that the resulting tibble retains all of the rows from the `pres_election2008` dataset, even if there is no corresponding unemployment information. Assign the resulting tibble to the name `election_unemp2008`. 
+
+__HINT:__ What is the key we can use to join these two tables? Note that the column names may be different for the key in each table. For example: we would like to join on the key `student_id` but one table has a column `studentID` and the other `student_id`. In the join function we use, we can say `???_join(tibble_a, tibble_b, by = c("studentID" = "student_id"))`. 
+
+```{r tags=c()}
+election_unemp2008 <- left_join(pres_election2008, unemp2008, by = c("FIPS" = "FIPS_Code"))
+
+election_unemp2008
+```
+
+```{r}
+. = ottr::check("tests/election_q1.R")
+```
+
+**Question 2.** Explain why the join function you selected (e.g., right join, left join, etc.) is appropriate for this problem. Why not choose another join function instead?  
+
+The question stated that we wanted to keep all the data from the pres_election2008 table, even if there were no unemployment stats to go with it. So, we made the pres_election2008 table the left table, and used a left join, so that we would get all the data from that table. Then we joined it with unemp2008, which will join any rows that have FIPS Codes that are present in pres_election2008.
+
+Let us explore the relationship between candidate votes and unemployment rate for each state. 
+
+**Question 3.** Create a tibble from `election_unemp2008` that contains, __for each state__, only the candidate that received the most amount of votes. Assign the resulting tibble to the name `state_candidate_winner2008`. It should contain three variables: `state`, `candidate`, and `votes`. Here is what the first few rows of `state_candidate_winner2008` looks like: 
+
+| state                 | candidate    | votes            |
+|-----------------------|--------------|------------------|
+| Alabama               | John McCain  |  1266546         |       
+| Alaska                | John McCain  |  193841          |
+| Arizona               | John McCain  |  1230111         |
+| ...                   |  ...         |   ...            | 
+
+
+```{r tags=c()}
+
+state_candidate_winner2008 <- election_unemp2008 |>
+  group_by(state, candidate) |>
+  summarize(votes = sum(candidatevotes)) |>
+  filter(votes == max(votes))
+
+state_candidate_winner2008
+
+  
+```
+
+```{r}
+. = ottr::check("tests/election_q3.R")
+```
+
+The following tibble `unemp_by_state2008` gives an average unemployment rate for each state by averaging the unemployment rate over the respective counties. 
+
+```{r}
+unemp_by_state2008 <- election_unemp2008 |>
+  group_by(state) |>
+  summarize(avg_unemp_rate = mean(Unemployment_rate_2008, na.rm = TRUE))
+unemp_by_state2008
+```
+
+
+**Question 4.** Create a new tibble that contains both the candidate winner voting data and the state-level average unemployment data. More specifically, we would like to add the state-level average unemployment data to the winner voting data by joining `state_candidate_winner2008` with `unemp_by_state2008`. Ensure that all rows from the `state_candidate_winner2008` data are retained, even if there is no matching state-level unemployment data. Assign the resulting tibble to the name `state_candidate_winner_unemp2008`. 
+
+```{r tags=c()}
+# YOUR CODE HERE
+
+state_candidate_winner_unemp2008 <- left_join(state_candidate_winner2008, unemp_by_state2008, by = "state")
+state_candidate_winner_unemp2008
+```
+
+```{r}
+. = ottr::check("tests/election_q4.R")
+```
+
+The following cell produces a bar chart visualization from the tibble you just made. Do __NOT__ worry about understanding any of the following code (visualization is next week :-). If there are any issues running the cell, that means there is something off with your `state_candidate_winner_unemp2008` tibble! 
+
+```{r}
+top_10 <- state_candidate_winner_unemp2008 |>
+  ungroup() |>
+  slice_max(avg_unemp_rate, n = 10)
+state_order <- top_10 |> pull(state)
+  
+ggplot(top_10) + 
+  geom_bar(aes(x = state, y = avg_unemp_rate, fill = candidate), 
+           stat = "identity") + 
+  coord_flip() + 
+  scale_x_discrete(limits = state_order) + 
+  labs(fill = "candidate winner")
+```
+
+
+**Question 5.** Does the bar chart reveal an association between average unemployment rate and the candidate that received the most votes in the top 10 states with the highest average unemployment rates? 
+
+No, I don't think the bar chart reveals any sort of pattern between the two. There might be a slight correlation between high employment rate and votes for John McCain because 7 out of the 10 top state with unemployment rates voted for him. However two out of the three with the highest unemployment rate voted for Barack Obama, so it's hard to say if there's a clear correlation.
+
+
+
+
+
+

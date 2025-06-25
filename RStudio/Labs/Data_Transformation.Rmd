@@ -1,0 +1,225 @@
+---
+title: "CSC113 Lab #4: Data Transformation"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "lab04"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.  
+
+If you are having trouble submitting, ask your lab instructor for help. 
+
+This lab assignment is due __September 16 at 11:59PM__.
+
+Reading: 
+
+- Chapter [2](https://ds4world.cs.miami.edu/data-transformation.html) textbook
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gapminder)
+library(testthat)
+is_it_tidy <- list(table5, table1, table3, table2)
+```
+
+__REMEMBER__ to use the *pipe* (`|>`) operator whenever possible!
+
+**Part I: Tidy Data.** Recall from lecture that data is *tidy* when it satisfies four conditions:
+
+1.  Each variable forms a column.
+2.  Each observation forms a row.
+3.  Each value must have its own cell.
+4.  Each type of observational unit forms a table.
+
+`is_it_tidy` is a list containing 4 tibbles, with each dataset showing the same values of the four variables *country*, *year*, *population*, and *cases*, but each dataset organizing the values in a different way. All display the number of Tuberculosis (TB) cases documented by the World Health Organization in Afghanistan, Brazil, and China between 1999 and 2000.
+
+
+
+**Table 1**
+
+```{r eval=FALSE}
+is_it_tidy[[1]]  # Table 1 
+```
+
+**Table 2**
+
+```{r eval=FALSE}
+is_it_tidy[[2]] # Table 2
+```
+
+**Table 3**
+
+```{r eval=FALSE}
+is_it_tidy[[3]] # Table 3
+```
+
+**Table 4**
+
+```{r eval=FALSE}
+is_it_tidy[[4]] # Table 4
+```
+
+**Question 1.** Have a look at each of the four tibbles. What is the observational unit being measured?
+
+
+The observational unit is the number of TB cases from the years 1999 - 2000 in each Afghanistan, Brazil, and China. 
+
+
+
+**Question 2.** Using the observational unit you have defined, which of these tibbles, if any, fulfills the properties of *tidy data*? For this question, it is enough to state simply whether each tibble is tidy or not.  
+
+Table 1 - Not Tidy.
+
+Table 2 - Tidy.
+
+Table 3 - Not Tidy.
+
+Table 4 - Not Tidy.
+
+
+**Question 3.** Select one of the tibbles you found not to be tidy and explain which of the tidy data guidelines are violated. Feel free to discuss ideas with a classmate. 
+
+Table 3 is not tidy because it doesn't have all four of our variables as columns. The four variables are country, year, population, and cases. This data set represents country, year, and rate. 
+
+
+**Part II: Exploring `gapminder`** Gapminder is an independent educational non-profit project that identifies systematic misconceptions about important global trends. In this part we will explore an excerpt of the Gapminder data on life expectancy, GDP per capita, and population by country.
+
+Let us have a look at the data. While we are at it, we will make an explicit copy of the data, called `my_gap`, to prevent any worry of modifying the original data.
+
+```{r}
+my_gap <- gapminder
+my_gap
+```
+
+**Question 1.** Let us recover each country's GDP. The Gapminder data has a variable for population (`pop`) and GDP per capita (`gdpPercap`), so we can accomplish this by multiplying them together. Create a new column called `gdp` by multiplying `pop` and `gdpPercap` and assign the resulting new tibble to the name `my_gap`.
+
+```{r tags=c()}
+
+my_gap <- my_gap |> mutate(gdp = pop * gdpPercap)
+my_gap
+
+```
+
+```{r}
+. = ottr::check("tests/p2q1.R")
+```
+
+[Those numbers are too large to be any useful](https://fivethirtyeight.com/features/xkcd-randall-munroe-qanda-what-if/) to potential consumers of our table. Instead of displaying raw GDP, let us report GDP per capita, *relative to some benchmark country*. Because the United States is where we are currently studying, that will be our reference country. We will achieve this in steps. 
+
+**Question 2.** First, filter down `my_gap` to rows that pertain to United States. Extract the `gdpPercap` variable from the resulting tibble as a *vector* and assign it to a name called `usa_gdpPercap`. 
+
+```{r tags=c()}
+usa_gdpPercap <- my_gap |>
+  filter(country == "United States") |>
+  pull(gdpPercap)
+
+usa_gdpPercap
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q2.R")
+```
+
+**Question 3.** Next, we would like to obtain a tibble of *unique* country names that are in the column `country`. We can accomplish this using the `dplyr` verb `distinct()`. Pipe your `my_gap` tibble into this function and store the resulting *tibble* into a name called `countries`. 
+
+```{r tags=c()}
+
+countries <- my_gap |>
+  distinct(country)
+
+countries
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q3.R")
+```
+
+**Question 4.** Replicate `usa_gdpPercap` once per each unique country in the dataset and store the resulting *vector* into a name called `usa_gdpPercap_rep`. Use the function `rep()`. 
+
+```{r tags=c()}
+
+usa_gdpPercap_rep <- rep(usa_gdpPercap, count(countries))
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q4.R")
+```
+
+**Question 5.** Time to put everything together! Add a new column to `my_gap` called `gdpPercapRelative` which divides `gdpPercap` by this United States figure. Store the resulting tibble into the name `my_gap`. 
+
+```{r tags=c()}
+ 
+my_gap <- my_gap |> mutate(gdpPercapRelative = gdpPercap / usa_gdpPercap_rep)
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q5.R")
+```
+
+Now, for the fun part: data analysis! :-)
+
+**Question 6.**  Relative to the United States, which country had the highest GDP per capita? And, in what year? Assign your answers to the names `highest_gdp_rel_to_us` and `year`, respectively.
+
+__NOTE__ You should use a `dplyr` verb to help you answer this; do NOT attempt to find the answer manually! 
+
+```{r tags=c()}
+
+highest_gdp_rel_to_us <- my_gap |> slice_max(gdpPercapRelative) |>
+  pull(country) |> 
+  as.character()
+
+year <- my_gap |> slice_max(gdpPercapRelative) |> 
+  pull(year) |> 
+  as.double()
+
+
+
+```
+
+```{r}
+. = ottr::check("tests/p2q6.R")
+```
+
+**Question 7.** The last question made it seem that a majority of countries have a higher GDP per capita relative to the U.S. But that is just a tiny slice of the data and intuition tells us that the U.S. should be one of the "high GDP" countries. The *median* is a good measure for the central tendancy of the data. Find the median of the column `highest_gdp_rel_to_us` and assign your answer to the name `the_median`. Your answer should be a single double value. 
+
+__NOTE__ One way to do this is to extract the column `gdpPercapRelative` as a vector (just as you did earlier in lab) and then use the function `median()`.
+
+```{r tags=c()}
+the_median <- my_gap |>
+  pull(gdpPercapRelative) |>
+  median()
+```
+
+```{r}
+. = ottr::check("tests/p2q7.R")
+```
+
+**Question 8.** Think about the value of the median you just found and give an interpretation for it when compared to the bulk of the data. Is it true that the majority of countries have a higher GDP per capita compared to the United States?
+
+__HINT:__ Remember that the median is the GDP per capita *relative to the United States*. If the median value was 1, what would that mean? If it was *greater* than 1? How about *less* than 1? 
+
+It is not true that the majority of countries have a higher GDP per capita compared to the USA. The median is .146, meaing that half of the countries have a gdp less than .146 relative to the USA and half has more than .146 relative to the USA. If the median was one, it would mean that the United States was directly in the middle of GDP compared to all countries. If it was greater than 1, it would mean USA had a relatively lower GDP. It if was less than 1, it would mean the USA had a relatively higher GPA. 
+
+Hurray -- you are done with Lab #4! 

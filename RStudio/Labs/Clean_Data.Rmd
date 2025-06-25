@@ -1,0 +1,279 @@
+---
+title: "CSC113 Lab #5: Tidy Transformations"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+assignment_name: "lab05"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.  
+
+If you are having trouble submitting, ask your lab instructor for help. 
+
+This lab assignment is due __September 23 at 11:59PM__.
+
+Reading: 
+
+- Chapter [2](https://ds4world.cs.miami.edu/data-transformation.html) textbook
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+raw_compensation <- read_csv("data/raw_compensation.csv")
+```
+
+__REMEMBER__ to use the *pipe* (`|>`) operator whenever possible!
+
+**Part I: Defining functions.** Let's begin by practicing how to write and use functions. 
+
+**Question 1.** Complete the function below that converts a proportion to a percentage by multiplying it by 100. For example, the value of `to_percentage(.25)` should be the number 25 (with no percent sign).
+
+```{r tags=c()}
+to_percentage <- function(prop) {
+  factor_to_use <- 100
+  prop * factor_to_use
+}
+  
+to_percentage(.25)
+
+```
+
+```{r}
+. = ottr::check("tests/functions_q1.R")
+```
+
+Here's something important about functions: each time a function is called, it creates its own "space" for names that is separate from the main space where you normally define names. So even though you defined `factor_to_use <- 100` inside `to_percentage` above and then called `to_percentage`, you can't refer to `factor_to_use` anywhere except inside the body of `to_percentage`:
+
+```{r eval=FALSE}
+factor_to_use
+```
+
+**Question 2.** Define a function called `disemvowel`.  It should take a single string as its argument.  (You can call that argument whatever you want.)  It should return a copy of that string, but with all the characters that are vowels removed. You should use a `stringr` function to help you accomplish this. 
+
+*Note*: In English, the vowels are the characters "a", "e", "i", "o", and "u".
+
+```{r tags=c()}
+disemvowel <- function(word) {
+  word |>
+    str_remove_all("[aeiouAEIUO]")
+}
+
+disemvowel("Can you read this without vowels?")
+```
+
+```{r}
+. = ottr::check("tests/functions_q2.R")
+```
+
+**Question 3.** Write a function called `num_non_vowels`. It should take a string as its argument and return a number. The number should be the number of characters in the argument string that aren't vowels.  One way to do that is to remove all the vowels and count the size of the remaining string.
+
+```{r tags=c()}
+
+num_non_vowels <- function(word) {
+  str_length(disemvowel(word))
+}
+
+num_non_vowels("Can you read this without vowels?")
+```
+
+```{r}
+. = ottr::check("tests/functions_q3.R")
+```
+
+Recall that an important use of functions is that we can use it in a purrr *map*. In the following cell, we applied your `disemvowel` function on a vector containing fruit names: 
+
+```{r}
+fruit_names <- c("lychee", "banana", "mango")
+map_chr(fruit_names, disemvowel)
+```
+
+**Question 4.** Suppose that we have the following two vectors of exam grades in a class of 5 students:  
+
+```{r}
+exam1_grades <- c(80, 63, 77, 90, 71)
+exam2_grades <- c(74, 67, 82, 75, 88)
+```
+
+Using a call to a `purrr` map function with the two vectors `exam1_grades` and `exam2_grades`, create a vector `exam_averages` that contains the average exam grade for each student. Your answer should involve defining a function that computes the mean of two grades. This function can be defined separately or within the map call itself. Refer to the lecture slides for examples of `purrr` map function usage if needed.
+
+__Hint:__ The function should take two arguments (e.g., `grade1` and `grade2`) and return their arithmetic mean. Test your function with some example inputs to ensure it's working correctly. 
+
+```{r tags=c()}
+mean_grade <- function(grade1, grade2) {
+  mean(c(grade1, grade2))
+}
+
+
+exam_averages <- map2_dbl(exam1_grades, exam2_grades, mean_grade)
+
+exam_averages
+```
+
+```{r}
+. = ottr::check("tests/functions_q4.R")
+```
+
+**Part II: CEO Incomes.**  Let's have a real data analysis task where applying a function to column(s) of data is needed. We will examine the total compensation of the 200 highest-paid chief executives at public companies in 2020. The data were compiled for a New York Times analysis [here](https://www.nytimes.com/2021/06/11/business/ceo-pay-compensation-stock.html), and ultimately came from [filings](https://www.sec.gov/answers/proxyhtf.htm) mandated by the SEC from all publicly-traded companies. 
+
+The data in raw form from the New York Times is available in the name `raw_compensation`. Let us have a look at this data. 
+
+```{r}
+raw_compensation
+```
+
+**Question 1.** We tried to compute the average of the CEOs' pay like this:
+
+```{r warning=TRUE}
+raw_compensation |>
+  summarize(avg_total_pay = mean(`Total Pay`))
+
+
+```
+
+Explain why that didn't work. Try looking at some of the values in the `Total Pay` column.
+
+This didn't work because the total pay is saved as a "char" type. The function doesn't work because you can't take the mean of characters. 
+
+**Question 2.** Extract the first value in the "Total Pay" column.  It's Alexander Karp's pay in 2020. Call it `karp_pay_string`.
+
+```{r tags=c()}
+karp_pay_string <- raw_compensation |>
+  slice_head(n = 1) |>
+  pull(`Total Pay`)
+
+karp_pay_string
+```
+
+```{r}
+. = ottr::check("tests/ceo_q2.R")
+```
+
+**Question 3.** Convert `karp_pay_string` to a number of *dollars*. The `stringr` method `str_replace_all()` will be useful for removing commas (`,`) and the dollar (`$`) sign.  For example, the value of `str_replace_all("$100", fixed("$"), "")` is the string `"100"`. You'll also need a function that converts a string that looks like a number to an actual number. Assign the result to the name `karp_pay`.
+
+```{r tags=c()}
+
+karp_pay <- karp_pay_string |>
+  str_remove_all(fixed("$")) |>
+  str_remove_all(",") |>
+  as.double()
+
+karp_pay
+
+```
+
+```{r}
+. = ottr::check("tests/ceo_q3.R")
+```
+
+Alexander Karp is the chief executive of Palantir, a data mining company that gets over half its revenue from government contracts. You should have found his total compensation to be worth about $1.1 *billion* -- but that may not have been clear given how large this number is! We can make the interpretation of these compensation amounts easier by expressing them as *millions of* dollars instead. 
+
+**Question 4.** Define a function `convert_pay_string_to_number` that converts pay strings to pay numbers. Your function should convert a pay string to a number of *millions of dollars*. For example, if the pay string  `"$78,191,786"` is given, the function will return the number `78.19179`. Your answer to *Question 3* will come in handy. 
+
+```{r tags=c()}
+convert_pay_string_to_number <- function(string){
+  x <- string |>
+    str_remove_all(fixed("$")) |>
+    str_remove_all(",") |>
+    as.double()
+  x / 1000000
+}
+
+convert_pay_string_to_number(karp_pay_string)
+```
+
+```{r}
+. = ottr::check("tests/ceo_q4.R")
+```
+
+**Question 5.** Apply the function `convert_pay_string_to_number` to every row in the tibble `raw_compensation`. Make a new tibble that is a copy of `raw_compensation` with one more column called `"Total Pay (M)"`. It should be the result of applying `convert_pay_string_to_number` to the "Total Pay" column. Call the new tibble `compensation`.
+
+__Note:__ There are two different ways this can be accomplished and either is acceptable. 
+
+```{r tags=c()}
+
+compensation <- raw_compensation |>
+  mutate(`Total Pay (M)` = map_dbl(`Total Pay`, convert_pay_string_to_number))
+
+compensation
+```
+
+```{r}
+. = ottr::check("tests/ceo_q5.R")
+```
+
+Now that we have the pay in numbers, we can compute things about them.
+
+**Question 6.** Compute the average total pay of the CEOs in the dataset. Assign your answer to the name `average_total_pay`.
+
+```{r tags=c()}
+
+average_total_pay <- compensation |>
+  pull(`Total Pay (M)`) |>
+  mean()
+
+average_total_pay
+
+```
+
+```{r}
+. = ottr::check("tests/ceo_q6.R")
+```
+
+Check out the "% Change" column in `compensation`.  It shows the percentage increase in the CEO's pay from the previous year.  For CEOs with no previous year on record, it instead says `"n/a"`.  The values in this column are *strings*, not numbers, so like the "Total Pay" column, it's not usable without a bit of extra work.
+
+Given your current pay and the percentage increase from the previous year, you can compute your previous year's pay.  For example, if your pay is \$100 this year, and that's an increase of 50% from the previous year, then your previous year's pay was $\frac{\$100}{1 + \frac{50}{100}}$, or around \$66.66.
+
+**Question 7.** Create a new tibble called `with_previous_compensation`. It should be a copy of `compensation`, but with the `"n/a"` CEOs filtered out, and with an extra column called `"2019 Total Pay (M)"`.  That column should have each CEO's pay in 2019.
+
+*Hint 1:* This question takes several steps, but each one is still something you've seen before. Take it one step at a time, using as many lines as you need. You can print out your results after each step to make sure you're on the right track.
+
+*Hint 2:* You'll need to define a function. You can do that just above your other code.
+
+```{r tags=c()}
+
+prev_year <- function(pay, change) {
+  c <- change |>
+    str_remove_all("%") |>
+    as.double()
+  pay / (1 + c / 100)
+}
+
+with_previous_compensation <- compensation |>
+  filter(`% Change` != "n/a") |>
+  mutate(`2019 Total Pay (M)` = map2_dbl(`Total Pay (M)`, `% Change`, prev_year))
+  
+with_previous_compensation
+```
+
+```{r}
+. = ottr::check("tests/ceo_q7.R")
+```
+
+In the following code chunk, we tried computing the highest total compensation that each CEO received in the two-year period from 2019-2020. These amounts are given in a new column `2019-2020 Max Pay (M)`. 
+
+```{r}
+with_previous_compensation |>
+  mutate(`2019-2020 Max Pay (M)` = max(`Total Pay (M)`, `2019 Total Pay (M)`))
+```
+
+**Question 8.** That code did not work as expected. What happened? In English, explain why this does not work. Then describe how you would revise it to fix the problem. Feel free to discuss ideas with a neighbor. 
+
+This did not work because it only applied the function to the very first element in this column. We want to apply the function to every element. To remedy this, we want to use the map2_dbl() so that we apply the function to every value in the vector. Instead, we should write:
+
+with_previous_compensation |>
+  mutate(`2019-2020 Max Pay (M)` = map2_dbl(`Total Pay (M)`, `2019 Total Pay (M)`, mean))
+
+

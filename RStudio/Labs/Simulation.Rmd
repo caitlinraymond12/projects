@@ -1,0 +1,331 @@
+---
+title: "CSC113 Lab #7: Simulation"
+date: "Fall 2024 | Data Science for the World"
+author: "Caitlin Raymond"
+output:
+  word_document: default
+always_allow_html: true
+assignment_name: "lab07"
+---
+
+Please complete this notebook by filling in the cells provided. When you're done:
+
+1.  Remember to put your name in the header at the top of this notebook where it says `author`.
+2.  Select `Knit (Knit to Word)` from the toolbar menu.
+3.  Read that file! If any of your lines are too long and get cut off, we won't be able to see them, so break them up into multiple lines and knit again.
+4.  Save that Word document as a PDF file. 
+5.  Submit BOTH this `.Rmd` file and the __PDF__ file you generated to Gradescope.
+    Some questions are autograded and you may improve your score on the tests given 
+    by resubmitting your work as many times as you like up to the deadline. 
+6. **Passing the automatic tests given does not guarantee full credit on any question.** The tests are provided to help catch some common mistakes, but it is *your* responsibility to answer the questions correctly.  
+
+If you are having trouble submitting, ask your lab instructor(s) for help. 
+
+This lab assignment is due __October 16 at 11:59PM__.
+
+Reading: 
+
+- Chapter [4](https://ds4world.cs.miami.edu/building-simulations.html) textbook
+
+Run the cell below to prepare the notebook.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(testthat)
+```
+
+## The Monty Hall Problem 
+
+The Monty Hall Problem is the following problem that originates in an American TV show. In that TV show, a contestant plays a guessing game with its show host [Monty Hall](https://en.wikipedia.org/wiki/Monty_Hall) to win a brand new fancy sport car.
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Monty_open_door.svg/2560px-Monty_open_door.svg.png)
+
+The game is played as follows:
+
+1. On the TV set appear three doors, Door 1, Door 2, and Door 3. Behind of the three doors is hidden the prize. Behind each of the other two is hidden a goat. Which door has the prize is not known to the contestant.
+2. The host asks the contestant to pick one door. The contestant makes her choice and announces it. The chosen door is remain closed. 
+3. The host opens one of the two remaining doors to reveal a goat. (This is indeed possible because not both of the two remaining doors have the prize behind them.)
+4. The host asks if the contestant wishes to change her choice to the last remaining door. (There are exactly two doors remaining, the one the contestant has chosen and the last one. Behind one is hidden the prize, and behind the other is hidden a goat.)
+5. The contestant makes the decision about switching and announces her decision.
+6. The host opens the door of the contestant's ultimate choice. If the prize appears behind it, the contestant can take it home with her. If a goat appears behind it, she wins nothing -- not even the goat!
+
+> The Monty Hall Problem asks this: _should the contestant switch_? That is, does she have higher chances of winning if she switches?
+
+The question challenges our intuition.
+
+When presented with the question, we instinctively think that since the prize has not changed its location, the probability of finding the prize behind the door initially chosen must be equal to the probability of finding the prize behind the remaining door. However, the thinking is not correct.
+
+> The goal of this lab is to reveal the error in the intuition by way of simulation.
+
+## A brief theoretical analysis
+
+Before starting to set up the simulation, let us analyze the problem mathematically.
+There are three strategies the contestant can choose from.
+
+1. Stick to the initial choice.
+2. Switch to the alternate choice.
+
+Let us look the strategies. Let us introduce two values $p$ and $q$.
+
+* The probability the contestant wins by sticking to the initial choice is $p$.
+* The probability the contestant wins by switching is $q$.
+
+Also, let us refer to the three doors by D1, D2, and D3. The contestant and we the viewers may be unable to tell the difference between them, but their handler may be able to (at least the goats themselves should be able to).
+
+Let us think about $p$ first.
+
+If the contestant sticks to her initial choice, since Monty Hall does not open the door of her initial choice, whether she wins or not is unchanged. In other words, $p$ is the probability that the contestant is winning immediately after making her door selection and the game is terminated at that point. What is the value of $p$?
+
+Here is an answer. There are six ways to place the car and the two goats behind the three doors. If we state the items behind D1, D2, and D3 in this order, the possibilities for the placements are:
+
+* Car, Goat, Goat
+* Goat, Car, Goat
+* Goat, Goat, Car
+
+We observe that D1 is the winning door for the first choice, D2 is the winning door for the next one, and D3 is the winning door for the last. If the contestant picks D1, then the chances of her winning is 1 out of 3, that is, $1/3$. The same holds for the other two choices.
+
+Thus, the winning chance, regardless of which door she chooses, is $1/3$. Hence, $p = 1/3$.
+
+Next we analyze the probability $q$. Assume the contestant has chosen D1. As before, there are three possible placements of the items. Suppose the contestant will switch. Here is what may transpire.
+
+* The placement is (Car, Goat, Goat). The host first opens one of D2 and D3 to reveal a goat. The contestant switches to one of the other. The host opens this other one. The contestant loses the game.
+* The placement is (Goat, Car, Goat). The host first opens D3 to reveal a goat, the contestant switches to D2, the host opens D2. The contestant wins the game.
+* The placement is (Goat, Goat, Car). The host first opens D2 to reveal a goat, the contestant switches to D3, the host opens D3. The contestant wins the game.
+
+The contestant loses in the first case but in each of the other two cases win. Thus, if the initial door choice is D1, she wins by 2-in-3 chances, which is $2/3$.
+
+We can conduct the same analysis with D2 as the initial door and with D3 as the initial door. In each of these two alternate cases, the winning probability is $2/3$. Thus, regardless of which door the contestant chooses, if she employs the strategy for switching, her winning probability $q$ is $2/3$.
+
+Hence, we have $p = 1/3$ and $q = 2/3$. 
+
+Not convinced? Then let's simulate the game and see how the results turn out.
+
+\pagebreak
+
+## Simulating the Monty Hall Problem
+
+**Part I: Figuring out how to simulate one game.** We will run a simulation in multiple parts. There are two goats behind the doors. We want to distinguish between them by calling them `"goat1"` and `"goat2"`.
+
+```{r}
+goats <- c("goat1", "goat2")
+```
+
+The vector `items_behind_doors` contains the set of things that could be behind the doors.
+
+```{r}
+items_behind_doors <- c("car", "goat1", "goat2")
+```
+
+**Question 1.** Write a function `hide_behind_doors()`, which simulates "hiding" the items behind the doors. It takes no arguments and returns a random arrangement of the items in `items_behind_doors`.  
+
+```{r tags=c()}
+
+hide_behind_doors <- function()
+{
+  sample(items_behind_doors, 3)
+}
+
+hide_behind_doors()
+
+
+```
+
+```{r}
+. = ottr::check("tests/p1q1.R")
+```
+
+**Question 2.** To help Monty conduct the game, we are going to have to identify which goat is selected and which one is revealed behind the open door. Write a function called `other_goat` that takes a string as an argument (which can either be `"goat1"` or `"goat2"`) and returns the other. If the function receives any other string (e.g., `"banana"`), nothing should be returned.  
+
+```{r tags=c()}
+
+other_goat <- function(goat)
+{
+  if(goat == "goat1")
+  {
+    "goat2"
+  }
+  else if(goat == "goat2")
+  {
+    "goat1"
+  }
+}
+
+
+```
+
+```{r}
+. = ottr::check("tests/p1q2.R")
+```
+
+**Question 3.** Write a function `contestant_pick`, which simulates the selection made by the contestant. The function takes a single argument (say, `hidden_behind_doors`) containing the items hidden behind the doors and randomly selects one of them with equal chance. The function returns the selection. 
+
+```{r tags=c()}
+# YOUR CODE HERE
+
+contestant_pick <- function(choices)
+{
+  sample(choices, 1)
+}
+
+contestant_pick(hide_behind_doors())
+
+contestant_pick(c("goat2", "car", "goat1")) # an example setup
+
+
+```
+
+```{r}
+. = ottr::check("tests/p1q3.R")
+```
+
+**Question 4.** Write a function called `monty_hall_game` that simulates one round of the Monty Hall game. The function should take no arguments and return a *list* representing the outcome of the game. The function operates as follows: 
+
+1. Execute `hide_behind_doors()` to hide items. Store the result in the name `hidden_items`.
+2. Simulate the contestant's initial guess by uniformly selecting at random one of the hidden items. In doing so, the contestant makes a random choice from among the first goat, the second goat, and the car. This should make use of your function `contestant_pick()`. 
+3. Based on the contestant's guess, determine which door Monty reveals and which item is behind the remaining door. If the contestant happens to pick one of the goats, then the other goat is revealed and the car is behind the remaining door. If the contestant happens to pick the car, then Monty reveals one of the goats and the other goat is behind the remaining door.
+4. This function should return a *list* of a vector containing three elements __in this order__: (a) the contestant's initial guess; (b) what Monty reveals when he opens a door; and (c) what remains behind the other door. 
+
+__HINT:__ The function `other_goat()` you wrote earlier may be helpful here. 
+
+```{r tags=c()}
+
+monty_hall_game <- function()
+{
+  hidden_item <- hide_behind_doors()
+  choice <- contestant_pick(hidden_item)
+
+  if(choice == "car")
+  {
+    goatchoice = sample(goats, 1)
+    
+    return(list(c(choice, goatchoice, other_goat(goatchoice))))
+  }
+  else
+  {
+    return(list(c(choice, other_goat(choice), "car")))
+  }
+  
+}
+
+
+
+```
+
+```{r}
+. = ottr::check("tests/p1q4.R")
+```
+
+Let's play! Run the cell several times and observe how the results change each time. 
+
+```{r}
+monty_hall_game()
+```
+
+**Part II: Simulation & Visualization.** To gauge the frequency with which the different results occur, we have to play the game many times and collect the results. Let's run 10,000 repetitions.
+
+**Question 1.** Simulate the game 10,000 times. Collect the results into a *list* named `games`.
+
+ __Hint:__ Completing this requires using an iteration construct. Consult a neighbor, your lab instructors, or the lecture notes/textbook if you have doubts on how to accomplish this.  
+
+```{r tags=c()}
+
+games <- replicate(10000, monty_hall_game())
+
+```
+
+```{r}
+. = ottr::check("tests/p2q1.R")
+```
+
+We present the results of the simulation in a tibble called `game_results` by extracting column-wise elements (using purrr's `map_chr`) from the list `games` you generated in **Question 1**. Execute the following code:  
+
+```{r}
+game_results <- tibble(
+  initial = map_chr(games, function(x) x[1]),
+  revealed = map_chr(games, function(x) x[2]),
+  remaining = map_chr(games, function(x) x[3])
+)
+game_results
+```
+
+To see whether the contestant should stick with her initial choice or switch, let's see how frequently the car is behind each of her two options.
+
+**Question 2.** If we define the observational unit to be a single item hidden behind some door, then the current form of `game_results` needs tidying (why?). Apply a pivot transformation to `game_results` so that two variables are materialized: `which_door` and `item`. Assign the resulting tibble to the name `game_results_long`. 
+
+The first few rows of this table will look like __(your results will differ!)__: 
+
+|which_door | item     | 
+|-----------|----------|
+| initial   | goat1    |
+| revealed  | goat2    |
+| remaining | car      |
+| ...       | ...      |
+
+```{r tags=c()}
+
+game_results_long <- game_results |>
+  pivot_longer(cols = everything(), names_to = "which_door", values_to = "item")
+
+game_results_long
+
+```
+
+```{r}
+. = ottr::check("tests/p2q2.R")
+```
+
+**Question 3.** Using `game_results_long`, obtain a tibble containing counts of the items hidden behind each of the doors. Assign the resulting tibble to the name `door_item_counts`. 
+
+The first few rows of this tibble may look like (again, your numbers will differ): 
+
+| which_door | item  | n    |
+|------------|-------|------|
+| initial    | car   | 3363 |
+| initial    | goat1 | 3335 |
+| initial    | goat2 | 3302 |
+| remaining  | car   | 6637 |
+| ...        | ...   | ...  |
+
+```{r tags=c()}
+
+door_item_counts <- game_results_long |>
+  group_by(which_door, item) |>
+  count() |>
+  ungroup()
+
+door_item_counts
+
+```
+
+```{r}
+. = ottr::check("tests/p2q3.R")
+```
+
+**Question 4.** Using `ggplot`, create a bar plot with a bar geom that shows the frequency of each item behind the "initial" choice and behind the "remaining" choice. Fill your bars using the `which_door` variable.
+
+You may wish to use a positional adjustment like "dodge" and a coordinate system like `coord_flip()` to help better see the results.  
+
+```{r tags=c()}
+
+door_item_counts |>
+  ggplot(aes(x = item, y = n, fill = which_door)) + geom_bar(stat = "identity", position = "dodge") +
+  coord_flip()
+
+
+```
+
+**Question 5.** Briefly explain what your visualization in **Question 4** shows. How does this bar plot either confirm or refute the claim that the contestant is more likely to win if she switches? 
+
+The bar plot shows the amount of times that each situation happens, showing the initial choice of the contestant, what was revealed, and what was remaining. This bar plot confirms that the contestant is more likely to win if she switches her guess. We can see this visually as the amount of time that car was chosen as initial guess was about 3,300, but the amount of times that car was remaining was about 6,600. So, roughly 2/3 of the time the car will be behind the remaining door, and 1/3 of the time it will be behind the first door. We can conclude from this that if the contestant switches her guess after the second door is revealed, 2/3 of the time she will win a car. 
+
+
+
+Fantastic -- you finished Lab #7! Time to submit. 
+
+Now that you are done, here is a segment from the game show *Let's Make a Deal*, where Monty Hall appears:
+
+```{r}
+vembedr::embed_youtube("T5QYTrDReTo")
+```
+
