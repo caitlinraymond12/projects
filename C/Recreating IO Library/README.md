@@ -8,10 +8,10 @@ In this project, I created my own IO library named MIO, and recreated all the fu
 
 ##	Solution Design
 
-MIO *myopen(const char *name, const int mode);
+# MIO *myopen(const char *name, const int mode);
 The function defines the variable fd. Then, it checks the mode the user typed in against the macros MODE_R, MODE_WA, MODE_WT. This tells the function how to open the file, either read, write append, or write truncate. Then, this function called mydopen() using that file descriptor. 
 
-MIO *mydopen(const int fd, const int mode, const int bsize);
+# MIO *mydopen(const int fd, const int mode, const int bsize);
 First, I check to see if bsize is a valid size. If it’s not, I return NULL. Then, the MIO object is created using malloc. The appropriate variables are set. If bsize is greater than 0, then the read buffer (rb) and the write buffer (wb) get memory allocated to them and they are initially set to zero. If bsize is equal to zero, then these get set to null. The MIO object has a new variable, bufferSize, and that gets set to bsize. Then, the function returns a pointer to the newly created MIO object.
 
 int myclose(MIO *m);
