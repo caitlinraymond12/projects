@@ -7,7 +7,7 @@
 The purpose of this project was to create a simple version of the ls command in C in order to show common information needed of files and directories. Completion of this project required great knowledge of how the Unix file system works as well as knowledge of the <dirent.h> and <pwd.h> libraries. This ls command can be called with the following flags:
 * -a Show hidden files 
 * -F Show char codes (indicates the type of file. "/" for directories, "*" for executable, etc.)
-* s Sort by name
+* -s Sort by name
 
 
 ## Solution Design
