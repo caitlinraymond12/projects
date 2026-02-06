@@ -2,9 +2,11 @@
 
 ### **Class**: Systems Programming
 
+##	Problem Description
+In this project, I created my own IO library named MIO, and recreated all the functions that are found in the standard library. I first had to create my own MIO object, that acts as a file struct does in standard IO. Then, I used that MIO in all the functions, starting from the lowest level to the highest. The lowest level works directly with the OS and utilizes the basic read() and write() function. These simple starting functions are built on level by level until we have the highest level functions such as getline(). My implementation uses a buffered IO approach.
 
 
-
+##	Solution Design
 
 MIO *myopen(const char *name, const int mode);
 The function defines the variable fd. Then, it checks the mode the user typed in against the macros MODE_R, MODE_WA, MODE_WT. This tells the function how to open the file, either read, write append, or write truncate. Then, this function called mydopen() using that file descriptor. 
