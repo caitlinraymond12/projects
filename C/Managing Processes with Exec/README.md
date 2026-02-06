@@ -3,7 +3,7 @@
 ### **Class**: Systems Programming
 
 ## Problem Description
-
+This project used pipes and processes in order to sort a list of words. However, the processes had to be creating using functions from the exec() group, and when a new process is created using exec(), the file descriptor table gets cleared leaving only STDIN, STDOUT, STDERR. In order to be able to connect the child to parent and still use an exec() call, it becomes necessary to duplication the file descriptor of read into STDIN of the child and write into STDOUT of the child. This makes it possible for the child to simply read from stdin and write to stdout as normal, but really it will be reading and writing to the pipes connected to the parent.
 
 ## Solution Design 
 
